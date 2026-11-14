@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ProductCard } from "@/components/storefront/product-card";
+import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
 import { getBazarData } from "@/data/mock-bazar";
 

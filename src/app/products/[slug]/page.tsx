@@ -13,8 +13,8 @@ import {
 import BackButton from "@/components/common/back-button";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
-import { ProductVisual } from "@/components/storefront/product-visual";
-import { ProductCard } from "@/components/storefront/product-card";
+import { ProductVisual } from "@/components/card/product-visual";
+import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,7 +75,9 @@ export default async function ProductDetailPage({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary">{product.category}</Badge>
-              {product.badge && <Badge variant="outline">{product.badge}</Badge>}
+              {product.badge && (
+                <Badge variant="outline">{product.badge}</Badge>
+              )}
             </div>
 
             <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">

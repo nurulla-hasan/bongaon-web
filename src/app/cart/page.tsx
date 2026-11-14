@@ -1,10 +1,17 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight, Minus, Plus, ShieldCheck, Trash2, Truck } from "lucide-react";
+import {
+  ArrowRight,
+  Minus,
+  Plus,
+  ShieldCheck,
+  Trash2,
+  Truck,
+} from "lucide-react";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ProductVisual } from "@/components/storefront/product-visual";
+import { ProductVisual } from "@/components/card/product-visual";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +34,7 @@ export default async function CartPage() {
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
-    0
+    0,
   );
   const total = subtotal + DELIVERY_CHARGE_BDT;
 

@@ -6,14 +6,12 @@ import {
   ProbashiGuideSection,
   ReviewsSection,
   StorySection,
-  TrustBar,
-} from "@/components/storefront/home-sections";
+} from "@/components/home";
 
 export default function HomePage() {
   return (
     <>
       <HeroBanner />
-      <TrustBar />
       <CategoryGrid />
       <FeaturedProductsSection />
       <StorySection />

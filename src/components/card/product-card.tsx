@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Star, Truck } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ProductVisual } from "@/components/storefront/product-visual";
+import { ProductVisual } from "@/components/card/product-visual";
 import type { BazarProduct } from "@/data/mock-bazar";
 
 interface ProductCardProps {
@@ -59,7 +59,9 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="mt-auto flex items-end justify-between gap-2 pt-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold text-clay">৳{product.price}</span>
+            <span className="text-xl font-bold text-clay">
+              ৳{product.price}
+            </span>
             {product.originalPrice && (
               <span className="text-xs text-muted-foreground line-through">
                 ৳{product.originalPrice}
