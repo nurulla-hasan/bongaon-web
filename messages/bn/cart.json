@@ -11,9 +11,9 @@
     "summaryTitle":  "অর্ডার সামারি",
     "subtotal":  "পণ্যের মূল্য",
     "deliveryCharge":  "ডেলিভারি চার্জ (সারাদেশে)",
-    "totalCod":  "সর্বমোট (COD)",
+    "totalCod":  "সর্বমোট (হাতে পেয়ে)",
     "deliveryNote":  "৪–৭ দিনের মধ্যে হোম ডেলিভারি",
     "codNote":  "প্যাকেট হাতে পেয়ে ক্যাশ টাকা পরিশোধ",
-    "proceedCheckout":  "চেকআউটে যান (COD)",
+    "proceedCheckout":  "চেকআউটে যান (হাতে পেয়ে)",
     "addMore":  "আরও প্রোডাক্ট যোগ করুন"
 }

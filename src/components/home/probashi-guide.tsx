@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ctaPrimary } from "./cta";
+import { Button } from "@/components/ui/button";
 
 export async function ProbashiGuideSection() {
   const t = await getTranslations("Home");
@@ -66,10 +66,10 @@ export async function ProbashiGuideSection() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <Link href="/checkout" className={ctaPrimary}>
+          <Button size="xl" render={<Link href="/checkout" />}>
             {t("probashiCta")}
-            <ArrowRight className="size-4" />
-          </Link>
+            <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+          </Button>
         </div>
       </div>
     </SectionWrapper>

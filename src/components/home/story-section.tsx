@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, Check, Leaf, Sprout } from "lucide-react";
+import { ArrowRight, Check, Sprout } from "lucide-react";
 import { SectionWrapper } from "@/components/common/section-wrapper";
-import { cn } from "@/lib/utils";
-import { ctaPrimary } from "./cta";
+import { Button } from "@/components/ui/button";
 
 export async function StorySection() {
   const t = await getTranslations("Home");
@@ -44,12 +43,7 @@ export async function StorySection() {
         </div>
 
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-clay/10 px-4 py-1.5 text-xs font-semibold text-clay">
-            <Leaf className="size-3.5" />
-            {t("storyBadge")}
-          </span>
-
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             {t("storyTitle")}
           </h2>
 
@@ -71,10 +65,12 @@ export async function StorySection() {
             ))}
           </ul>
 
-          <Link href="/products" className={cn(ctaPrimary, "mt-8")}>
-            {t("storyCta")}
-            <ArrowRight className="size-4" />
-          </Link>
+          <div className="mt-8">
+            <Button size="xl" render={<Link href="/products" />}>
+              {t("storyCta")}
+              <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+            </Button>
+          </div>
         </div>
       </div>
     </SectionWrapper>

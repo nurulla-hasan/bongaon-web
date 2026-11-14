@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
+import { Button } from "@/components/ui/button";
 import AnimationWrapper from "@/components/common/animation-wrapper";
 import { getBazarData, type CategoryItem } from "@/data/mock-bazar";
 import { cn } from "@/lib/utils";
-import { ctaSecondary } from "./cta";
 
 const categoryIconMap: Record<CategoryItem["iconName"], typeof Flame> = {
   flame: Flame,
@@ -45,14 +45,18 @@ export async function CategoryGrid() {
     <SectionWrapper id="categories" padding="md">
       <SectionHeading
         variant="plain"
-        eyebrow={t("catEyebrow")}
+        alignment="left"
         title={t("catTitle")}
         description={t("catDesc")}
       >
-        <Link href="/products" className={ctaSecondary}>
+        <Button
+          variant="outline"
+          size="lg"
+          render={<Link href="/products" />}
+        >
           {t("catCta")}
-          <ArrowRight className="size-4" />
-        </Link>
+          <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+        </Button>
       </SectionHeading>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

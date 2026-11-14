@@ -1,14 +1,20 @@
 import Link from "next/link";
-import { ShoppingBag, Truck } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { GrassTuft, LeafSprig } from "@/components/common/leaf-decor";
 import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MOCK_CART_ITEMS } from "@/data/mock-bazar";
-import { CONTAINER_GUTTER, CONTAINER_MAX_WIDTH } from "@/lib/layout";
+import {
+  CONTAINER_GUTTER,
+  CONTAINER_MAX_WIDTH,
+  SURFACE_WARM,
+} from "@/lib/layout";
 import { cn } from "@/lib/utils";
+import { AnnouncementBar } from "./announcement-bar";
 import { MobileNav } from "./mobile-nav";
 import { NAV_LINKS } from "./nav-items";
 import { NavbarUserMenu } from "./navbar-user-menu";
@@ -21,19 +27,15 @@ export async function Navbar() {
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur">
-      <div className="bg-primary text-primary-foreground">
-        <div
-          className={cn(
-            "mx-auto flex items-center justify-center gap-2 py-1.5 text-center text-xs font-medium",
-            CONTAINER_MAX_WIDTH,
-            CONTAINER_GUTTER
-          )}
-        >
-          <Truck className="size-3.5 shrink-0" />
-          <span>{t("announcement")}</span>
-        </div>
-      </div>
+    <header
+      className={cn(
+        "sticky top-0 z-40 w-full",
+        SURFACE_WARM
+      )}
+    >
+      <LeafSprig className="pointer-events-none absolute top-9 left-2 hidden h-14 w-10 text-primary/15 2xl:block" />
+      <GrassTuft className="pointer-events-none absolute top-9 right-2 hidden h-12 w-16 -scale-x-100 text-primary/15 2xl:block" />
+      <AnnouncementBar message={t("announcement")} />
 
       <div
         className={cn(

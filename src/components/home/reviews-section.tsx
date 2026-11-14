@@ -16,7 +16,6 @@ export async function ReviewsSection() {
     <SectionWrapper id="reviews" bg="muted" padding="md">
       <SectionHeading
         variant="plain"
-        eyebrow={t("reviewsEyebrow")}
         title={t("reviewsTitle")}
         description={t("reviewsDesc")}
         alignment="center"

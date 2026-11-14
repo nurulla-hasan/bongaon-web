@@ -53,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </span>
           <span className="inline-flex items-center gap-1">
             <Truck className="size-3.5 text-primary" />
-            {product.deliveryDays} • COD
+            {product.deliveryDays} • {t("cashOnDeliveryShort")}
           </span>
         </div>
 
