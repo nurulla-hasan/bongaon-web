@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 import Providers from "@/provider";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const hindSiliguri = Hind_Siliguri({
+  variable: "--font-sans",
+  subsets: ["bengali", "latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -14,8 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BankyBondy",
-  description: "Modern banking & bonding platform",
+  title: "Bongaon Bazar | গ্রামের খাঁটি ও ইউনিক প্যাকেটজাত খাবার",
+  description:
+    "শহরের মানুষ ও প্রবাসীদের পরিবারের জন্য বনগাঁও গ্রামের স্পেশাল প্যাকেটজাত খাবার — ৪ থেকে ৭ দিনে সারাদেশে ক্যাশ অন ডেলিভারি।",
 };
 
 export default function RootLayout({
@@ -25,12 +29,16 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="bn"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${hindSiliguri.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

@@ -71,8 +71,8 @@ export function SectionHeading({
       >
         <div className="min-w-0">
           {eyebrow && (
-            <p className="inline-flex items-center gap-2 text-xs font-medium tracking-widest text-primary uppercase">
-              <span className="size-1.5 rounded-full bg-primary" aria-hidden />
+            <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+              <span className="size-1.5 rounded-full bg-clay" aria-hidden />
               {eyebrow}
             </p>
           )}
@@ -82,8 +82,8 @@ export function SectionHeading({
           <Tag
             className={cn(
               hasKicker ? "mt-3" : "",
-              "tracking-tight text-primary font-heading uppercase",
-              variant === "plain" && "text-foreground normal-case",
+              "font-heading font-semibold tracking-tight text-foreground",
+              variant === "plain" && "text-foreground",
               titleClassName ?? headingSizes[Tag]
             )}
           >
