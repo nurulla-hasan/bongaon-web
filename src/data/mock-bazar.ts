@@ -19,6 +19,7 @@ export interface BazarProduct {
   shortTag: string;
   badge?: string;
   image?: string;
+  gallery?: string[];
   price: number;
   originalPrice?: number;
   unit: string;
@@ -103,6 +104,11 @@ export const BAZAR_PRODUCTS: BazarProduct[] = [
     shortTag: "সর্বাধিক বিক্রিত",
     badge: "বেস্টসেলার",
     image: "/images/product-churi-shutki.png",
+    gallery: [
+      "/images/product-mixed-shutki-pack.jpg",
+      "/images/product-loitta-shutki.jpg",
+      "/images/story-village-kitchen.png",
+    ],
     price: 320,
     originalPrice: 380,
     unit: "২৫০ গ্রাম",
@@ -168,6 +174,11 @@ export const BAZAR_PRODUCTS: BazarProduct[] = [
     shortTag: "মায়ের হাতের স্বাদ",
     badge: "নতুন ব্যাচ",
     image: "/images/product-mango-achar.png",
+    gallery: [
+      "/images/product-achar-trio.jpg",
+      "/images/story-village-kitchen.png",
+      "/images/hero-bongaon-tabletop.jpg",
+    ],
     price: 290,
     originalPrice: 340,
     unit: "৪০০ গ্রাম জার",
@@ -197,6 +208,11 @@ export const BAZAR_PRODUCTS: BazarProduct[] = [
     shortTag: "১০০% খাঁটি",
     badge: "প্রিমিয়াম",
     image: "/images/product-gawa-ghee.png",
+    gallery: [
+      "/images/product-deshi-murgir-ghee.jpg",
+      "/images/story-village-kitchen.png",
+      "/images/hero-bongaon-tabletop.jpg",
+    ],
     price: 850,
     originalPrice: 950,
     unit: "৫০০ গ্রাম",

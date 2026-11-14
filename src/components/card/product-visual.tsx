@@ -36,7 +36,7 @@ export function ProductVisual({
       className={cn(
         "relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-border/70",
         image ? "bg-muted" : toneMap[tone],
-        size === "card" ? "aspect-square" : "h-80 sm:h-96"
+        "aspect-square"
       )}
     >
       {image ? (

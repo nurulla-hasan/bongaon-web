@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import {
@@ -6,18 +5,17 @@ import {
   Clock,
   HandCoins,
   MapPin,
-  ShoppingBag,
   Star,
   Truck,
 } from "lucide-react";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
-import { ProductVisual } from "@/components/card/product-visual";
 import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ProductImageGallery } from "@/app/products/[slug]/_components/product-image-gallery";
+import { ProductPurchasePanel } from "@/app/products/[slug]/_components/product-purchase-panel";
 import { getBazarData } from "@/data/mock-bazar";
 
 interface ProductDetailPageProps {
@@ -40,9 +38,13 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const relatedProducts = products
-    .filter((item) => item.slug !== product.slug)
-    .slice(0, 3);
+  const sameCategory = products.filter(
+    (item) => item.slug !== product.slug && item.category === product.category,
+  );
+  const otherProducts = products.filter(
+    (item) => item.slug !== product.slug && item.category !== product.category,
+  );
+  const relatedProducts = [...sameCategory, ...otherProducts].slice(0, 5);
 
   return (
     <PageWrapper>
@@ -54,16 +56,9 @@ export default async function ProductDetailPage({
         ]}
       />
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-5">
-          <ProductVisual
-            tone={product.visualTone}
-            unit={product.unit}
-            shortTag={product.shortTag}
-            image={product.image}
-            alt={product.name}
-            size="detail"
-          />
+      <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-start">
+        <div className="lg:sticky lg:top-24 lg:col-span-5">
+          <ProductImageGallery product={product} />
         </div>
 
         <div className="space-y-6 lg:col-span-7">
@@ -80,10 +75,12 @@ export default async function ProductDetailPage({
             </h1>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5">
-                <Star className="size-4 text-primary" />
-                {product.rating} ({product.reviewCount}{" "}
-                {tProducts("reviewsLabel")})
+              <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+                <Star className="size-4 fill-gold text-gold" />
+                {product.rating}
+                <span className="font-normal text-muted-foreground">
+                  ({product.reviewCount} {tProducts("reviewsLabel")})
+                </span>
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-4 text-primary" />
@@ -92,54 +89,7 @@ export default async function ProductDetailPage({
             </div>
           </div>
 
-          <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-primary">
-              ৳{product.price}
-            </span>
-            {product.originalPrice && (
-              <span className="text-lg text-muted-foreground line-through">
-                ৳{product.originalPrice}
-              </span>
-            )}
-            <span className="text-sm text-muted-foreground">
-              / {product.unit} {tProducts("packSuffix")}
-            </span>
-          </div>
-
-          <p className="text-base leading-relaxed text-muted-foreground">
-            {product.description}
-          </p>
-
-          <div className="space-y-2.5">
-            <p className="text-sm font-semibold text-foreground">
-              {tProducts("selectPackSize")}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {product.packOptions.map((option, index) => (
-                <Button
-                  key={option.label}
-                  variant={index === 0 ? "default" : "outline"}
-                  size="lg"
-                >
-                  {option.label} — ৳{option.price}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button size="xl" render={<Link href="/cart" />}>
-              <ShoppingBag />
-              {tProducts("addToCart")}
-            </Button>
-            <Button
-              variant="secondary"
-              size="xl"
-              render={<Link href="/checkout" />}
-            >
-              {tProducts("orderCodNow")}
-            </Button>
-          </div>
+          <ProductPurchasePanel product={product} />
 
           <Card>
             <CardContent className="grid gap-4 sm:grid-cols-3">
@@ -219,7 +169,7 @@ export default async function ProductDetailPage({
         <h2 className="text-xl font-bold text-foreground sm:text-2xl">
           {tProducts("relatedTitle")}
         </h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-5">
           {relatedProducts.map((item) => (
             <ProductCard key={item.slug} product={item} />
           ))}
