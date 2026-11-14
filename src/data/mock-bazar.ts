@@ -335,3 +335,22 @@ export const BAZAR_REVIEWS: CustomerReview[] = [
 ];
 
 export const DELIVERY_CHARGE_BDT = 80;
+
+export async function getBazarData(locale: string) {
+  if (locale === "en") {
+    const en = await import("./mock-bazar-en");
+    return {
+      categories: en.BAZAR_CATEGORIES_EN,
+      products: en.BAZAR_PRODUCTS_EN,
+      cartItems: en.MOCK_CART_ITEMS_EN,
+      reviews: en.BAZAR_REVIEWS_EN,
+    };
+  }
+
+  return {
+    categories: BAZAR_CATEGORIES,
+    products: BAZAR_PRODUCTS,
+    cartItems: MOCK_CART_ITEMS,
+    reviews: BAZAR_REVIEWS,
+  };
+}

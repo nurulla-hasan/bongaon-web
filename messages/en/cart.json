@@ -1,0 +1,19 @@
+{
+    "breadcrumb":  "Your Cart",
+    "eyebrow":  "Order Review",
+    "title":  "Your Shopping Cart",
+    "description":  "Review item quantities and pack sizes before proceeding to checkout.",
+    "packLabel":  "Pack:",
+    "perPack":  "per pack",
+    "decrease":  "Decrease",
+    "increase":  "Increase",
+    "remove":  "Remove",
+    "summaryTitle":  "Order Summary",
+    "subtotal":  "Subtotal",
+    "deliveryCharge":  "Delivery Charge (Nationwide)",
+    "totalCod":  "Total (COD)",
+    "deliveryNote":  "Home delivery within 4–7 days",
+    "codNote":  "Pay cash when parcel arrives",
+    "proceedCheckout":  "Proceed to Checkout (COD)",
+    "addMore":  "Add More Products"
+}

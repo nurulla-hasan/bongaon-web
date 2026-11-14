@@ -14,6 +14,15 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: (await import(`../../messages/${locale}.json`)).default,
+    messages: {
+      Common: (await import(`../../messages/${locale}/common.json`)).default,
+      Navbar: (await import(`../../messages/${locale}/navbar.json`)).default,
+      Footer: (await import(`../../messages/${locale}/footer.json`)).default,
+      Home: (await import(`../../messages/${locale}/home.json`)).default,
+      Products: (await import(`../../messages/${locale}/products.json`)).default,
+      Cart: (await import(`../../messages/${locale}/cart.json`)).default,
+      Checkout: (await import(`../../messages/${locale}/checkout.json`)).default,
+      OrderSuccess: (await import(`../../messages/${locale}/order-success.json`)).default,
+    },
   };
 });

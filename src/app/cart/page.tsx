@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, Minus, Plus, ShieldCheck, Trash2, Truck } from "lucide-react";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
@@ -14,10 +15,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DELIVERY_CHARGE_BDT, MOCK_CART_ITEMS } from "@/data/mock-bazar";
+import { DELIVERY_CHARGE_BDT, getBazarData } from "@/data/mock-bazar";
 
-export default function CartPage() {
-  const subtotal = MOCK_CART_ITEMS.reduce(
+export default async function CartPage() {
+  const locale = await getLocale();
+  const [tCommon, tCart, { cartItems }] = await Promise.all([
+    getTranslations("Common"),
+    getTranslations("Cart"),
+    getBazarData(locale),
+  ]);
+
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
     0
   );
@@ -27,22 +35,23 @@ export default function CartPage() {
     <PageWrapper>
       <CustomBreadcrumb
         links={[
-          { name: "হোম", href: "/" },
-          { name: "আপনার কার্ট", isCurrent: true },
+          { name: tCommon("home"), href: "/" },
+          { name: tCart("breadcrumb"), isCurrent: true },
         ]}
       />
 
       <SectionHeading
         as="h1"
+        variant="plain"
         alignment="left"
-        eyebrow="অর্ডার রিভিউ"
-        title="আপনার শপিং কার্ট"
-        description="চেকআউটে যাওয়ার আগে পণ্যের পরিমাণ ও প্যাকেট সাইজ দেখে নিন।"
+        eyebrow={tCart("eyebrow")}
+        title={tCart("title")}
+        description={tCart("description")}
       />
 
       <div className="mt-8 grid gap-8 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-8">
-          {MOCK_CART_ITEMS.map((item) => (
+          {cartItems.map((item) => (
             <Card key={`${item.product.slug}-${item.selectedPack}`}>
               <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div className="w-full shrink-0 sm:w-36">
@@ -69,8 +78,8 @@ export default function CartPage() {
                         </Link>
                       </h2>
                       <p className="text-xs text-muted-foreground">
-                        প্যাকেট: {item.selectedPack} • প্রতি প্যাক ৳
-                        {item.unitPrice}
+                        {tCart("packLabel")} {item.selectedPack} •{" "}
+                        {tCart("perPack")} ৳{item.unitPrice}
                       </p>
                     </div>
 
@@ -81,20 +90,28 @@ export default function CartPage() {
 
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="icon-sm" aria-label="কমান">
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        aria-label={tCart("decrease")}
+                      >
                         <Minus />
                       </Button>
                       <span className="w-8 text-center text-sm font-semibold">
                         {item.quantity}
                       </span>
-                      <Button variant="outline" size="icon-sm" aria-label="বাড়ান">
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        aria-label={tCart("increase")}
+                      >
                         <Plus />
                       </Button>
                     </div>
 
                     <Button variant="ghost" size="sm">
                       <Trash2 />
-                      বাদ দিন
+                      {tCart("remove")}
                     </Button>
                   </div>
                 </div>
@@ -106,19 +123,21 @@ export default function CartPage() {
         <div className="lg:col-span-4">
           <Card>
             <CardHeader>
-              <CardTitle>অর্ডার সামারি</CardTitle>
+              <CardTitle>{tCart("summaryTitle")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">পণ্যের মূল্য</span>
+                  <span className="text-muted-foreground">
+                    {tCart("subtotal")}
+                  </span>
                   <span className="font-medium text-foreground">
                     ৳{subtotal}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">
-                    ডেলিভারি চার্জ (সারাদেশে)
+                    {tCart("deliveryCharge")}
                   </span>
                   <span className="font-medium text-foreground">
                     ৳{DELIVERY_CHARGE_BDT}
@@ -130,7 +149,7 @@ export default function CartPage() {
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-semibold text-foreground">
-                  সর্বমোট (COD)
+                  {tCart("totalCod")}
                 </span>
                 <span className="text-xl font-bold text-primary">৳{total}</span>
               </div>
@@ -138,11 +157,11 @@ export default function CartPage() {
               <div className="space-y-2 rounded-xl border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <p className="flex items-center gap-2">
                   <Truck className="size-4 shrink-0 text-primary" />
-                  <span>৪–৭ দিনের মধ্যে হোম ডেলিভারি</span>
+                  <span>{tCart("deliveryNote")}</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <ShieldCheck className="size-4 shrink-0 text-primary" />
-                  <span>প্যাকেট হাতে পেয়ে ক্যাশ টাকা পরিশোধ</span>
+                  <span>{tCart("codNote")}</span>
                 </p>
               </div>
             </CardContent>
@@ -152,7 +171,7 @@ export default function CartPage() {
                 className="w-full"
                 render={<Link href="/checkout" />}
               >
-                চেকআউটে যান (COD)
+                {tCart("proceedCheckout")}
                 <ArrowRight />
               </Button>
               <Button
@@ -160,7 +179,7 @@ export default function CartPage() {
                 className="w-full"
                 render={<Link href="/products" />}
               >
-                আরও প্রোডাক্ট যোগ করুন
+                {tCart("addMore")}
               </Button>
             </CardFooter>
           </Card>

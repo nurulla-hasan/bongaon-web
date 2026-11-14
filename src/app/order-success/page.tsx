@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, CheckCircle2, HandCoins, Truck } from "lucide-react";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { Badge } from "@/components/ui/badge";
@@ -11,10 +12,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DELIVERY_CHARGE_BDT, MOCK_CART_ITEMS } from "@/data/mock-bazar";
+import { DELIVERY_CHARGE_BDT, getBazarData } from "@/data/mock-bazar";
 
-export default function OrderSuccessPage() {
-  const subtotal = MOCK_CART_ITEMS.reduce(
+export default async function OrderSuccessPage() {
+  const locale = await getLocale();
+  const [t, { cartItems }] = await Promise.all([
+    getTranslations("OrderSuccess"),
+    getBazarData(locale),
+  ]);
+
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
     0
   );
@@ -29,16 +36,14 @@ export default function OrderSuccessPage() {
               <CheckCircle2 className="size-9" />
             </div>
             <div className="flex justify-center">
-              <Badge variant="secondary">অর্ডার নম্বর: #BB-2026-104</Badge>
+              <Badge variant="secondary">{t("orderRef")}</Badge>
             </div>
-            <CardTitle>আপনার অর্ডারটি সফলভাবে গৃহীত হয়েছে!</CardTitle>
+            <CardTitle>{t("title")}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-6">
             <p className="text-center text-sm leading-relaxed text-muted-foreground">
-              ধন্যবাদ! বনগাঁও থেকে আপনার স্পেশাল প্যাকেটজাত খাবারগুলো ফ্রেশ
-              প্যাক করে পাঠানো হবে। ডেলিভারির আগে রিসিভারের মোবাইল নম্বরে কল করা
-              হবে।
+              {t("description")}
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -46,10 +51,10 @@ export default function OrderSuccessPage() {
                 <Truck className="mt-0.5 size-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs font-medium text-muted-foreground">
-                    ডেলিভারি সময়সীমা
+                    {t("deliveryWindowLabel")}
                   </p>
                   <p className="text-sm font-semibold text-foreground">
-                    ৪ থেকে ৭ দিনের মধ্যে
+                    {t("deliveryWindowValue")}
                   </p>
                 </div>
               </div>
@@ -58,10 +63,10 @@ export default function OrderSuccessPage() {
                 <HandCoins className="mt-0.5 size-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs font-medium text-muted-foreground">
-                    পেমেন্ট মাধ্যম
+                    {t("paymentLabel")}
                   </p>
                   <p className="text-sm font-semibold text-foreground">
-                    ক্যাশ অন ডেলিভারি (৳{total})
+                    {t("paymentValuePrefix")} (৳{total})
                   </p>
                 </div>
               </div>
@@ -70,8 +75,10 @@ export default function OrderSuccessPage() {
             <Separator />
 
             <div className="space-y-2 text-sm">
-              <p className="font-semibold text-foreground">অর্ডারকৃত পণ্যসমূহ:</p>
-              {MOCK_CART_ITEMS.map((item) => (
+              <p className="font-semibold text-foreground">
+                {t("orderedItems")}
+              </p>
+              {cartItems.map((item) => (
                 <div
                   key={`${item.product.slug}-${item.selectedPack}`}
                   className="flex items-center justify-between text-muted-foreground"
@@ -89,11 +96,11 @@ export default function OrderSuccessPage() {
 
           <CardFooter className="flex flex-wrap justify-center gap-3">
             <Button size="lg" render={<Link href="/products" />}>
-              আরও প্রোডাক্ট দেখুন
+              {t("moreProducts")}
               <ArrowRight />
             </Button>
             <Button variant="outline" size="lg" render={<Link href="/" />}>
-              হোমপেজে ফিরে যান
+              {t("backHome")}
             </Button>
           </CardFooter>
         </Card>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   CheckCircle2,
   Globe,
@@ -24,10 +25,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { DELIVERY_CHARGE_BDT, MOCK_CART_ITEMS } from "@/data/mock-bazar";
+import { DELIVERY_CHARGE_BDT, getBazarData } from "@/data/mock-bazar";
 
-export default function CheckoutPage() {
-  const subtotal = MOCK_CART_ITEMS.reduce(
+export default async function CheckoutPage() {
+  const locale = await getLocale();
+  const [tCommon, tCheckout, { cartItems }] = await Promise.all([
+    getTranslations("Common"),
+    getTranslations("Checkout"),
+    getBazarData(locale),
+  ]);
+
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
     0
   );
@@ -37,29 +45,27 @@ export default function CheckoutPage() {
     <PageWrapper>
       <CustomBreadcrumb
         links={[
-          { name: "হোম", href: "/" },
-          { name: "কার্ট", href: "/cart" },
-          { name: "চেকআউট (COD)", isCurrent: true },
+          { name: tCommon("home"), href: "/" },
+          { name: tCheckout("cartBreadcrumb"), href: "/cart" },
+          { name: tCheckout("breadcrumb"), isCurrent: true },
         ]}
       />
 
       <SectionHeading
         as="h1"
+        variant="plain"
         alignment="left"
-        eyebrow="লগইন ছাড়াই অর্ডার"
-        title="ক্যাশ অন ডেলিভারি চেকআউট"
-        description="শুধুমাত্র বাংলাদেশের ভেতরের ঠিকানা দিন। ৪–৭ দিনের মধ্যে পার্সেল পৌঁছে যাবে এবং হাতে পেয়েই টাকা পরিশোধ করা যাবে।"
+        eyebrow={tCheckout("eyebrow")}
+        title={tCheckout("title")}
+        description={tCheckout("description")}
       />
 
       <div className="mt-8 grid gap-8 lg:grid-cols-12">
         <div className="space-y-6 lg:col-span-7">
           <Card>
             <CardHeader>
-              <CardTitle>১. অর্ডারটি কার জন্য?</CardTitle>
-              <CardDescription>
-                নিজের শহরের বাসায় নিতে পারেন অথবা প্রবাস থেকে দেশের পরিবারের
-                ঠিকানায় পাঠাতে পারেন।
-              </CardDescription>
+              <CardTitle>{tCheckout("step1Title")}</CardTitle>
+              <CardDescription>{tCheckout("step1Desc")}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-start gap-3 rounded-xl border-2 border-primary bg-primary/5 p-4">
@@ -67,12 +73,12 @@ export default function CheckoutPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold text-foreground">
-                      নিজের জন্য (শহরে)
+                      {tCheckout("forSelfTitle")}
                     </p>
-                    <Badge variant="default">নির্বাচিত</Badge>
+                    <Badge variant="default">{tCheckout("selected")}</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    আপনি নিজেই পার্সেল রিসিভ করবেন ও COD টাকা দেবেন।
+                    {tCheckout("forSelfDesc")}
                   </p>
                 </div>
               </div>
@@ -81,10 +87,10 @@ export default function CheckoutPage() {
                 <Globe className="mt-0.5 size-5 shrink-0 text-primary" />
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-foreground">
-                    প্রবাস থেকে পরিবারের জন্য
+                    {tCheckout("forFamilyTitle")}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    দেশে থাকা পরিবার পার্সেল হাতে পেয়ে টাকা পরিশোধ করবে।
+                    {tCheckout("forFamilyDesc")}
                   </p>
                 </div>
               </div>
@@ -93,60 +99,66 @@ export default function CheckoutPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>২. ডেলিভারি ঠিকানা ও রিসিভার তথ্য</CardTitle>
-              <CardDescription>
-                ডেলিভারির আগে কুরিয়ার থেকে রিসিভারের নম্বরে কল করা হবে।
-              </CardDescription>
+              <CardTitle>{tCheckout("step2Title")}</CardTitle>
+              <CardDescription>{tCheckout("step2Desc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="receiver-name">রিসিভারের পূর্ণ নাম *</Label>
+                  <Label htmlFor="receiver-name">
+                    {tCheckout("receiverName")}
+                  </Label>
                   <Input
                     id="receiver-name"
-                    placeholder="যেমন: মো. রাশেদুল ইসলাম"
+                    placeholder={tCheckout("receiverNamePlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="receiver-phone">
-                    রিসিভারের মোবাইল নম্বর (বাংলাদেশ) *
+                    {tCheckout("receiverPhone")}
                   </Label>
-                  <Input id="receiver-phone" placeholder="017XXXXXXXX" />
+                  <Input
+                    id="receiver-phone"
+                    placeholder={tCheckout("receiverPhonePlaceholder")}
+                  />
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="district">জেলা ও থানা *</Label>
-                  <Input id="district" placeholder="যেমন: ঢাকা, মিরপুর-১০" />
+                  <Label htmlFor="district">{tCheckout("district")}</Label>
+                  <Input
+                    id="district"
+                    placeholder={tCheckout("districtPlaceholder")}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="probashi-whatsapp">
-                    অর্ডারকারীর WhatsApp (প্রবাসী হলে ঐচ্ছিক)
+                    {tCheckout("whatsapp")}
                   </Label>
                   <Input
                     id="probashi-whatsapp"
-                    placeholder="+966 / +971 / +880..."
+                    placeholder={tCheckout("whatsappPlaceholder")}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="full-address">
-                  বিস্তারিত বাসা/বাড়ির ঠিকানা ও ল্যান্ডমার্ক *
+                  {tCheckout("fullAddress")}
                 </Label>
                 <Textarea
                   id="full-address"
                   rows={3}
-                  placeholder="বাসা নং, রোড নং, পাড়া বা কাছাকাছি পরিচিত জায়গার নাম..."
+                  placeholder={tCheckout("fullAddressPlaceholder")}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="order-note">বিশেষ নির্দেশনা (ঐচ্ছিক)</Label>
+                <Label htmlFor="order-note">{tCheckout("orderNote")}</Label>
                 <Input
                   id="order-note"
-                  placeholder="যেমন: মায়ের জন্য উপহার, বিকেলে ডেলিভারি দিলে ভালো হয়"
+                  placeholder={tCheckout("orderNotePlaceholder")}
                 />
               </div>
             </CardContent>
@@ -154,7 +166,7 @@ export default function CheckoutPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>৩. পেমেন্ট পদ্ধতি</CardTitle>
+              <CardTitle>{tCheckout("step3Title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-4">
@@ -162,13 +174,15 @@ export default function CheckoutPage() {
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-sm font-semibold text-foreground">
-                      ক্যাশ অন ডেলিভারি (Cash on Delivery)
+                      {tCheckout("codTitle")}
                     </p>
-                    <Badge variant="secondary">একমাত্র মাধ্যম</Badge>
+                    <Badge variant="secondary">
+                      {tCheckout("onlyMethod")}
+                    </Badge>
                   </div>
                   <p className="text-xs leading-relaxed text-muted-foreground">
-                    আগে কোনো টাকা দিতে হবে না। ৪–৭ দিনের মধ্যে পার্সেল হাতে
-                    পেয়ে ডেলিভারি ম্যানকে মোট ৳{total} পরিশোধ করবেন।
+                    {tCheckout("codDescPrefix")} ৳{total}{" "}
+                    {tCheckout("codDescSuffix")}
                   </p>
                 </div>
               </div>
@@ -179,11 +193,11 @@ export default function CheckoutPage() {
         <div className="lg:col-span-5">
           <Card>
             <CardHeader>
-              <CardTitle>আপনার অর্ডারের বিবরণ</CardTitle>
+              <CardTitle>{tCheckout("orderDetailsTitle")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                {MOCK_CART_ITEMS.map((item) => (
+                {cartItems.map((item) => (
                   <div
                     key={`${item.product.slug}-${item.selectedPack}`}
                     className="flex items-start justify-between gap-3 text-sm"
@@ -207,11 +221,15 @@ export default function CheckoutPage() {
 
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">সাবটোটাল</span>
+                  <span className="text-muted-foreground">
+                    {tCheckout("subtotal")}
+                  </span>
                   <span>৳{subtotal}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">ডেলিভারি চার্জ</span>
+                  <span className="text-muted-foreground">
+                    {tCheckout("deliveryCharge")}
+                  </span>
                   <span>৳{DELIVERY_CHARGE_BDT}</span>
                 </div>
               </div>
@@ -220,7 +238,7 @@ export default function CheckoutPage() {
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-semibold text-foreground">
-                  মোট প্রদেয় (হাতে পেয়ে)
+                  {tCheckout("totalPayable")}
                 </span>
                 <span className="text-2xl font-bold text-primary">
                   ৳{total}
@@ -230,11 +248,11 @@ export default function CheckoutPage() {
               <div className="space-y-2 rounded-xl border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <p className="flex items-center gap-2">
                   <Truck className="size-4 shrink-0 text-primary" />
-                  <span>সম্ভাব্য ডেলিভারি: ৪ থেকে ৭ কর্মদিবস</span>
+                  <span>{tCheckout("estDelivery")}</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <ShieldCheck className="size-4 shrink-0 text-primary" />
-                  <span>শুধুমাত্র বাংলাদেশের ভেতরে ডেলিভারি প্রযোজ্য</span>
+                  <span>{tCheckout("bdOnly")}</span>
                 </p>
               </div>
             </CardContent>
@@ -245,14 +263,14 @@ export default function CheckoutPage() {
                 render={<Link href="/order-success" />}
               >
                 <CheckCircle2 />
-                অর্ডার কনফার্ম করুন (COD)
+                {tCheckout("confirmOrder")}
               </Button>
               <Button
                 variant="ghost"
                 className="w-full"
                 render={<Link href="/cart" />}
               >
-                কার্টে ফিরে যান
+                {tCheckout("backToCart")}
               </Button>
             </CardFooter>
           </Card>

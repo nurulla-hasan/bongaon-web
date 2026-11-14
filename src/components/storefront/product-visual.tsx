@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PackageCheck, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { BazarProduct } from "@/data/mock-bazar";
 
@@ -27,6 +28,7 @@ export function ProductVisual({
   alt,
   size = "card",
 }: ProductVisualProps) {
+  const t = useTranslations("Common");
   return (
     <div
       className={cn(
@@ -53,7 +55,7 @@ export function ProductVisual({
             {shortTag}
           </span>
           <span className="absolute bottom-3 left-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur">
-            প্যাকেট: {unit}
+            {t("packPrefix")} {unit}
           </span>
         </>
       ) : (
@@ -68,7 +70,7 @@ export function ProductVisual({
           />
 
           <span className="rounded-md bg-background/85 px-2.5 py-0.5 text-xs font-semibold text-foreground">
-            প্যাকেট: {unit}
+            {t("packPrefix")} {unit}
           </span>
         </>
       )}

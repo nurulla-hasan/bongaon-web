@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Sprout } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -15,6 +18,7 @@ export function Logo({
   showText = true,
   href = "/",
 }: LogoProps) {
+  const t = useTranslations("Common");
   const boxSize = size === "lg" ? "size-10" : size === "md" ? "size-9" : "size-7";
   const iconSize = size === "lg" ? "size-5" : size === "md" ? "size-4" : "size-3.5";
 
@@ -45,10 +49,10 @@ export function Logo({
               size === "sm" && "text-base"
             )}
           >
-            Bongaon Bazar
+            {t("brandName")}
           </span>
           <span className="text-xs font-normal text-muted-foreground">
-            গ্রামের খাঁটি প্যাকেটজাত স্বাদ
+            {t("tagline")}
           </span>
         </span>
       )}

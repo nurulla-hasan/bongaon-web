@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   ArrowRight,
   BadgeCheck,
@@ -25,9 +26,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 import AnimationWrapper from "@/components/common/animation-wrapper";
 import { ProductCard } from "@/components/storefront/product-card";
 import {
-  BAZAR_CATEGORIES,
-  BAZAR_PRODUCTS,
-  BAZAR_REVIEWS,
+  getBazarData,
   type CategoryItem,
 } from "@/data/mock-bazar";
 import { cn } from "@/lib/utils";
@@ -57,7 +56,9 @@ const ctaPrimary =
 const ctaSecondary =
   "inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary";
 
-export function HeroBanner() {
+export async function HeroBanner() {
+  const t = await getTranslations("Home");
+
   return (
     <SectionWrapper
       container={false}
@@ -81,43 +82,42 @@ export function HeroBanner() {
         <div className="lg:col-span-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary">
             <Sprout className="size-3.5" />
-            বনগাঁও গ্রামের ঘরোয়া রান্নাঘর থেকে
+            {t("heroBadge")}
           </span>
 
           <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            গ্রামের <span className="text-primary">খাঁটি স্বাদ</span>, এখন আপনার
-            শহরের দরজায়
+            {t("heroTitleStart")}{" "}
+            <span className="text-primary">{t("heroTitleHighlight")}</span>
+            {t("heroTitleEnd")}
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            হাতে বাটা শুঁটকি ভর্তা, রোদে শুকানো আচার, দানাদার গাওয়া ঘি আর
-            খেজুরের গুড় — নিজের রান্নাঘরের জন্য, কিংবা প্রবাস থেকে দেশের
-            পরিবারের জন্য।
+            {t("heroDescription")}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/products" className={ctaPrimary}>
-              স্পেশাল প্রোডাক্ট দেখুন
+              {t("heroPrimaryCta")}
               <ArrowRight className="size-4" />
             </Link>
             <Link href="/checkout" className={ctaSecondary}>
               <Globe className="size-4 text-clay" />
-              প্রবাস থেকে অর্ডার করুন
+              {t("heroSecondaryCta")}
             </Link>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-2">
               <CheckCircle2 className="size-4 text-primary" />
-              লগইন ছাড়াই অর্ডার
+              {t("heroPoint1")}
             </span>
             <span className="inline-flex items-center gap-2">
               <CheckCircle2 className="size-4 text-primary" />
-              ভ্যাকুয়াম-সিলড প্যাক
+              {t("heroPoint2")}
             </span>
             <span className="inline-flex items-center gap-2">
               <CheckCircle2 className="size-4 text-primary" />
-              হাতে পেয়ে COD
+              {t("heroPoint3")}
             </span>
           </div>
 
@@ -140,8 +140,10 @@ export function HeroBanner() {
               ))}
             </div>
             <p className="text-xs leading-snug text-muted-foreground">
-              শহর ও প্রবাসের পরিবারগুলোর{" "}
-              <span className="font-semibold text-foreground">ভরসার ঠিকানা</span>
+              {t("heroSocialPrefix")}{" "}
+              <span className="font-semibold text-foreground">
+                {t("heroSocialHighlight")}
+              </span>
             </p>
           </div>
         </div>
@@ -166,7 +168,7 @@ export function HeroBanner() {
             <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary">
               <Truck className="size-3.5" />
             </span>
-            ৪–৭ দিনে COD ডেলিভারি
+            {t("heroCodBadge")}
           </div>
 
           <Link
@@ -183,12 +185,16 @@ export function HeroBanner() {
               />
             </span>
             <span className="flex flex-col">
-              <span className="text-xs text-muted-foreground">সেরা বিক্রিত</span>
+              <span className="text-xs text-muted-foreground">
+                {t("heroTopSeller")}
+              </span>
               <span className="text-sm font-semibold text-foreground">
-                দানাদার গাওয়া ঘি
+                {t("heroTopProduct")}
               </span>
             </span>
-            <span className="ml-2 text-sm font-bold text-clay">৳৮৫০</span>
+            <span className="ml-2 text-sm font-bold text-clay">
+              {t("heroTopPrice")}
+            </span>
           </Link>
         </div>
       </div>
@@ -196,30 +202,31 @@ export function HeroBanner() {
   );
 }
 
-export function TrustBar() {
+export async function TrustBar() {
+  const t = await getTranslations("Home");
   const trustItems = [
     {
       icon: Truck,
-      title: "৪–৭ দিনে হোম ডেলিভারি",
-      desc: "ঢাকা, চট্টগ্রামসহ বাংলাদেশের যেকোনো জেলায় নিরাপদ ডেলিভারি।",
+      title: t("trust1Title"),
+      desc: t("trust1Desc"),
       tone: "bg-primary/10 text-primary",
     },
     {
       icon: HandCoins,
-      title: "১০০% ক্যাশ অন ডেলিভারি",
-      desc: "প্যাকেট হাতে পেয়ে যাচাই করে তারপর টাকা পরিশোধের সুবিধা।",
+      title: t("trust2Title"),
+      desc: t("trust2Desc"),
       tone: "bg-clay/10 text-clay",
     },
     {
       icon: ShieldCheck,
-      title: "হাইজেনিক প্যাকেটজাত পণ্য",
-      desc: "ভ্যাকুয়াম-সিলড ও ফুড-গ্রেড জারে প্যাকিং, তাই স্বাদ থাকে অটুট।",
+      title: t("trust3Title"),
+      desc: t("trust3Desc"),
       tone: "bg-gold/20 text-gold-foreground",
     },
     {
       icon: Globe,
-      title: "প্রবাসীদের জন্য সহজ অর্ডার",
-      desc: "বিদেশে বসে অর্ডার করুন, দেশে পরিবার হাতে পেয়ে টাকা দেবে।",
+      title: t("trust4Title"),
+      desc: t("trust4Desc"),
       tone: "bg-primary/10 text-primary",
     },
   ];
@@ -257,23 +264,29 @@ export function TrustBar() {
   );
 }
 
-export function CategoryGrid() {
+export async function CategoryGrid() {
+  const locale = await getLocale();
+  const [t, { categories }] = await Promise.all([
+    getTranslations("Home"),
+    getBazarData(locale),
+  ]);
+
   return (
     <SectionWrapper id="categories" padding="md">
       <SectionHeading
         variant="plain"
-        eyebrow="ক্যাটাগরি"
-        title="গ্রামের কোন স্পেশাল স্বাদ খুঁজছেন?"
-        description="আমাদের সব পণ্য নিজস্ব তত্ত্বাবধানে প্যাকেটজাত — শহরের রান্নাঘর কিংবা পরিবারের উপহারের জন্য তৈরি।"
+        eyebrow={t("catEyebrow")}
+        title={t("catTitle")}
+        description={t("catDesc")}
       >
         <Link href="/products" className={ctaSecondary}>
-          সব প্রোডাক্ট দেখুন
+          {t("catCta")}
           <ArrowRight className="size-4" />
         </Link>
       </SectionHeading>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {BAZAR_CATEGORIES.map((category, index) => {
+        {categories.map((category, index) => {
           const Icon = categoryIconMap[category.iconName];
           return (
             <AnimationWrapper key={category.id} delay={index * 0.05}>
@@ -312,23 +325,29 @@ export function CategoryGrid() {
   );
 }
 
-export function FeaturedProductsSection() {
+export async function FeaturedProductsSection() {
+  const locale = await getLocale();
+  const [t, { products }] = await Promise.all([
+    getTranslations("Home"),
+    getBazarData(locale),
+  ]);
+
   return (
     <SectionWrapper id="featured-products" bg="muted" padding="md">
       <SectionHeading
         variant="plain"
-        eyebrow="স্পেশাল কালেকশন"
-        title="ঘরোয়া হাতে বানানো জনপ্রিয় প্যাক"
-        description="প্রতিটি পণ্য অর্ডার অনুযায়ী ফ্রেশ প্যাক করে ৪–৭ দিনের মধ্যে পৌঁছে দেওয়া হয়।"
+        eyebrow={t("featuredEyebrow")}
+        title={t("featuredTitle")}
+        description={t("featuredDesc")}
       >
         <Link href="/products" className={ctaSecondary}>
-          সব দেখুন
+          {t("featuredCta")}
           <ArrowRight className="size-4" />
         </Link>
       </SectionHeading>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {BAZAR_PRODUCTS.map((product, index) => (
+        {products.map((product, index) => (
           <AnimationWrapper key={product.slug} delay={index * 0.04}>
             <ProductCard product={product} />
           </AnimationWrapper>
@@ -338,11 +357,12 @@ export function FeaturedProductsSection() {
   );
 }
 
-export function StorySection() {
+export async function StorySection() {
+  const t = await getTranslations("Home");
   const points = [
-    "প্রতিটি ব্যাচ গ্রামের ঘরোয়া রান্নাঘরে হাতে তৈরি",
-    "কোনো প্রিজারভেটিভ, কৃত্রিম রঙ বা ফ্লেভার নেই",
-    "ভ্যাকুয়াম-সিলড ফুড-গ্রেড প্যাকে সারা দেশে ডেলিভারি",
+    t("heroPoint2"),
+    t("trust3Desc"),
+    t("trust1Desc"),
   ];
 
   return (
@@ -369,9 +389,11 @@ export function StorySection() {
             </span>
             <div>
               <p className="text-sm font-semibold text-foreground">
-                ২০+ গ্রামের পরিবার
+                {t("storyFamilies")}
               </p>
-              <p className="text-xs text-muted-foreground">আমাদের সাথে জড়িত</p>
+              <p className="text-xs text-muted-foreground">
+                {t("storyInvolved")}
+              </p>
             </div>
           </div>
         </div>
@@ -379,17 +401,15 @@ export function StorySection() {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-clay/10 px-4 py-1.5 text-xs font-semibold text-clay">
             <Leaf className="size-3.5" />
-            আমাদের গল্প
+            {t("storyBadge")}
           </span>
 
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            বনগাঁও থেকে সরাসরি আপনার রান্নাঘরে
+            {t("storyTitle")}
           </h2>
 
           <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-            বনগাঁও গ্রামের গৃহস্থ রান্নাঘরে পুরনো রেসিপিতে তৈরি হয় আমাদের ভর্তা,
-            আচার আর ঘি। মাটির চুলা, রোদ আর হাতের ছোঁয়ায় তৈরি সেই স্বাদই আমরা সিল
-            করে পাঠিয়ে দিই শহর থেকে প্রবাস পর্যন্ত।
+            {t("storyDesc")}
           </p>
 
           <ul className="mt-6 space-y-3">
@@ -407,7 +427,7 @@ export function StorySection() {
           </ul>
 
           <Link href="/products" className={cn(ctaPrimary, "mt-8")}>
-            গ্রামের প্যাকগুলো দেখুন
+            {t("storyCta")}
             <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -416,22 +436,23 @@ export function StorySection() {
   );
 }
 
-export function ProbashiGuideSection() {
+export async function ProbashiGuideSection() {
+  const t = await getTranslations("Home");
   const steps = [
     {
-      step: "০১",
-      title: "প্রোডাক্ট ও কম্বো বাছাই করুন",
-      desc: "শুঁটকি ভর্তা, আচার, ঘি বা প্রবাসী ফ্যামিলি কম্বো পছন্দ করে কার্টে রাখুন।",
+      step: t("step1Num"),
+      title: t("step1Title"),
+      desc: t("step1Desc"),
     },
     {
-      step: "০২",
-      title: "দেশের পরিবারের ঠিকানা দিন",
-      desc: "চেকআউটে 'পরিবারের জন্য অর্ডার' সিলেক্ট করে দেশে থাকা রিসিভারের নাম ও মোবাইল নম্বর দিন।",
+      step: t("step2Num"),
+      title: t("step2Title"),
+      desc: t("step2Desc"),
     },
     {
-      step: "০৩",
-      title: "৪–৭ দিনে হাতে পেয়ে COD পেমেন্ট",
-      desc: "আপনার পরিবার ৪–৭ দিনের মধ্যে পার্সেল হাতে পেয়ে ক্যাশ টাকা পরিশোধ করবে।",
+      step: t("step3Num"),
+      title: t("step3Title"),
+      desc: t("step3Desc"),
     },
   ];
 
@@ -444,9 +465,9 @@ export function ProbashiGuideSection() {
         />
 
         <SectionHeading
-          eyebrow="প্রবাসী ও শহরের ক্রেতাদের জন্য"
-          title="বিদেশে বসেও দেশের পরিবারের জন্য অর্ডার করুন"
-          description="কোনো আন্তর্জাতিক কার্ড বা লগইন ছাড়াই, মাত্র ৩টি ধাপে আপনার প্রিয়জনের ঠিকানায় গ্রামের খাঁটি খাবার পৌঁছে দিন।"
+          eyebrow={t("probashiEyebrow")}
+          title={t("probashiTitle")}
+          description={t("probashiDesc")}
           alignment="center"
         />
 
@@ -477,7 +498,7 @@ export function ProbashiGuideSection() {
 
         <div className="mt-10 flex justify-center">
           <Link href="/checkout" className={ctaPrimary}>
-            পরিবারের জন্য অর্ডার করুন
+            {t("probashiCta")}
             <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -486,19 +507,25 @@ export function ProbashiGuideSection() {
   );
 }
 
-export function ReviewsSection() {
+export async function ReviewsSection() {
+  const locale = await getLocale();
+  const [t, { reviews }] = await Promise.all([
+    getTranslations("Home"),
+    getBazarData(locale),
+  ]);
+
   return (
     <SectionWrapper id="reviews" bg="muted" padding="md">
       <SectionHeading
         variant="plain"
-        eyebrow="ক্রেতাদের অভিজ্ঞতা"
-        title="শহর ও প্রবাস থেকে যারা অর্ডার করেছেন"
-        description="প্রথমবার অর্ডার করা ক্রেতাদের বাস্তব অভিজ্ঞতা।"
+        eyebrow={t("reviewsEyebrow")}
+        title={t("reviewsTitle")}
+        description={t("reviewsDesc")}
         alignment="center"
       />
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {BAZAR_REVIEWS.map((review) => (
+        {reviews.map((review) => (
           <AnimationWrapper key={review.id}>
             <figure className="flex h-full flex-col rounded-3xl border border-border/60 bg-card p-6 shadow-sm">
               <Quote className="size-6 text-clay/60" />
@@ -527,12 +554,12 @@ export function ReviewsSection() {
                 </div>
                 <span className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-primary">
                   <BadgeCheck className="size-3.5" />
-                  ভেরিফাইড
+                  {t("verified")}
                 </span>
               </figcaption>
 
               <p className="mt-3 text-xs font-medium text-clay">
-                পণ্য: {review.productName}
+                {t("productPrefix")} {review.productName}
               </p>
             </figure>
           </AnimationWrapper>
@@ -542,7 +569,9 @@ export function ReviewsSection() {
   );
 }
 
-export function ClosingCta() {
+export async function ClosingCta() {
+  const t = await getTranslations("Home");
+
   return (
     <SectionWrapper padding="md">
       <div className="relative isolate overflow-hidden rounded-4xl border border-border/70 bg-secondary/70 px-6 py-12 text-center sm:px-12 sm:py-16">
@@ -556,41 +585,40 @@ export function ClosingCta() {
 
         <span className="inline-flex items-center gap-2 rounded-full bg-background/80 px-4 py-1.5 text-xs font-semibold text-primary">
           <Sparkles className="size-3.5" />
-          আজকের অর্ডার আজই কনফার্ম
+          {t("closingBadge")}
         </span>
 
         <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          আপনার প্রিয়জনের জন্য গ্রামের খাঁটি স্বাদ পাঠান
+          {t("closingTitle")}
         </h2>
 
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-          লগইন ছাড়াই অর্ডার করুন। ৪–৭ দিনের মধ্যে পার্সেল হাতে পেয়ে ক্যাশ টাকা
-          পরিশোধ করবেন।
+          {t("closingDesc")}
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/products" className={ctaPrimary}>
-            অর্ডার শুরু করুন
+            {t("closingPrimary")}
             <ArrowRight className="size-4" />
           </Link>
           <Link href="/checkout" className={ctaSecondary}>
             <HandCoins className="size-4 text-clay" />
-            COD চেকআউট
+            {t("closingSecondary")}
           </Link>
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <Truck className="size-3.5 text-primary" />
-            সারা দেশে ডেলিভারি
+            {t("closingPoint1")}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <ShieldCheck className="size-3.5 text-primary" />
-            ১০০% ক্যাশ অন ডেলিভারি
+            {t("closingPoint2")}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <CheckCircle2 className="size-3.5 text-primary" />
-            লগইন ছাড়াই
+            {t("closingPoint3")}
           </span>
         </div>
       </div>

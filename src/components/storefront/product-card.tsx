@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Star, Truck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ProductVisual } from "@/components/storefront/product-visual";
 import type { BazarProduct } from "@/data/mock-bazar";
 
@@ -8,6 +9,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const t = useTranslations("Products");
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5">
       <Link
@@ -69,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
             href={`/products/${product.slug}`}
             className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3.5 py-1.5 text-xs font-semibold text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
           >
-            দেখুন
+            {t("view")}
             <ArrowRight className="size-3.5" />
           </Link>
         </div>

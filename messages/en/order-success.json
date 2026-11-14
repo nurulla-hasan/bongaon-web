@@ -1,0 +1,12 @@
+{
+    "orderRef":  "Order ID: #BB-2026-104",
+    "title":  "Your order has been placed successfully!",
+    "description":  "Thank you! Your special packaged foods from Bongaon will be freshly packed and dispatched. The receiver will be called before delivery.",
+    "deliveryWindowLabel":  "Delivery Window",
+    "deliveryWindowValue":  "Within 4 to 7 days",
+    "paymentLabel":  "Payment Method",
+    "paymentValuePrefix":  "Cash on Delivery",
+    "orderedItems":  "Ordered Items:",
+    "moreProducts":  "Browse More Products",
+    "backHome":  "Back to Home"
+}
