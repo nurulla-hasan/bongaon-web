@@ -1,0 +1,24 @@
+{
+  "Common": {
+    "brandName": "Bongaon Bazar",
+    "tagline": "গ্রামের খাঁটি প্যাকেটজাত স্বাদ",
+    "searchPlaceholder": "প্রোডাক্ট খুঁজুন..."
+  },
+  "Navbar": {
+    "announcement": "৪–৭ দিনের মধ্যে সারাদেশে ডেলিভারি • শুধুমাত্র ক্যাশ অন ডেলিভারি (COD)",
+    "home": "হোম",
+    "products": "সব প্রোডাক্ট",
+    "probashiGuide": "প্রবাসী গাইড",
+    "checkout": "চেকআউট",
+    "cart": "কার্ট",
+    "login": "লগইন",
+    "loginTrack": "লগইন / অর্ডার ট্র্যাক",
+    "logout": "লগআউট",
+    "myOrders": "আমার অর্ডারসমূহ",
+    "savedAddresses": "সেভ করা ঠিকানা",
+    "profile": "প্রোফাইল",
+    "menu": "মেনু খুলুন",
+    "theme": "থিম পরিবর্তন",
+    "language": "ভাষা পরিবর্তন"
+  }
+}

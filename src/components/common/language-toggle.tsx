@@ -24,7 +24,7 @@ export function LanguageToggle({
   const locale = useLocale();
   const router = useRouter();
 
-  const handleLanguageChange = (nextLocale: "es" | "en") => {
+  const handleLanguageChange = (nextLocale: "bn" | "en") => {
     // Set cookie for 1 year so next-intl picks it up across clean URLs
     document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`;
     router.refresh();
@@ -45,10 +45,10 @@ export function LanguageToggle({
       />
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => handleLanguageChange("es")}
-          className={locale === "es" ? "font-bold text-primary" : ""}
+          onClick={() => handleLanguageChange("bn")}
+          className={locale === "bn" ? "font-bold text-primary" : ""}
         >
-          Español
+          বাংলা
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => handleLanguageChange("en")}

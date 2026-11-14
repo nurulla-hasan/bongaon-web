@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ShoppingBag, Truck } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Badge } from "@/components/ui/badge";
@@ -11,15 +13,16 @@ import { MobileNav } from "./mobile-nav";
 import { NAV_LINKS } from "./nav-items";
 import { NavbarUserMenu } from "./navbar-user-menu";
 
-export function Navbar() {
+export async function Navbar() {
+  const t = await getTranslations("Navbar");
   const totalItems = MOCK_CART_ITEMS.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="border-b border-border bg-muted/60 text-muted-foreground">
+    <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur">
+      <div className="bg-primary text-primary-foreground">
         <div
           className={cn(
             "mx-auto flex items-center justify-center gap-2 py-1.5 text-center text-xs font-medium",
@@ -27,10 +30,8 @@ export function Navbar() {
             CONTAINER_GUTTER
           )}
         >
-          <Truck className="size-3.5 shrink-0 text-primary" />
-          <span>
-            ৪–৭ দিনের মধ্যে সারাদেশে ডেলিভারি • শুধুমাত্র ক্যাশ অন ডেলিভারি (COD)
-          </span>
+          <Truck className="size-3.5 shrink-0" />
+          <span>{t("announcement")}</span>
         </div>
       </div>
 
@@ -53,13 +54,14 @@ export function Navbar() {
               href={link.href}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex">
+          <div className="hidden items-center gap-1 md:flex">
+            <LanguageToggle />
             <ThemeToggle />
           </div>
 
@@ -69,7 +71,7 @@ export function Navbar() {
             render={<Link href="/cart" />}
           >
             <ShoppingBag />
-            <span className="hidden sm:inline">কার্ট</span>
+            <span className="hidden sm:inline">{t("cart")}</span>
             <Badge variant="secondary">{totalItems}</Badge>
           </Button>
 

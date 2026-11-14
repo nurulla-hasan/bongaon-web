@@ -1,0 +1,24 @@
+{
+  "Common": {
+    "brandName": "Bongaon Bazar",
+    "tagline": "Authentic village packaged flavors",
+    "searchPlaceholder": "Search products..."
+  },
+  "Navbar": {
+    "announcement": "4–7 days nationwide delivery • Cash on Delivery (COD) only",
+    "home": "Home",
+    "products": "All Products",
+    "probashiGuide": "Probashi Guide",
+    "checkout": "Checkout",
+    "cart": "Cart",
+    "login": "Login",
+    "loginTrack": "Login / Track Order",
+    "logout": "Logout",
+    "myOrders": "My Orders",
+    "savedAddresses": "Saved Addresses",
+    "profile": "Profile",
+    "menu": "Open menu",
+    "theme": "Theme",
+    "language": "Language"
+  }
+}

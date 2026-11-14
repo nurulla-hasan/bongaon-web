@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { LogIn, LogOut, MapPin, PackageCheck, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -19,12 +20,14 @@ interface NavbarUserMenuProps {
 }
 
 export function NavbarUserMenu({ isLoggedIn = false }: NavbarUserMenuProps) {
+  const t = useTranslations("Navbar");
+
   if (!isLoggedIn) {
     return (
       <div className="hidden md:flex">
         <Button variant="ghost" size="lg" render={<Link href="/checkout" />}>
           <LogIn />
-          <span>লগইন</span>
+          <span>{t("login")}</span>
         </Button>
       </div>
     );
@@ -57,20 +60,20 @@ export function NavbarUserMenu({ isLoggedIn = false }: NavbarUserMenuProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem render={<Link href="/order-success" />}>
               <PackageCheck />
-              <span>আমার অর্ডারসমূহ</span>
+              <span>{t("myOrders")}</span>
             </DropdownMenuItem>
             <DropdownMenuItem render={<Link href="/checkout" />}>
               <MapPin />
-              <span>সেভ করা ঠিকানা</span>
+              <span>{t("savedAddresses")}</span>
             </DropdownMenuItem>
             <DropdownMenuItem render={<Link href="/checkout" />}>
               <User />
-              <span>প্রোফাইল</span>
+              <span>{t("profile")}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">
               <LogOut />
-              <span>লগআউট</span>
+              <span>{t("logout")}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

@@ -3,7 +3,9 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { LogIn, LogOut, Menu, PackageCheck } from "lucide-react";
+import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -27,6 +29,7 @@ export function MobileNav({
   isLoggedIn = false,
   className,
 }: MobileNavProps) {
+  const t = useTranslations("Navbar");
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
 
@@ -35,7 +38,7 @@ export function MobileNav({
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           render={
-            <Button variant="ghost" size="icon-lg" aria-label="মেনু খুলুন">
+            <Button variant="ghost" size="icon-lg" aria-label={t("menu")}>
               <Menu />
             </Button>
           }
@@ -75,7 +78,7 @@ export function MobileNav({
                     )}
                   >
                     <Icon className="size-4 shrink-0" />
-                    <span>{link.label}</span>
+                    <span>{t(link.key)}</span>
                   </Link>
                 );
               })}
@@ -84,9 +87,12 @@ export function MobileNav({
             <div className="mt-auto flex flex-col gap-3 border-t border-border pt-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-muted-foreground">
-                  থিম পরিবর্তন
+                  {t("language")} & {t("theme")}
                 </span>
-                <ThemeToggle />
+                <div className="flex items-center gap-1">
+                  <LanguageToggle />
+                  <ThemeToggle />
+                </div>
               </div>
 
               {isLoggedIn ? (
@@ -112,7 +118,7 @@ export function MobileNav({
                     onClick={() => setOpen(false)}
                   >
                     <PackageCheck />
-                    <span>আমার অর্ডারসমূহ</span>
+                    <span>{t("myOrders")}</span>
                   </Button>
 
                   <Button
@@ -121,7 +127,7 @@ export function MobileNav({
                     onClick={() => setOpen(false)}
                   >
                     <LogOut />
-                    <span>লগআউট</span>
+                    <span>{t("logout")}</span>
                   </Button>
                 </div>
               ) : (
@@ -131,7 +137,7 @@ export function MobileNav({
                   onClick={() => setOpen(false)}
                 >
                   <LogIn />
-                  <span>লগইন / অর্ডার ট্র্যাক</span>
+                  <span>{t("loginTrack")}</span>
                 </Button>
               )}
             </div>
