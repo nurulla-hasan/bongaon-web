@@ -1,5 +1,6 @@
 import {
   CategoryGrid,
+  CategoryShowcaseSection,
   ClosingCta,
   FeaturedProductsSection,
   HeroBanner,
@@ -14,6 +15,7 @@ export default function HomePage() {
       <HeroBanner />
       <CategoryGrid />
       <FeaturedProductsSection />
+      <CategoryShowcaseSection />
       <StorySection />
       <ProbashiGuideSection />
       <ReviewsSection />

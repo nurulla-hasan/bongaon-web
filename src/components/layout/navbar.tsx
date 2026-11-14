@@ -27,15 +27,17 @@ export async function Navbar() {
   );
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 w-full",
-        SURFACE_WARM
-      )}
-    >
-      <LeafSprig className="pointer-events-none absolute top-9 left-2 hidden h-14 w-10 text-primary/15 2xl:block" />
-      <GrassTuft className="pointer-events-none absolute top-9 right-2 hidden h-12 w-16 -scale-x-100 text-primary/15 2xl:block" />
+    <>
       <AnnouncementBar message={t("announcement")} />
+
+      <header
+        className={cn(
+          "sticky top-0 z-40 w-full",
+          SURFACE_WARM
+        )}
+      >
+        <LeafSprig className="pointer-events-none absolute top-2 left-2 hidden h-14 w-10 text-primary/15 2xl:block" />
+        <GrassTuft className="pointer-events-none absolute top-2 right-2 hidden h-12 w-16 -scale-x-100 text-primary/15 2xl:block" />
 
       <div
         className={cn(
@@ -81,7 +83,8 @@ export async function Navbar() {
 
           <MobileNav isLoggedIn={false} />
         </div>
-      </div>
-    </header>
+        </div>
+      </header>
+    </>
   );
 }

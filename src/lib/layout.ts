@@ -1,4 +1,4 @@
-export const CONTAINER_MAX_WIDTH = "max-w-7xl";
+export const CONTAINER_MAX_WIDTH = "max-w-360";
 export const CONTAINER_GUTTER = "px-4 md:px-6";
 
 // Shared warm surface so the sticky navbar and the hero read as one piece.

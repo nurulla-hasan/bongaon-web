@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 
 export async function StorySection() {
   const t = await getTranslations("Home");
-  const points = [t("heroPoint2"), t("trust3Desc"), t("trust1Desc")];
+  const points = [
+    { title: t("trust3Title"), desc: t("trust3Desc") },
+    { title: t("trust1Title"), desc: t("trust1Desc") },
+    { title: t("trust2Title"), desc: t("trust2Desc") },
+  ];
 
   return (
     <SectionWrapper id="story" padding="lg">
@@ -20,7 +24,7 @@ export async function StorySection() {
           <div className="relative aspect-4/3 overflow-hidden rounded-4xl border border-border/70 shadow-xl">
             <Image
               src="/images/story-village-kitchen.png"
-              alt="বনগাঁও গ্রামের রান্নাঘরে হাতে আচার বয়াম ভরা হচ্ছে"
+              alt={t("storyTitle")}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
@@ -43,7 +47,12 @@ export async function StorySection() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+            <span className="size-1.5 rounded-full bg-clay" aria-hidden />
+            {t("storyBadge")}
+          </p>
+
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             {t("storyTitle")}
           </h2>
 
@@ -54,13 +63,20 @@ export async function StorySection() {
           <ul className="mt-6 space-y-3">
             {points.map((point) => (
               <li
-                key={point}
-                className="flex items-start gap-3 text-sm text-foreground"
+                key={point.title}
+                className="flex items-start gap-3.5 rounded-2xl border border-border/70 bg-card/80 px-4 py-3 shadow-xs"
               >
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Check className="size-3" />
+                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Check className="size-3.5" />
                 </span>
-                {point}
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-foreground">
+                    {point.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    {point.desc}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>

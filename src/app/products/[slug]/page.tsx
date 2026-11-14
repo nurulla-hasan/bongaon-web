@@ -10,7 +10,6 @@ import {
   Star,
   Truck,
 } from "lucide-react";
-import BackButton from "@/components/common/back-button";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { ProductVisual } from "@/components/card/product-visual";
@@ -47,10 +46,6 @@ export default async function ProductDetailPage({
 
   return (
     <PageWrapper>
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <BackButton label={tProducts("back")} variant="ghost" />
-      </div>
-
       <CustomBreadcrumb
         links={[
           { name: tCommon("home"), href: "/" },

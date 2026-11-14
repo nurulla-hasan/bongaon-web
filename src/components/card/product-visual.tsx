@@ -11,6 +11,7 @@ interface ProductVisualProps {
   image?: string;
   alt?: string;
   size?: "card" | "detail";
+  loading?: "eager" | "lazy";
 }
 
 const toneMap: Record<BazarProduct["visualTone"], string> = {
@@ -27,6 +28,7 @@ export function ProductVisual({
   image,
   alt,
   size = "card",
+  loading,
 }: ProductVisualProps) {
   const t = useTranslations("Common");
   return (
@@ -34,7 +36,7 @@ export function ProductVisual({
       className={cn(
         "relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-border/70",
         image ? "bg-muted" : toneMap[tone],
-        size === "card" ? "h-48" : "h-80 sm:h-96"
+        size === "card" ? "aspect-square" : "h-80 sm:h-96"
       )}
     >
       {image ? (
@@ -43,9 +45,10 @@ export function ProductVisual({
             src={image}
             alt={alt ?? shortTag}
             fill
+            loading={loading ?? (size === "detail" ? "eager" : undefined)}
             sizes={
               size === "card"
-                ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                 : "(max-width: 1024px) 100vw, 40vw"
             }
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"

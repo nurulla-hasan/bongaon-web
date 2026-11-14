@@ -12,6 +12,11 @@ import { Button } from "@/components/ui/button";
 
 export async function ClosingCta() {
   const t = await getTranslations("Home");
+  const highlights = [
+    { icon: Truck, label: t("closingPoint1") },
+    { icon: ShieldCheck, label: t("closingPoint2") },
+    { icon: CheckCircle2, label: t("closingPoint3") },
+  ];
 
   return (
     <SectionWrapper padding="md">
@@ -21,42 +26,52 @@ export async function ClosingCta() {
           <div className="absolute -bottom-24 right-1/4 size-72 rounded-full bg-primary/10 blur-3xl" />
         </div>
 
-        <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {t("closingTitle")}
-        </h2>
+        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+              <span className="size-1.5 rounded-full bg-clay" aria-hidden />
+              {t("closingBadge")}
+            </p>
 
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-          {t("closingDesc")}
-        </p>
+            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              {t("closingTitle")}
+            </h2>
 
-        <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
-          <Button size="xl" render={<Link href="/products" />}>
-            {t("closingPrimary")}
-            <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="xl"
-            render={<Link href="/checkout" />}
-          >
-            <HandCoins />
-            {t("closingSecondary")}
-          </Button>
-        </div>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {t("closingDesc")}
+            </p>
 
-        <div className="mt-6 flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Truck className="size-3.5 text-primary" />
-            {t("closingPoint1")}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck className="size-3.5 text-primary" />
-            {t("closingPoint2")}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <CheckCircle2 className="size-3.5 text-primary" />
-            {t("closingPoint3")}
-          </span>
+            <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
+              <Button size="xl" render={<Link href="/products" />}>
+                {t("closingPrimary")}
+                <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="xl"
+                render={<Link href="/checkout" />}
+              >
+                <HandCoins />
+                {t("closingSecondary")}
+              </Button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <ul className="space-y-3 rounded-3xl border border-border/70 bg-card/85 p-6 shadow-sm backdrop-blur">
+              {highlights.map(({ icon: Icon, label }) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-3.5 rounded-2xl border border-border/50 bg-background/80 px-4 py-3 text-sm font-medium text-foreground"
+                >
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="size-4" />
+                  </span>
+                  <span>{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </SectionWrapper>

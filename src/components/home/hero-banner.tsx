@@ -220,7 +220,7 @@ export async function HeroBanner() {
             >
               <span className="relative size-14 shrink-0 overflow-hidden rounded-xl">
                 <Image
-                  src={highlightProduct.image}
+                  src={highlightProduct.image ?? "/images/product-churi-shutki.png"}
                   alt=""
                   fill
                   sizes="56px"

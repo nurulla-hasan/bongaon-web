@@ -15,6 +15,10 @@ export async function FeaturedProductsSection() {
     getBazarData(locale),
   ]);
 
+  const withImages = products.filter((product) => Boolean(product.image));
+  const withoutImages = products.filter((product) => !product.image);
+  const featuredProducts = [...withImages, ...withoutImages].slice(0, 10);
+
   return (
     <SectionWrapper id="featured-products" bg="muted" padding="md">
       <SectionHeading
@@ -22,6 +26,7 @@ export async function FeaturedProductsSection() {
         alignment="left"
         title={t("featuredTitle")}
         description={t("featuredDesc")}
+        descriptionClassName="mt-1.5"
       >
         <Button
           variant="outline"
@@ -33,8 +38,8 @@ export async function FeaturedProductsSection() {
         </Button>
       </SectionHeading>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product, index) => (
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+        {featuredProducts.map((product, index) => (
           <AnimationWrapper key={product.slug} delay={index * 0.04}>
             <ProductCard product={product} />
           </AnimationWrapper>

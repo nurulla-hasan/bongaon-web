@@ -65,7 +65,7 @@ export async function CategoryGrid() {
           return (
             <AnimationWrapper key={category.id} delay={index * 0.05}>
               <Link
-                href="/products"
+                href={`/products?category=${category.id}`}
                 className={cn(
                   "group flex h-full flex-col gap-3 rounded-3xl border border-border/70 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5",
                   categoryTints[index % categoryTints.length]

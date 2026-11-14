@@ -1,9 +1,10 @@
+import { Suspense } from "react";
+import { ShieldCheck, Truck } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ProductCard } from "@/components/card/product-card";
-import { Badge } from "@/components/ui/badge";
+import { ProductCatalog } from "@/app/products/_components/product-catalog";
 import { getBazarData } from "@/data/mock-bazar";
 
 export default async function ProductsPage() {
@@ -27,27 +28,27 @@ export default async function ProductsPage() {
         as="h1"
         variant="plain"
         alignment="left"
-        eyebrow={tProducts("catalogEyebrow")}
         title={tProducts("catalogTitle")}
         description={tProducts("catalogDescription")}
-      />
+        titleClassName="text-2xl font-bold sm:text-3xl"
+        descriptionClassName="mt-1.5 max-w-xl"
+        className="border-b border-border pb-6"
+      >
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3.5 py-1.5 text-xs font-medium text-foreground">
+            <Truck className="size-3.5 text-primary" aria-hidden />
+            {tProducts("catalogDeliveryTag")}
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3.5 py-1.5 text-xs font-medium text-foreground">
+            <ShieldCheck className="size-3.5 text-primary" aria-hidden />
+            {tProducts("catalogPaymentTag")}
+          </span>
+        </div>
+      </SectionHeading>
 
-      <div className="mt-6 flex flex-wrap items-center gap-2">
-        <Badge variant="default">
-          {tProducts("allFilter")} ({products.length})
-        </Badge>
-        {categories.map((category) => (
-          <Badge key={category.id} variant="outline">
-            {category.name}
-          </Badge>
-        ))}
-      </div>
-
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard key={product.slug} product={product} />
-        ))}
-      </div>
+      <Suspense fallback={null}>
+        <ProductCatalog products={products} categories={categories} />
+      </Suspense>
     </PageWrapper>
   );
 }

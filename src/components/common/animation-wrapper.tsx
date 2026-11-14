@@ -15,7 +15,7 @@ interface AnimationWrapperProps {
   duration?: number
   /** @default 40 */
   distance?: number
-  /** @default false */
+  /** @default true */
   once?: boolean
   as?: "div" | "section" | "span"
   layout?: boolean | "size" | "position" | "preserve-aspect" | "x" | "y"
@@ -35,7 +35,7 @@ export default function AnimationWrapper({
   direction = "up",
   delay = 0,
   duration = 0.6,
-  once = false,
+  once = true,
   as = "div",
   layout,
 }: AnimationWrapperProps) {
