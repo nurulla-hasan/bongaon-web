@@ -53,11 +53,21 @@ export function ProductVisual({
             }
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
-          <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground shadow-sm backdrop-blur">
+          <span
+            className={cn(
+              "absolute top-3 left-3 items-center gap-1.5 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground shadow-sm backdrop-blur",
+              size === "card" ? "hidden sm:inline-flex" : "inline-flex"
+            )}
+          >
             <Sparkles className="size-3.5 text-clay" />
             {shortTag}
           </span>
-          <span className="absolute bottom-3 left-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur">
+          <span
+            className={cn(
+              "absolute bottom-3 left-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur",
+              size === "card" ? "hidden sm:inline-block" : "inline-block"
+            )}
+          >
             {t("packPrefix")} {unit}
           </span>
         </>
