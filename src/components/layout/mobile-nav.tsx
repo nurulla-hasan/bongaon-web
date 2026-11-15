@@ -111,7 +111,7 @@ export function MobileNav({
                   <Button
                     variant="outline"
                     className="w-full"
-                    render={<Link href="/order-success" />}
+                    render={<Link href="/orders" />}
                     onClick={() => setOpen(false)}
                   >
                     <PackageCheck />

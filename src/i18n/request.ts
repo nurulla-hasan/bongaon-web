@@ -23,6 +23,9 @@ export default getRequestConfig(async () => {
       Cart: (await import(`../../messages/${locale}/cart.json`)).default,
       Checkout: (await import(`../../messages/${locale}/checkout.json`)).default,
       OrderSuccess: (await import(`../../messages/${locale}/order-success.json`)).default,
+      Orders: (await import(`../../messages/${locale}/orders.json`)).default,
+      About: (await import(`../../messages/${locale}/about.json`)).default,
+      Contact: (await import(`../../messages/${locale}/contact.json`)).default,
     },
   };
 });

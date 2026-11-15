@@ -35,7 +35,7 @@ export function DesktopNav() {
               setHash(link.href.startsWith("/#") ? link.href.slice(1) : "")
             }
             className={cn(
-              "rounded-full px-3.5 py-1.5 text-sm transition-colors",
+              "rounded-full px-3 py-1.5 text-sm whitespace-nowrap transition-colors",
               isActive
                 ? "bg-primary/10 font-semibold text-primary"
                 : "font-medium text-muted-foreground hover:bg-muted/70 hover:text-foreground"

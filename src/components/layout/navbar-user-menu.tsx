@@ -58,7 +58,7 @@ export function NavbarUserMenu({ isLoggedIn = false }: NavbarUserMenuProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href="/order-success" />}>
+            <DropdownMenuItem render={<Link href="/orders" />}>
               <PackageCheck />
               <span>{t("myOrders")}</span>
             </DropdownMenuItem>

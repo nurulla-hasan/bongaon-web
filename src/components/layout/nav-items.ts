@@ -1,6 +1,19 @@
-import { Home, LayoutGrid, Package, ShoppingBag, type LucideIcon } from "lucide-react";
+import {
+  Home,
+  Info,
+  LayoutGrid,
+  Package,
+  PhoneCall,
+  type LucideIcon,
+} from "lucide-react";
 
-export type NavLinkKey = "home" | "products" | "categories" | "checkout";
+export type NavLinkKey =
+  | "home"
+  | "categories"
+  | "products"
+  | "about"
+  | "contact"
+  | "checkout";
 
 export interface NavLinkItem {
   key: NavLinkKey;
@@ -12,7 +25,8 @@ export const NAV_LINKS: NavLinkItem[] = [
   { key: "home", href: "/", icon: Home },
   { key: "categories", href: "/#categories", icon: LayoutGrid },
   { key: "products", href: "/products", icon: Package },
-  { key: "checkout", href: "/checkout", icon: ShoppingBag },
+  { key: "about", href: "/about", icon: Info },
+  { key: "contact", href: "/contact", icon: PhoneCall },
 ];
 
 export function isNavLinkActive(

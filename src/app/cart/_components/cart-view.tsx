@@ -62,27 +62,31 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
 
   if (items.length === 0) {
     return (
-      <Card className="mt-8">
-        <CardContent className="flex flex-col items-center justify-center py-14 text-center">
-          <div className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <ShoppingBag className="size-7" />
-          </div>
-          <h2 className="mt-4 text-lg font-semibold text-foreground">
-            {t("emptyTitle")}
-          </h2>
-          <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
-            {t("emptyDesc")}
-          </p>
-          <Button
-            size="xl"
-            className="mt-6"
-            render={<Link href="/products" />}
-          >
-            {t("addMore")}
-            <ArrowRight />
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="mt-8">
+        <Card>
+          <CardContent>
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <ShoppingBag className="size-7" />
+              </div>
+              <h2 className="mt-4 text-lg font-semibold text-foreground">
+                {t("emptyTitle")}
+              </h2>
+              <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+                {t("emptyDesc")}
+              </p>
+              <Button
+                size="xl"
+                className="mt-6"
+                render={<Link href="/products" />}
+              >
+                {t("addMore")}
+                <ArrowRight />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
