@@ -15,5 +15,7 @@
     "deliveryNote":  "Home delivery within 4–7 days",
     "codNote":  "Pay cash when parcel arrives",
     "proceedCheckout":  "Proceed to Checkout (COD)",
-    "addMore":  "Add More Products"
+    "addMore":  "Add More Products",
+    "emptyTitle":  "Your cart is currently empty",
+    "emptyDesc":  "Explore our authentic shutki, achar, and ghee to add items to your cart."
 }
