@@ -25,14 +25,12 @@ export default async function ProductsPage() {
       />
 
       <SectionHeading
-        as="h1"
+        as="h3"
         variant="plain"
         alignment="left"
         title={tProducts("catalogTitle")}
         description={tProducts("catalogDescription")}
-        titleClassName="text-2xl font-bold sm:text-3xl"
-        descriptionClassName="mt-1.5 max-w-xl"
-        className="border-b border-border pb-6"
+        className="border-b pb-6"
       >
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3.5 py-1.5 text-xs font-medium text-foreground">

@@ -7,6 +7,8 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import { GrassTuft } from "@/components/common/leaf-decor";
+import { SectionHeading } from "@/components/common/section-heading";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { Button } from "@/components/ui/button";
 
@@ -24,22 +26,20 @@ export async function ClosingCta() {
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -top-20 left-1/4 size-64 rounded-full bg-gold/25 blur-3xl" />
           <div className="absolute -bottom-24 right-1/4 size-72 rounded-full bg-primary/10 blur-3xl" />
+          <GrassTuft className="absolute -bottom-2 -left-2 hidden h-20 w-24 text-primary/20 sm:block" />
+          <GrassTuft className="absolute -right-2 -bottom-2 hidden h-24 w-28 -scale-x-100 text-primary/15 md:block" />
         </div>
 
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-7">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
-              <span className="size-1.5 rounded-full bg-clay" aria-hidden />
-              {t("closingBadge")}
-            </p>
-
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              {t("closingTitle")}
-            </h2>
-
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {t("closingDesc")}
-            </p>
+            <SectionHeading
+              variant="plain"
+              alignment="left"
+              constrain={false}
+              badge={t("closingBadge")}
+              title={t("closingTitle")}
+              description={t("closingDesc")}
+            />
 
             <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
               <Button size="xl" render={<Link href="/products" />}>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
+import { GrassTuft } from "@/components/common/leaf-decor";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
@@ -28,13 +29,12 @@ export async function ProbashiGuideSection() {
   return (
     <SectionWrapper id="probashi-guide" padding="md">
       <div className="relative isolate overflow-hidden rounded-4xl border border-primary/15 bg-primary/5 p-6 sm:p-12">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-24 -right-16 -z-10 size-80 rounded-full bg-gold/20 blur-3xl"
-        />
-
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <GrassTuft className="absolute -bottom-2 -left-2 hidden h-20 w-24 text-primary/20 sm:block" />
+          <GrassTuft className="absolute -right-2 -bottom-2 hidden h-24 w-28 -scale-x-100 text-primary/15 md:block" />
+        </div>
         <SectionHeading
-          eyebrow={t("probashiEyebrow")}
+          badge={t("probashiEyebrow")}
           title={t("probashiTitle")}
           description={t("probashiDesc")}
           alignment="center"

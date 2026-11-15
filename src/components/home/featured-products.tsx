@@ -22,17 +22,14 @@ export async function FeaturedProductsSection() {
   return (
     <SectionWrapper id="featured-products" bg="muted" padding="md">
       <SectionHeading
+        as="h3"
         variant="plain"
         alignment="left"
         title={t("featuredTitle")}
         description={t("featuredDesc")}
         descriptionClassName="mt-1.5"
       >
-        <Button
-          variant="outline"
-          size="lg"
-          render={<Link href="/products" />}
-        >
+        <Button variant="outline" size="lg" render={<Link href="/products" />}>
           {t("featuredCta")}
           <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
         </Button>

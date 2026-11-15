@@ -18,7 +18,6 @@ export async function ReviewsSection() {
         variant="plain"
         title={t("reviewsTitle")}
         description={t("reviewsDesc")}
-        descriptionClassName="mt-2"
         alignment="center"
       />
 

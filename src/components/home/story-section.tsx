@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, Check, Sprout } from "lucide-react";
+import { SectionHeading } from "@/components/common/section-heading";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { Button } from "@/components/ui/button";
 
@@ -47,18 +48,14 @@ export async function StorySection() {
         </div>
 
         <div>
-          <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
-            <span className="size-1.5 rounded-full bg-clay" aria-hidden />
-            {t("storyBadge")}
-          </p>
-
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {t("storyTitle")}
-          </h2>
-
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-            {t("storyDesc")}
-          </p>
+          <SectionHeading
+            variant="default"
+            alignment="left"
+            constrain={false}
+            badge={t("storyBadge")}
+            title={t("storyTitle")}
+            description={t("storyDesc")}
+          />
 
           <ul className="mt-6 space-y-3">
             {points.map((point) => (

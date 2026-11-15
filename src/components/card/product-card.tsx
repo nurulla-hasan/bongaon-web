@@ -52,7 +52,8 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
 
         <Link
           href={`/products/${product.slug}`}
-          className="line-clamp-2 text-sm font-semibold leading-snug text-foreground transition-colors hover:text-primary"
+          title={product.name}
+          className="truncate text-sm font-semibold leading-snug text-foreground transition-colors hover:text-primary"
         >
           {product.name}
         </Link>

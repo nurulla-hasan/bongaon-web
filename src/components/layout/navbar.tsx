@@ -15,8 +15,8 @@ import {
 } from "@/lib/layout";
 import { cn } from "@/lib/utils";
 import { AnnouncementBar } from "./announcement-bar";
+import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
-import { NAV_LINKS } from "./nav-items";
 import { NavbarUserMenu } from "./navbar-user-menu";
 
 export async function Navbar() {
@@ -48,20 +48,7 @@ export async function Navbar() {
       >
         <Logo size="md" />
 
-        <nav
-          aria-label="প্রধান নেভিগেশন"
-          className="hidden items-center gap-6 md:flex"
-        >
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {t(link.key)}
-            </Link>
-          ))}
-        </nav>
+        <DesktopNav />
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-1 md:flex">

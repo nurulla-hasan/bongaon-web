@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, PhoneCall, ShieldCheck, Truck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { GrassTuft } from "@/components/common/leaf-decor";
 import { Logo } from "@/components/common/logo";
 import { Separator } from "@/components/ui/separator";
 import { CONTAINER_GUTTER, CONTAINER_MAX_WIDTH } from "@/lib/layout";
@@ -10,7 +11,9 @@ export async function Footer() {
   const t = await getTranslations("Footer");
 
   return (
-    <footer className="border-t border-border bg-muted/40">
+    <footer className="relative isolate overflow-hidden border-t border-border bg-muted/40">
+      <GrassTuft className="pointer-events-none absolute -bottom-2 -left-2 -z-10 hidden h-20 w-24 text-primary/20 sm:block" />
+      <GrassTuft className="pointer-events-none absolute -right-2 -bottom-2 -z-10 hidden h-24 w-28 -scale-x-100 text-primary/15 md:block" />
       <div
         className={cn(
           "mx-auto py-12",

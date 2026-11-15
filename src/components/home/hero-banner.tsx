@@ -14,7 +14,7 @@ import {
   Truck,
 } from "lucide-react";
 import AnimationWrapper from "@/components/common/animation-wrapper";
-import { GrassTuft, LeafSprig } from "@/components/common/leaf-decor";
+import { GrassTuft } from "@/components/common/leaf-decor";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { Button } from "@/components/ui/button";
 import { getBazarData } from "@/data/mock-bazar";
@@ -73,11 +73,8 @@ export async function HeroBanner() {
         <div className="absolute top-1/2 -left-24 hidden size-100 -translate-y-1/2 rounded-full border border-dashed border-gold/30 lg:block" />
       </div>
 
-      <LeafSprig className="pointer-events-none absolute -left-8 bottom-24 -z-10 hidden h-64 w-44 origin-bottom-left animate-sway text-primary/25 motion-reduce:animate-none lg:block" />
-      <GrassTuft className="pointer-events-none absolute bottom-24 left-2 -z-10 hidden h-24 w-28 text-primary/20 lg:block" />
-      <LeafSprig className="pointer-events-none absolute -top-14 -left-14 -z-10 hidden h-52 w-36 -rotate-6 text-primary/15 lg:block" />
-      <GrassTuft className="pointer-events-none absolute top-10 right-10 -z-10 hidden h-24 w-28 text-primary/20 2xl:block" />
-      <GrassTuft className="pointer-events-none absolute right-16 bottom-28 -z-10 hidden h-16 w-20 text-primary/15 2xl:block" />
+      <GrassTuft className="pointer-events-none absolute bottom-16 left-4 -z-10 hidden h-20 w-24 text-primary/15 2xl:block" />
+      <GrassTuft className="pointer-events-none absolute right-2 bottom-20 -z-10 hidden h-20 w-24 -scale-x-100 text-primary/20 xl:block" />
 
       <div
         className={cn(

@@ -18,7 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS } from "./nav-items";
+import { isNavLinkActive, NAV_LINKS } from "./nav-items";
 
 interface MobileNavProps {
   isLoggedIn?: boolean;
@@ -59,10 +59,7 @@ export function MobileNav({
             >
               {NAV_LINKS.map((link) => {
                 const Icon = link.icon;
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname?.startsWith(link.href);
+                const isActive = isNavLinkActive(pathname, link.href);
 
                 return (
                   <Link

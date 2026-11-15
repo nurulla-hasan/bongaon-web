@@ -44,16 +44,13 @@ export async function CategoryGrid() {
   return (
     <SectionWrapper id="categories" padding="md">
       <SectionHeading
+        as="h3"
         variant="plain"
         alignment="left"
         title={t("catTitle")}
         description={t("catDesc")}
       >
-        <Button
-          variant="outline"
-          size="lg"
-          render={<Link href="/products" />}
-        >
+        <Button variant="outline" size="lg" render={<Link href="/products" />}>
           {t("catCta")}
           <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
         </Button>
@@ -68,7 +65,7 @@ export async function CategoryGrid() {
                 href={`/products?category=${category.id}`}
                 className={cn(
                   "group flex h-full flex-col gap-3 rounded-3xl border border-border/70 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5",
-                  categoryTints[index % categoryTints.length]
+                  categoryTints[index % categoryTints.length],
                 )}
               >
                 <div className="flex items-center justify-between">

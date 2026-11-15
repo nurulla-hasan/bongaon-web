@@ -40,6 +40,7 @@ export async function CategoryShowcaseSection() {
         {sections.map(({ category, items }) => (
           <div key={category.id}>
             <SectionHeading
+              as="h3"
               variant="plain"
               alignment="left"
               title={category.name}
