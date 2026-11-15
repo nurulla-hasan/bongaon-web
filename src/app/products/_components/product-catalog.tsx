@@ -61,7 +61,7 @@ export function ProductCatalog({ products, categories }: ProductCatalogProps) {
               <Button
                 type="button"
                 variant="ghost"
-                size="xs"
+                size="default"
                 onClick={resetFilters}
               >
                 <RotateCcw />
@@ -102,7 +102,7 @@ export function ProductCatalog({ products, categories }: ProductCatalogProps) {
             <Button
               type="button"
               variant="outline"
-              size="sm"
+              size="default"
               className="lg:hidden"
               onClick={() => setMobileOpen(true)}
               aria-expanded={mobileOpen}

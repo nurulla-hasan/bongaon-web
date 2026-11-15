@@ -103,7 +103,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             <Button
               type="button"
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               aria-label="Decrease quantity"
               disabled={quantity <= 1}
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -116,7 +116,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             <Button
               type="button"
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               aria-label="Increase quantity"
               disabled={quantity >= 20}
               onClick={() => setQuantity((q) => Math.min(20, q + 1))}

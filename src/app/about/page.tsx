@@ -101,10 +101,12 @@ export default async function AboutPage() {
           return (
             <Card key={item.title}>
               <CardHeader>
-                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon className="size-5" />
+                <div className="space-y-3">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="size-5" />
+                  </div>
+                  <CardTitle>{item.title}</CardTitle>
                 </div>
-                <CardTitle className="mt-3">{item.title}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm leading-relaxed text-muted-foreground">

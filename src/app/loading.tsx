@@ -1,17 +1,21 @@
-import { Spinner } from "@/components/ui/spinner";
+import Image from "next/image";
 
 export default function RootLoading() {
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center p-4">
+    <div className="flex min-h-140 flex-col items-center justify-center gap-4 p-4">
       <div className="relative flex items-center justify-center">
-        <div className="absolute size-16 animate-ping rounded-full bg-primary/10" />
-        <div className="flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary shadow-sm">
-          <Spinner className="size-6 text-primary" />
+        <div className="absolute size-20 animate-ping rounded-full bg-primary/10" />
+        <div className="relative size-16 animate-pulse">
+          <Image
+            src="/images/logo-mark.png"
+            alt="Bongaon Bazar"
+            fill
+            sizes="64px"
+            className="object-contain"
+            priority
+          />
         </div>
       </div>
-      <p className="mt-4 font-mono text-xs uppercase tracking-wider text-muted-foreground animate-pulse">
-        Loading...
-      </p>
     </div>
   );
 }

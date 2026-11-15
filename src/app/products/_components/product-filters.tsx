@@ -60,7 +60,7 @@ export function ProductFilters({
               <Button
                 type="button"
                 variant="ghost"
-                size="xs"
+                size="default"
                 onClick={resetFilters}
               >
                 <RotateCcw />
