@@ -1,9 +1,15 @@
 "use client";
 
+import { Atma } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
-import { Sprout } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+
+const brandLogoFont = Atma({
+  subsets: ["bengali", "latin"],
+  weight: ["700"],
+});
 
 interface LogoProps {
   className?: string;
@@ -19,39 +25,59 @@ export function Logo({
   href = "/",
 }: LogoProps) {
   const t = useTranslations("Common");
-  const boxSize = size === "lg" ? "size-10" : size === "md" ? "size-9" : "size-7";
-  const iconSize = size === "lg" ? "size-5" : size === "md" ? "size-4" : "size-3.5";
+  const brandName = t("brandName");
+  const [firstWord, ...restWords] = brandName.split(" ");
+  const secondWord = restWords.join(" ");
+
+  const boxSize =
+    size === "lg" ? "size-12" : size === "md" ? "size-11" : "size-9";
+  const imageSizes =
+    size === "lg" ? "48px" : size === "md" ? "44px" : "36px";
 
   return (
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-2.5 font-semibold tracking-tight transition-opacity hover:opacity-90",
+        "inline-flex items-center gap-2.5 tracking-tight transition-opacity hover:opacity-90",
         className
       )}
     >
       <span
         className={cn(
-          "inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground",
+          "relative inline-flex shrink-0 items-center justify-center",
           boxSize
         )}
       >
-        <Sprout className={iconSize} />
+        <Image
+          src="/images/logo-mark.png"
+          alt={brandName}
+          fill
+          sizes={imageSizes}
+          className="object-contain"
+          priority
+        />
       </span>
 
       {showText && (
-        <span className="flex flex-col leading-none">
+        <span className="flex flex-col leading-tight">
           <span
             className={cn(
-              "font-bold tracking-tight font-heading text-foreground",
-              size === "lg" && "text-xl",
-              size === "md" && "text-lg",
+              brandLogoFont.className,
+              "font-bold tracking-normal",
+              size === "lg" && "text-2xl",
+              size === "md" && "text-xl",
               size === "sm" && "text-base"
             )}
           >
-            {t("brandName")}
+            <span className="text-primary">{firstWord}</span>
+            {secondWord && (
+              <>
+                {" "}
+                <span className="text-clay">{secondWord}</span>
+              </>
+            )}
           </span>
-          <span className="text-xs font-normal text-muted-foreground">
+          <span className="text-xs font-medium text-muted-foreground">
             {t("tagline")}
           </span>
         </span>

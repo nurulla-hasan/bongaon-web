@@ -66,9 +66,9 @@ export async function Navbar() {
             <Badge variant="secondary">{totalItems}</Badge>
           </Button>
 
-          <NavbarUserMenu isLoggedIn={false} />
+          <NavbarUserMenu isLoggedIn={true} />
 
-          <MobileNav isLoggedIn={false} />
+          <MobileNav isLoggedIn={true} />
         </div>
         </div>
       </header>

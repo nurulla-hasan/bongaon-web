@@ -45,7 +45,7 @@ export function NavbarUserMenu({ isLoggedIn = false }: NavbarUserMenuProps) {
             </Button>
           }
         />
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="w-52">
           <DropdownMenuGroup>
             <DropdownMenuLabel>
               <div className="flex flex-col gap-0.5">

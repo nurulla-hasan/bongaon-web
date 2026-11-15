@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   title: "Bongaon Bazar | গ্রামের খাঁটি ও ইউনিক প্যাকেটজাত খাবার",
   description:
     "শহরের মানুষ ও প্রবাসীদের পরিবারের জন্য বনগাঁও গ্রামের স্পেশাল প্যাকেটজাত খাবার — ৪ থেকে ৭ দিনে সারাদেশে ক্যাশ অন ডেলিভারি।",
+  icons: {
+    icon: "/images/logo-mark.png",
+    apple: "/images/logo-mark.png",
+  },
 };
 
 export default async function RootLayout({
