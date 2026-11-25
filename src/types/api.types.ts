@@ -27,6 +27,15 @@ export interface ApiError {
 export type UserRole = "ADMIN" | "USER";
 export type UserStatus = "ACTIVE" | "BLOCKED";
 
+export interface HeroBannerSlide {
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  linkUrl: string;
+  isActive: boolean;
+}
+
 export interface StoreSetting {
   id: string;
   storeName: string;
@@ -39,6 +48,7 @@ export interface StoreSetting {
   estimatedDeliveryDays: string;
   announcementEnabled: boolean;
   announcementText: string;
+  heroBanners: HeroBannerSlide[];
   isOrderingEnabled: boolean;
   orderAlertEmail: string;
   updatedAt: string;

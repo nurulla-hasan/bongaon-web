@@ -15,7 +15,7 @@ export async function StorySection() {
   ];
 
   return (
-    <SectionWrapper id="story" padding="lg">
+    <SectionWrapper id="story" bg="muted" padding="lg">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="relative isolate">
           <div

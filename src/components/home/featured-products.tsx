@@ -18,10 +18,6 @@ export async function FeaturedProductsSection({
 
   const t = await getTranslations("Home");
 
-  const withImages = products.filter((product) => Boolean(product.imageUrl));
-  const withoutImages = products.filter((product) => !product.imageUrl);
-  const featuredProducts = [...withImages, ...withoutImages].slice(0, 10);
-
   return (
     <SectionWrapper id="featured-products" bg="muted" padding="md">
       <SectionHeading
@@ -30,7 +26,6 @@ export async function FeaturedProductsSection({
         alignment="left"
         title={t("featuredTitle")}
         description={t("featuredDesc")}
-        descriptionClassName="mt-1.5"
       >
         <Button variant="outline" size="lg" render={<Link href="/products" />}>
           {t("featuredCta")}
@@ -39,7 +34,7 @@ export async function FeaturedProductsSection({
       </SectionHeading>
 
       <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-        {featuredProducts.map((product, index) => (
+        {products.map((product, index) => (
           <AnimationWrapper key={product.id} delay={index * 0.04}>
             <ProductCard product={product} />
           </AnimationWrapper>

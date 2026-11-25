@@ -23,16 +23,15 @@ export async function CategoryShowcaseSection({
 
   return (
     <SectionWrapper id="category-showcase" padding="md">
-      <div className="space-y-14">
+      <div className="divide-y divide-border/70">
         {sections.map(({ category, products }) => (
-          <div key={category.id}>
+          <div key={category.id} className="py-12 first:pt-0 last:pb-0">
             <SectionHeading
               as="h3"
               variant="plain"
               alignment="left"
               title={category.name}
               description={category.subtitle}
-              descriptionClassName="mt-1.5"
             >
               <Button
                 variant="outline"
@@ -45,7 +44,7 @@ export async function CategoryShowcaseSection({
             </SectionHeading>
 
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-              {products.slice(0, 10).map((product, index) => (
+              {products.map((product, index) => (
                 <AnimationWrapper key={product.id} delay={index * 0.04}>
                   <ProductCard product={product} />
                 </AnimationWrapper>
