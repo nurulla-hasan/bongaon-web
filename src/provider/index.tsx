@@ -12,7 +12,7 @@ export default function Providers({ children }: { children: ReactNode }) {
       <QueryProvider>
         <TooltipProvider>
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster position="top-right" richColors closeButton />
         </TooltipProvider>
       </QueryProvider>
     </ThemeProvider>

@@ -1,0 +1,22 @@
+{
+  "title": "আমার প্রোফাইল",
+  "description": "আপনার অ্যাকাউন্টের তথ্য ও পাসওয়ার্ড পরিচালনা করুন।",
+  "accountTitle": "অ্যাকাউন্টের তথ্য",
+  "accountDescription": "ক্যাশ অন ডেলিভারির জন্য আপনার নাম ও মোবাইল নম্বর আপডেট করুন।",
+  "nameLabel": "পুরো নাম",
+  "namePlaceholder": "আপনার নাম",
+  "emailLabel": "ইমেইল",
+  "emailHint": "ইমেইল ঠিকানা পরিবর্তন করা যাবে না।",
+  "phoneLabel": "মোবাইল নম্বর",
+  "saveProfile": "তথ্য সংরক্ষণ করুন",
+  "saving": "সংরক্ষণ হচ্ছে...",
+  "passwordTitle": "পাসওয়ার্ড পরিবর্তন",
+  "passwordDescription": "আপনার বনগাঁও বাজার অ্যাকাউন্ট সুরক্ষিত রাখতে শক্তিশালী পাসওয়ার্ড দিন।",
+  "currentPasswordLabel": "বর্তমান পাসওয়ার্ড",
+  "newPasswordLabel": "নতুন পাসওয়ার্ড",
+  "newPasswordPlaceholder": "কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড",
+  "confirmPasswordLabel": "নতুন পাসওয়ার্ড নিশ্চিত করুন",
+  "confirmPasswordPlaceholder": "আবার নতুন পাসওয়ার্ড লিখুন",
+  "updatePassword": "পাসওয়ার্ড আপডেট করুন",
+  "updating": "আপডেট হচ্ছে..."
+}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ const verifyEmailSchema = z.object({
 });
 
 export function VerifyEmailForm({ email }: { email: string }) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const { secondsLeft, isRunning, start } = useCountdown(60, "web-verify-otp");
   const verifyEmail = useVerifyEmail();
@@ -77,13 +79,10 @@ export function VerifyEmailForm({ email }: { email: string }) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Verify Your Email</CardTitle>
+        <CardTitle>{t("verifyEmailTitle")}</CardTitle>
         <CardDescription>
-          Enter the 6-digit code sent to{" "}
-          <span className="font-medium text-foreground">
-            {email || "your email"}
-          </span>
-          .
+          {t("verifyEmailDescription")}{" "}
+          <span className="font-medium text-foreground">{email}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -115,7 +114,7 @@ export function VerifyEmailForm({ email }: { email: string }) {
                   className="items-center text-center"
                 >
                   <FieldLabel htmlFor="verify-email-otp" className="justify-center">
-                    6-Digit Verification Code
+                    {t("otpLabel")}
                   </FieldLabel>
                   <div className="flex justify-center">
                     <InputOTP
@@ -151,9 +150,9 @@ export function VerifyEmailForm({ email }: { email: string }) {
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || verifyEmail.isPending}
-                loadingText="Verifying..."
+                loadingText={t("verifying")}
               >
-                Verify Email
+                {t("verifyEmailButton")}
               </Button>
             )}
           </form.Subscribe>
@@ -164,7 +163,7 @@ export function VerifyEmailForm({ email }: { email: string }) {
               className="inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to Register
+              {t("backToRegister")}
             </Link>
 
             <button
@@ -174,10 +173,10 @@ export function VerifyEmailForm({ email }: { email: string }) {
               className="cursor-pointer font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               {resendOtp.isPending
-                ? "Sending..."
+                ? t("sendingOtp")
                 : isRunning
-                  ? `Resend in ${secondsLeft}`
-                  : "Resend OTP"}
+                  ? `${t("resendIn")} ${secondsLeft}`
+                  : t("resendOtp")}
             </button>
           </div>
         </form>

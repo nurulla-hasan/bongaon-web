@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
@@ -23,6 +24,7 @@ const forgotPasswordSchema = z.object({
 });
 
 export function ForgotPasswordForm() {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const forgotPassword = useForgotPassword();
 
@@ -47,10 +49,8 @@ export function ForgotPasswordForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Forgot Password</CardTitle>
-        <CardDescription>
-          Enter your account email to receive a 6-digit password reset OTP.
-        </CardDescription>
+        <CardTitle>{t("forgotTitle")}</CardTitle>
+        <CardDescription>{t("forgotDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -65,9 +65,9 @@ export function ForgotPasswordForm() {
           <FormInput
             form={form}
             name="email"
-            label="Email"
+            label={t("emailLabel")}
             type="email"
-            placeholder="you@example.com"
+            placeholder={t("emailPlaceholder")}
             autoComplete="email"
             disabled={forgotPassword.isPending}
           />
@@ -79,9 +79,9 @@ export function ForgotPasswordForm() {
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || forgotPassword.isPending}
-                loadingText="Sending OTP..."
+                loadingText={t("sendingResetOtp")}
               >
-                Send Reset OTP
+                {t("sendResetOtpButton")}
               </Button>
             )}
           </form.Subscribe>
@@ -92,7 +92,7 @@ export function ForgotPasswordForm() {
               className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to Sign In
+              {t("backToSignIn")}
             </Link>
           </div>
         </form>

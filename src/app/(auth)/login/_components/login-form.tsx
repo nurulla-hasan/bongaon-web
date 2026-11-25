@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
@@ -29,6 +30,7 @@ function getSafeRedirect(callbackUrl?: string): string {
 }
 
 export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const loginMutation = useLogin();
 
@@ -55,10 +57,8 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription>
-          Sign in to track your Bongaon Bazar orders and manage your account.
-        </CardDescription>
+        <CardTitle>{t("loginTitle")}</CardTitle>
+        <CardDescription>{t("loginDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -73,9 +73,9 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
           <FormInput
             form={form}
             name="email"
-            label="Email"
+            label={t("emailLabel")}
             type="email"
-            placeholder="you@example.com"
+            placeholder={t("emailPlaceholder")}
             autoComplete="email"
             disabled={loginMutation.isPending}
           />
@@ -84,7 +84,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
             <FormInput
               form={form}
               name="password"
-              label="Password"
+              label={t("passwordLabel")}
               type="password"
               placeholder="••••••••"
               autoComplete="current-password"
@@ -95,7 +95,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
                 href="/forgot-password"
                 className="text-xs font-medium text-primary hover:underline"
               >
-                Forgot password?
+                {t("forgotPasswordLink")}
               </Link>
             </div>
           </div>
@@ -107,17 +107,17 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || loginMutation.isPending}
-                loadingText="Signing in..."
+                loadingText={t("signingIn")}
               >
-                Sign In
+                {t("signInButton")}
               </Button>
             )}
           </form.Subscribe>
 
           <p className="text-center text-xs text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            {t("noAccount")}{" "}
             <Link href="/register" className="font-medium text-primary hover:underline">
-              Create an account
+              {t("createAccountLink")}
             </Link>
           </p>
         </form>

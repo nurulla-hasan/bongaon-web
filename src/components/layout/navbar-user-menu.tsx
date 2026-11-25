@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getErrorMessage } from "@/lib/error";
 import { useLogout, useMe } from "@/services";
 
@@ -26,8 +27,16 @@ interface NavbarUserMenuProps {
 export function NavbarUserMenu({ isLoggedIn }: NavbarUserMenuProps) {
   const t = useTranslations("Navbar");
   const router = useRouter();
-  const { data: user } = useMe();
+  const { data: user, isLoading } = useMe();
   const logout = useLogout();
+
+  if (isLoading) {
+    return (
+      <div className="hidden md:flex">
+        <Skeleton className="size-9 rounded-full" />
+      </div>
+    );
+  }
 
   const signedIn = Boolean(user) || Boolean(isLoggedIn && user !== undefined);
 

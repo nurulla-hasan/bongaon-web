@@ -4,7 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ProductCatalog } from "@/app/products/_components/product-catalog";
+import { ProductCatalog } from "./_components/product-catalog";
 import { getBazarData } from "@/data/mock-bazar";
 
 export default async function ProductsPage() {

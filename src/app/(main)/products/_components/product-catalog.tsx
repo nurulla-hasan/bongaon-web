@@ -4,7 +4,7 @@ import { useState } from "react";
 import { RotateCcw, SlidersHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ProductCard } from "@/components/card/product-card";
-import { ProductFilters } from "@/app/products/_components/product-filters";
+import { ProductFilters } from "./product-filters";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

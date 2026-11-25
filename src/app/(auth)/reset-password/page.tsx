@@ -11,9 +11,5 @@ export default async function ResetPasswordPage({
   searchParams: Promise<{ email?: string; otp?: string }>;
 }) {
   const { email = "", otp = "" } = await searchParams;
-  return (
-    <div className="flex min-h-[calc(100vh-16rem)] items-center justify-center px-4 py-12">
-      <ResetPasswordForm email={email} otp={otp} />
-    </div>
-  );
+  return <ResetPasswordForm email={email} otp={otp} />;
 }

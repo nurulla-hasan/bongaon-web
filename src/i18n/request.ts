@@ -26,6 +26,8 @@ export default getRequestConfig(async () => {
       Orders: (await import(`../../messages/${locale}/orders.json`)).default,
       About: (await import(`../../messages/${locale}/about.json`)).default,
       Contact: (await import(`../../messages/${locale}/contact.json`)).default,
+      Auth: (await import(`../../messages/${locale}/auth.json`)).default,
+      Profile: (await import(`../../messages/${locale}/profile.json`)).default,
     },
   };
 });

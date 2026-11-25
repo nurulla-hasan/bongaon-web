@@ -5,7 +5,6 @@ import { GrassTuft, LeafSprig } from "@/components/common/leaf-decor";
 import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MOCK_CART_ITEMS } from "@/data/mock-bazar";
 import {
@@ -14,13 +13,26 @@ import {
   SURFACE_WARM,
 } from "@/lib/layout";
 import { cn } from "@/lib/utils";
+import { settingApi } from "@/services/api";
 import { AnnouncementBar } from "./announcement-bar";
 import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
 import { NavbarUserMenu } from "./navbar-user-menu";
 
+async function getAnnouncementMessage(fallback: string): Promise<string | null> {
+  try {
+    const res = await settingApi.getSettings();
+    const settings = res.data;
+    if (!settings.announcementEnabled) return null;
+    return settings.announcementText.trim() || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export async function Navbar() {
   const t = await getTranslations("Navbar");
+  const announcement = await getAnnouncementMessage(t("announcement"));
   const totalItems = MOCK_CART_ITEMS.reduce(
     (sum, item) => sum + item.quantity,
     0
@@ -28,7 +40,7 @@ export async function Navbar() {
 
   return (
     <>
-      <AnnouncementBar message={t("announcement")} />
+      {announcement && <AnnouncementBar message={announcement} />}
 
       <header
         className={cn(
@@ -57,18 +69,23 @@ export async function Navbar() {
           </div>
 
           <Button
-            variant="outline"
-            size="lg"
+            variant="ghost"
+            size="icon"
+            aria-label={`${t("cart")} (${totalItems})`}
+            className="relative"
             render={<Link href="/cart" />}
           >
             <ShoppingBag />
-            <span className="hidden sm:inline">{t("cart")}</span>
-            <Badge variant="secondary">{totalItems}</Badge>
+            {totalItems > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
           </Button>
 
-          <NavbarUserMenu isLoggedIn={true} />
+          <NavbarUserMenu />
 
-          <MobileNav isLoggedIn={true} />
+          <MobileNav />
         </div>
         </div>
       </header>

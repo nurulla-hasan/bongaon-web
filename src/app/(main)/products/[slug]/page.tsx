@@ -14,8 +14,8 @@ import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ProductImageGallery } from "@/app/products/[slug]/_components/product-image-gallery";
-import { ProductPurchasePanel } from "@/app/products/[slug]/_components/product-purchase-panel";
+import { ProductImageGallery } from "./_components/product-image-gallery";
+import { ProductPurchasePanel } from "./_components/product-purchase-panel";
 import { getBazarData } from "@/data/mock-bazar";
 
 interface ProductDetailPageProps {

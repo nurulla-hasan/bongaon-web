@@ -1,0 +1,22 @@
+{
+  "title": "My Profile",
+  "description": "Manage your account details and password.",
+  "accountTitle": "Account Details",
+  "accountDescription": "Update your name and contact phone number for COD deliveries.",
+  "nameLabel": "Full Name",
+  "namePlaceholder": "Your name",
+  "emailLabel": "Email",
+  "emailHint": "Email address cannot be changed.",
+  "phoneLabel": "Phone Number",
+  "saveProfile": "Save Profile",
+  "saving": "Saving...",
+  "passwordTitle": "Change Password",
+  "passwordDescription": "Keep your Bongaon Bazar account secure with a strong password.",
+  "currentPasswordLabel": "Current Password",
+  "newPasswordLabel": "New Password",
+  "newPasswordPlaceholder": "Minimum 6 characters",
+  "confirmPasswordLabel": "Confirm New Password",
+  "confirmPasswordPlaceholder": "Re-enter new password",
+  "updatePassword": "Update Password",
+  "updating": "Updating..."
+}

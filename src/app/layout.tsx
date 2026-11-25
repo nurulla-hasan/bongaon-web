@@ -4,8 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 import Providers from "@/provider";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-sans",
@@ -39,16 +37,13 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${hindSiliguri.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         <NextIntlClientProvider messages={messages}>
-          <Providers>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </Providers>
+          <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>
     </html>

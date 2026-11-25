@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
@@ -41,6 +42,7 @@ export function ResetPasswordForm({
   email: string;
   otp: string;
 }) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const resetPassword = useResetPassword();
 
@@ -72,10 +74,8 @@ export function ResetPasswordForm({
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Reset Password</CardTitle>
-        <CardDescription>
-          Set a new password for your Bongaon Bazar account.
-        </CardDescription>
+        <CardTitle>{t("resetTitle")}</CardTitle>
+        <CardDescription>{t("resetDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -90,16 +90,16 @@ export function ResetPasswordForm({
           <FormInput
             form={form}
             name="email"
-            label="Email"
+            label={t("emailLabel")}
             type="email"
-            placeholder="you@example.com"
+            placeholder={t("emailPlaceholder")}
             disabled={resetPassword.isPending}
           />
 
           <FormInput
             form={form}
             name="otp"
-            label="6-Digit OTP"
+            label={t("otpFieldLabel")}
             placeholder="123456"
             maxLength={6}
             inputMode="numeric"
@@ -109,9 +109,9 @@ export function ResetPasswordForm({
           <FormInput
             form={form}
             name="password"
-            label="New Password"
+            label={t("newPasswordLabel")}
             type="password"
-            placeholder="Minimum 6 characters"
+            placeholder={t("passwordMinPlaceholder")}
             autoComplete="new-password"
             disabled={resetPassword.isPending}
           />
@@ -119,9 +119,9 @@ export function ResetPasswordForm({
           <FormInput
             form={form}
             name="confirmPassword"
-            label="Confirm Password"
+            label={t("confirmPasswordLabel")}
             type="password"
-            placeholder="Re-enter new password"
+            placeholder={t("confirmPasswordPlaceholder")}
             autoComplete="new-password"
             disabled={resetPassword.isPending}
           />
@@ -133,9 +133,9 @@ export function ResetPasswordForm({
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || resetPassword.isPending}
-                loadingText="Resetting..."
+                loadingText={t("resetting")}
               >
-                Reset Password
+                {t("resetButton")}
               </Button>
             )}
           </form.Subscribe>
@@ -146,7 +146,7 @@ export function ResetPasswordForm({
               className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to Sign In
+              {t("backToSignIn")}
             </Link>
           </div>
         </form>

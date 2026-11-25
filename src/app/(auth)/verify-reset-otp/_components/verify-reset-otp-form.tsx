@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ const verifyOtpSchema = z.object({
 });
 
 export function VerifyResetOtpForm({ email }: { email: string }) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const { secondsLeft, isRunning, start } = useCountdown(60, "web-reset-otp");
   const verifyOtp = useVerifyResetOtp();
@@ -79,13 +81,10 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Verify Reset OTP</CardTitle>
+        <CardTitle>{t("verifyResetTitle")}</CardTitle>
         <CardDescription>
-          Enter the 6-digit code sent to{" "}
-          <span className="font-medium text-foreground">
-            {email || "your email"}
-          </span>
-          .
+          {t("verifyResetDescription")}{" "}
+          <span className="font-medium text-foreground">{email}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -117,7 +116,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
                   className="items-center text-center"
                 >
                   <FieldLabel htmlFor="web-reset-otp" className="justify-center">
-                    6-Digit Verification Code
+                    {t("otpLabel")}
                   </FieldLabel>
                   <div className="flex justify-center">
                     <InputOTP
@@ -153,9 +152,9 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || verifyOtp.isPending}
-                loadingText="Verifying..."
+                loadingText={t("verifying")}
               >
-                Verify OTP
+                {t("verifyOtpButton")}
               </Button>
             )}
           </form.Subscribe>
@@ -166,7 +165,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
               className="inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Change Email
+              {t("changeEmail")}
             </Link>
 
             <button
@@ -176,10 +175,10 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
               className="cursor-pointer font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               {resendOtp.isPending
-                ? "Sending..."
+                ? t("sendingOtp")
                 : isRunning
-                  ? `Resend in ${secondsLeft}`
-                  : "Resend OTP"}
+                  ? `${t("resendIn")} ${secondsLeft}`
+                  : t("resendOtp")}
             </button>
           </div>
         </form>

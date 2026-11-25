@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
@@ -32,6 +33,7 @@ const registerSchema = z.object({
 });
 
 export function RegisterForm() {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const registerMutation = useRegister();
 
@@ -64,10 +66,8 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Create Account</CardTitle>
-        <CardDescription>
-          Join Bongaon Bazar for faster checkout and order tracking.
-        </CardDescription>
+        <CardTitle>{t("registerTitle")}</CardTitle>
+        <CardDescription>{t("registerDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -82,8 +82,8 @@ export function RegisterForm() {
           <FormInput
             form={form}
             name="name"
-            label="Full Name"
-            placeholder="e.g. Rashedul Islam"
+            label={t("nameLabel")}
+            placeholder={t("namePlaceholder")}
             autoComplete="name"
             disabled={registerMutation.isPending}
           />
@@ -91,9 +91,9 @@ export function RegisterForm() {
           <FormInput
             form={form}
             name="email"
-            label="Email"
+            label={t("emailLabel")}
             type="email"
-            placeholder="you@example.com"
+            placeholder={t("emailPlaceholder")}
             autoComplete="email"
             disabled={registerMutation.isPending}
           />
@@ -101,8 +101,8 @@ export function RegisterForm() {
           <FormInput
             form={form}
             name="phone"
-            label="Phone Number (Optional)"
-            placeholder="01712345678"
+            label={t("phoneLabel")}
+            placeholder={t("phonePlaceholder")}
             autoComplete="tel"
             disabled={registerMutation.isPending}
           />
@@ -110,9 +110,9 @@ export function RegisterForm() {
           <FormInput
             form={form}
             name="password"
-            label="Password"
+            label={t("passwordLabel")}
             type="password"
-            placeholder="Minimum 6 characters"
+            placeholder={t("passwordMinPlaceholder")}
             autoComplete="new-password"
             disabled={registerMutation.isPending}
           />
@@ -124,17 +124,17 @@ export function RegisterForm() {
                 size="lg"
                 className="w-full"
                 loading={isSubmitting || registerMutation.isPending}
-                loadingText="Creating account..."
+                loadingText={t("creatingAccount")}
               >
-                Create Account
+                {t("registerButton")}
               </Button>
             )}
           </form.Subscribe>
 
           <p className="text-center text-xs text-muted-foreground">
-            Already have an account?{" "}
+            {t("haveAccount")}{" "}
             <Link href="/login" className="font-medium text-primary hover:underline">
-              Sign in
+              {t("signInLink")}
             </Link>
           </p>
         </form>

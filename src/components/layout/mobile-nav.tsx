@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LogIn, LogOut, Menu, PackageCheck } from "lucide-react";
+import { toast } from "sonner";
 import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
@@ -17,21 +18,38 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getErrorMessage } from "@/lib/error";
 import { cn } from "@/lib/utils";
+import { useLogout, useMe } from "@/services";
 import { isNavLinkActive, NAV_LINKS } from "./nav-items";
 
 interface MobileNavProps {
-  isLoggedIn?: boolean;
   className?: string;
 }
 
-export function MobileNav({
-  isLoggedIn = false,
-  className,
-}: MobileNavProps) {
+export function MobileNav({ className }: MobileNavProps) {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
+  const { data: user } = useMe();
+  const logout = useLogout();
+
+  const handleLogout = async () => {
+    try {
+      await logout.mutateAsync();
+      setOpen(false);
+      toast.success("Signed out");
+      router.push("/login");
+      router.refresh();
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Failed to sign out"));
+    }
+  };
+
+  const displayName = user?.name || "Customer";
+  const displaySub = user?.phone || user?.email || "";
+  const initials = displayName.trim().slice(0, 2).toUpperCase();
 
   return (
     <div className={cn("flex md:hidden", className)}>
@@ -92,19 +110,21 @@ export function MobileNav({
                 </div>
               </div>
 
-              {isLoggedIn ? (
+              {user ? (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-2.5">
                     <Avatar>
-                      <AvatarFallback>রা</AvatarFallback>
+                      <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-foreground">
-                        রাশেদুল ইসলাম
+                        {displayName}
                       </p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        01712-345678
-                      </p>
+                      {displaySub && (
+                        <p className="truncate text-xs text-muted-foreground">
+                          {displaySub}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -121,7 +141,8 @@ export function MobileNav({
                   <Button
                     variant="destructive"
                     className="w-full"
-                    onClick={() => setOpen(false)}
+                    loading={logout.isPending}
+                    onClick={handleLogout}
                   >
                     <LogOut />
                     <span>{t("logout")}</span>
@@ -130,7 +151,7 @@ export function MobileNav({
               ) : (
                 <Button
                   className="w-full"
-                  render={<Link href="/checkout" />}
+                  render={<Link href="/login" />}
                   onClick={() => setOpen(false)}
                 >
                   <LogIn />

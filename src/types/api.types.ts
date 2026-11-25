@@ -26,3 +26,20 @@ export interface ApiError {
 
 export type UserRole = "ADMIN" | "USER";
 export type UserStatus = "ACTIVE" | "BLOCKED";
+
+export interface StoreSetting {
+  id: string;
+  storeName: string;
+  supportPhone: string;
+  whatsappNumber: string;
+  supportEmail: string;
+  storeAddress: string;
+  defaultDeliveryCharge: number;
+  freeDeliveryMinOrder: number;
+  estimatedDeliveryDays: string;
+  announcementEnabled: boolean;
+  announcementText: string;
+  isOrderingEnabled: boolean;
+  orderAlertEmail: string;
+  updatedAt: string;
+}
