@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { DEFAULT_DELIVERY_CHARGE_BDT } from "@/lib/cart";
 import { CartView } from "./_components/cart-view";
 
 export default async function CartPage() {
@@ -42,7 +41,7 @@ export default async function CartPage() {
         </div>
       </SectionHeading>
 
-      <CartView deliveryCharge={DEFAULT_DELIVERY_CHARGE_BDT} />
+      <CartView />
     </PageWrapper>
   );
 }

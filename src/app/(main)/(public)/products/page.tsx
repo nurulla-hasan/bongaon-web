@@ -4,7 +4,10 @@ import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { ProductCatalog } from "./_components/product-catalog";
+import {
+  ProductCatalog,
+  ProductCatalogSkeleton,
+} from "./_components/product-catalog";
 
 export default async function ProductsPage() {
   const [tCommon, tProducts] = await Promise.all([
@@ -41,7 +44,7 @@ export default async function ProductsPage() {
         </div>
       </SectionHeading>
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<ProductCatalogSkeleton />}>
         <ProductCatalog />
       </Suspense>
     </PageWrapper>

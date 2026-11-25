@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { RotateCcw, SlidersHorizontal, WifiOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ProductCard, ProductCardSkeleton } from "@/components/card/product-card";
 import CustomPagination from "@/components/common/custom-pagination";
+import { EmptyState } from "@/components/common/empty-state";
 import { FilterSelect } from "@/components/common/filter-select";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,8 +38,13 @@ export function ProductCatalog() {
 
   const page = Math.max(1, Number(getFilter("page", "1")) || 1);
   const categoryId = getFilter("category") || undefined;
-  const priceStr = getFilter("price");
-  const [minPrice, maxPrice] = priceStr ? priceStr.split("-").map(Number) : [];
+  const priceParts = getFilter("price").split("-").map(Number);
+  const hasValidPrice =
+    priceParts.length === 2 &&
+    Number.isFinite(priceParts[0]) &&
+    Number.isFinite(priceParts[1]);
+  const minPrice = hasValidPrice ? Math.max(0, priceParts[0]) : undefined;
+  const maxPrice = hasValidPrice ? Math.max(0, priceParts[1]) : undefined;
   const onlyDiscounted = getFilter("discount") === "1" ? true : undefined;
   const minRating = Number(getFilter("rating", "0")) || undefined;
   const sort = getFilter("sort", "all");
@@ -49,7 +55,12 @@ export function ProductCatalog() {
     "rating",
   ]);
 
-  const { data: productsRes, isLoading: isProductsLoading } = useProducts({
+  const {
+    data: productsRes,
+    isLoading: isProductsLoading,
+    isError,
+    refetch,
+  } = useProducts({
     isActive: true,
     page,
     limit: PAGE_SIZE,
@@ -143,6 +154,23 @@ export function ProductCatalog() {
               <ProductCardSkeleton key={index} />
             ))}
           </div>
+        ) : isError ? (
+          <div className="mt-6">
+            <EmptyState
+              icon={<WifiOff className="size-5" aria-hidden />}
+              title={t("loadErrorTitle")}
+              description={t("loadErrorDescription")}
+              action={
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => refetch()}
+                >
+                  {t("retry")}
+                </Button>
+              }
+            />
+          </div>
         ) : products.length > 0 ? (
           <>
             <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
@@ -197,6 +225,28 @@ export function ProductCatalog() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+    </div>
+  );
+}
+
+export function ProductCatalogSkeleton() {
+  return (
+    <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+      <aside className="hidden w-64 shrink-0 lg:block xl:w-72">
+        <ProductFiltersSkeleton />
+      </aside>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-3">
+          <Skeleton className="h-5 w-28" />
+          <Skeleton className="h-9 w-36 rounded-md" />
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <ProductCardSkeleton key={index} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

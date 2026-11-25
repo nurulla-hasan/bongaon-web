@@ -47,7 +47,23 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
     ? selected.originalPrice * quantity
     : undefined;
 
+  const isOutOfStock = product.stock <= 0;
+  const maxQuantity = Math.min(20, Math.max(1, product.stock));
+
   const currency = tCommon("currency");
+
+  const handleAddToCart = () => {
+    addToCart({
+      productId: product.id,
+      slug: product.slug,
+      name: product.name,
+      categoryName: product.category?.name ?? "",
+      image: product.imageUrl || undefined,
+      selectedPack: selected.label,
+      quantity,
+      unitPrice: selected.price,
+    });
+  };
 
   return (
     <div className="space-y-5">
@@ -121,8 +137,8 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
               variant="ghost"
               size="icon"
               aria-label="Increase quantity"
-              disabled={quantity >= 20}
-              onClick={() => setQuantity((q) => Math.min(20, q + 1))}
+              disabled={isOutOfStock || quantity >= maxQuantity}
+              onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
             >
               <Plus />
             </Button>
@@ -134,38 +150,22 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
         <Button
           size="xl"
           type="button"
+          disabled={isOutOfStock}
           onClick={() => {
-            addToCart({
-              productId: product.id,
-              slug: product.slug,
-              name: product.name,
-              categoryName: product.category?.name ?? "",
-              image: product.imageUrl || undefined,
-              selectedPack: selected.label,
-              quantity,
-              unitPrice: selected.price,
-            });
-            toast.success(`${product.name} added to cart`);
+            handleAddToCart();
+            toast.success(tProducts("addedToCart", { name: product.name }));
           }}
         >
           <ShoppingBag />
-          {tProducts("addToCart")}
+          {isOutOfStock ? tProducts("outOfStock") : tProducts("addToCart")}
         </Button>
         <Button
           variant="secondary"
           size="xl"
           type="button"
+          disabled={isOutOfStock}
           onClick={() => {
-            addToCart({
-              productId: product.id,
-              slug: product.slug,
-              name: product.name,
-              categoryName: product.category?.name ?? "",
-              image: product.imageUrl || undefined,
-              selectedPack: selected.label,
-              quantity,
-              unitPrice: selected.price,
-            });
+            handleAddToCart();
             router.push("/checkout");
           }}
         >

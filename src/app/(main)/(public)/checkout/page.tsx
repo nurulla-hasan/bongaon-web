@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { DEFAULT_DELIVERY_CHARGE_BDT } from "@/lib/cart";
 import { CheckoutView } from "./_components/checkout-view";
 
 export default async function CheckoutPage() {
@@ -43,7 +42,7 @@ export default async function CheckoutPage() {
         </div>
       </SectionHeading>
 
-      <CheckoutView deliveryCharge={DEFAULT_DELIVERY_CHARGE_BDT} />
+      <CheckoutView />
     </PageWrapper>
   );
 }

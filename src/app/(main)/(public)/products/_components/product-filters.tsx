@@ -34,9 +34,16 @@ export function ProductFilters({
   const { getFilter, updateFilter, clearAll, isFilterActive } = useNextFilter();
 
   const categoryId = getFilter("category") || null;
-  const priceRange: [number, number] = getFilter("price")
-    ? (getFilter("price").split("-").map(Number) as [number, number])
-    : [0, MAX_PRICE];
+  const priceParts = getFilter("price").split("-").map(Number);
+  const priceRange: [number, number] =
+    priceParts.length === 2 &&
+    Number.isFinite(priceParts[0]) &&
+    Number.isFinite(priceParts[1])
+      ? [
+          Math.max(0, Math.min(priceParts[0], priceParts[1])),
+          Math.min(MAX_PRICE, Math.max(priceParts[0], priceParts[1])),
+        ]
+      : [0, MAX_PRICE];
   const rating = Number(getFilter("rating", "0")) || 0;
   const onlyDiscounted = getFilter("discount") === "1";
 

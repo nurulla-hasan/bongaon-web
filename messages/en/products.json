@@ -1,7 +1,7 @@
 {
     "view": "View",
     "catalogEyebrow": "Bongaon Bazar Catalog",
-    "catalogTitle": "All Village Special Packaged Products",
+    "catalogTitle": "All Village Special & Pure Products",
     "catalogDescription": "Order fresh village specialties for your city kitchen or send directly to your family in Bangladesh.",
     "catalogDeliveryTag": "4–7 Days Delivery",
     "catalogPaymentTag": "Cash on Delivery (COD)",
@@ -21,7 +21,7 @@
     "storageTitle": "Storage",
     "whySpecial": "Why It's Special?",
     "ingredientsTitle": "Ingredients",
-    "relatedTitle": "More Special Packaged Foods",
+    "relatedTitle": "More Special Village Foods",
     "filtersTitle": "Filters",
     "categoryTitle": "Category",
     "allItems": "All products",
@@ -41,5 +41,10 @@
     "sortPriceDesc": "Price: high to low",
     "sortDiscount": "Biggest discount",
     "filtersDescription": "Choose the filters you need",
-    "showResults": "Show results"
+    "showResults": "Show results",
+    "outOfStock": "Out of Stock",
+    "addedToCart": "{name} added to cart",
+    "loadErrorTitle": "Could not load products",
+    "loadErrorDescription": "Please try again.",
+    "retry": "Try again"
 }

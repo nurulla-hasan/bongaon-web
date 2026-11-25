@@ -26,11 +26,10 @@ export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
-  const [tCommon, tProducts, productRes, listRes] = await Promise.all([
+  const [tCommon, tProducts, productRes] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Products"),
     productApi.getProductByIdOrSlug(slug).catch(() => null),
-    productApi.getProducts({ isActive: true, limit: 12 }).catch(() => null),
   ]);
 
   const product = productRes?.data;
@@ -39,18 +38,7 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const allProducts = listRes?.data ?? [];
-  const sameCategory = allProducts.filter(
-    (item) =>
-      item.slug !== product.slug &&
-      item.category?.slug === product.category?.slug,
-  );
-  const otherProducts = allProducts.filter(
-    (item) =>
-      item.slug !== product.slug &&
-      item.category?.slug !== product.category?.slug,
-  );
-  const relatedProducts = [...sameCategory, ...otherProducts].slice(0, 5);
+  const relatedProducts = product.relatedProducts ?? [];
 
   return (
     <PageWrapper>
@@ -121,66 +109,78 @@ export default async function ProductDetailPage({
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5">
-                <Clock className="mt-0.5 size-4 shrink-0 text-primary" />
-                <div className="text-xs">
-                  <p className="font-semibold text-foreground">
-                    {tProducts("storageTitle")}
-                  </p>
-                  <p className="text-muted-foreground">{product.shelfLife}</p>
+              {product.shelfLife && (
+                <div className="flex items-start gap-2.5">
+                  <Clock className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <div className="text-xs">
+                    <p className="font-semibold text-foreground">
+                      {tProducts("storageTitle")}
+                    </p>
+                    <p className="text-muted-foreground">{product.shelfLife}</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>{tProducts("whySpecial")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {product.highlights.map((item) => (
-                  <p
-                    key={item}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
-                  >
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span>{item}</span>
-                  </p>
-                ))}
-              </CardContent>
-            </Card>
+          {(product.highlights.length > 0 || product.ingredients.length > 0) && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {product.highlights.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{tProducts("whySpecial")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {product.highlights.map((item) => (
+                      <p
+                        key={item}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                        <span>{item}</span>
+                      </p>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
 
-            <Card>
-              <CardHeader>
-                <CardTitle>{tProducts("ingredientsTitle")}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {product.ingredients.map((ingredient) => (
-                  <Badge key={ingredient} variant="secondary">
-                    {ingredient}
-                  </Badge>
-                ))}
-              </CardContent>
-            </Card>
+              {product.ingredients.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{tProducts("ingredientsTitle")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-wrap gap-2">
+                    {product.ingredients.map((ingredient) => (
+                      <Badge key={ingredient} variant="secondary">
+                        {ingredient}
+                      </Badge>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {relatedProducts.length > 0 && (
+        <>
+          <div className="my-12">
+            <Separator />
           </div>
-        </div>
-      </div>
 
-      <div className="my-12">
-        <Separator />
-      </div>
-
-      <section className="space-y-6">
-        <h2 className="text-xl font-bold text-foreground sm:text-2xl">
-          {tProducts("relatedTitle")}
-        </h2>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-5">
-          {relatedProducts.map((item) => (
-            <ProductCard key={item.slug} product={item} />
-          ))}
-        </div>
-      </section>
+          <section className="space-y-6">
+            <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+              {tProducts("relatedTitle")}
+            </h2>
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-5">
+              {relatedProducts.map((item) => (
+                <ProductCard key={item.slug} product={item} />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </PageWrapper>
   );
 }

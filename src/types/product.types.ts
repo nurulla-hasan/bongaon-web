@@ -47,6 +47,7 @@ export interface ApiProduct {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  relatedProducts?: ApiProduct[];
 }
 
 export interface HomeShowcase {

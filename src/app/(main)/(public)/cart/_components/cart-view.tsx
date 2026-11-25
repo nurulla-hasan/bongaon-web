@@ -24,24 +24,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   CART_UPDATED_EVENT,
+  calculateDeliveryCharge,
   readCartItems,
   writeCartItems,
   type CartItem,
 } from "@/lib/cart";
+import { useSettings } from "@/services";
 
-interface CartViewProps {
-  deliveryCharge: number;
-}
-
-export function CartView({ deliveryCharge }: CartViewProps) {
+export function CartView() {
   const t = useTranslations("Cart");
+  const { data: settings } = useSettings();
   const [items, setItems] = React.useState<CartItem[]>([]);
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
     const sync = () => setItems(readCartItems());
     sync();
+    setMounted(true);
     window.addEventListener("storage", sync);
     window.addEventListener(CART_UPDATED_EVENT, sync);
     return () => {
@@ -52,15 +54,23 @@ export function CartView({ deliveryCharge }: CartViewProps) {
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
-    0
+    0,
   );
-  const total = subtotal + (items.length > 0 ? deliveryCharge : 0);
+  const deliveryCharge = calculateDeliveryCharge(
+    subtotal,
+    settings?.defaultDeliveryCharge,
+    settings?.freeDeliveryMinOrder,
+  );
+  const total = subtotal + deliveryCharge;
 
   const updateQuantity = (slug: string, selectedPack: string, delta: number) => {
     const next = items.map((item) =>
       item.slug === slug && item.selectedPack === selectedPack
-        ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-        : item
+        ? {
+            ...item,
+            quantity: Math.min(20, Math.max(1, item.quantity + delta)),
+          }
+        : item,
     );
     setItems(next);
     writeCartItems(next);
@@ -68,11 +78,25 @@ export function CartView({ deliveryCharge }: CartViewProps) {
 
   const removeItem = (slug: string, selectedPack: string) => {
     const next = items.filter(
-      (item) => !(item.slug === slug && item.selectedPack === selectedPack)
+      (item) => !(item.slug === slug && item.selectedPack === selectedPack),
     );
     setItems(next);
     writeCartItems(next);
   };
+
+  if (!mounted) {
+    return (
+      <div className="mt-8 grid items-start gap-8 lg:grid-cols-12">
+        <div className="space-y-4 lg:col-span-8">
+          <Skeleton className="h-36 w-full rounded-2xl" />
+          <Skeleton className="h-36 w-full rounded-2xl" />
+        </div>
+        <div className="lg:col-span-4">
+          <Skeleton className="h-72 w-full rounded-2xl" />
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -168,6 +192,7 @@ export function CartView({ deliveryCharge }: CartViewProps) {
                     <Button
                       variant="outline"
                       size="icon"
+                      disabled={item.quantity >= 20}
                       aria-label={t("increase")}
                       onClick={() =>
                         updateQuantity(item.slug, item.selectedPack, 1)

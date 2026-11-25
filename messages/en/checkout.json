@@ -37,5 +37,10 @@
     "estDelivery":  "Estimated delivery: 4 to 7 business days",
     "bdOnly":  "Delivery available within Bangladesh only",
     "confirmOrder":  "Confirm Order (COD)",
-    "backToCart":  "Back to Cart"
+    "submittingOrder":  "Placing order...",
+    "backToCart":  "Back to Cart",
+    "emptyCartTitle":  "Your cart is empty",
+    "emptyCartDesc":  "Add at least one product to your cart before checking out.",
+    "browseProducts":  "Browse Products",
+    "orderingPaused":  "Orders are temporarily paused. Please try again later."
 }

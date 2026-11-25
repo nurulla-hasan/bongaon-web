@@ -67,3 +67,17 @@ export function readCartCount(): number {
     0,
   );
 }
+
+export function clearCart(): void {
+  writeCartItems([]);
+}
+
+export function calculateDeliveryCharge(
+  subtotal: number,
+  defaultCharge = DEFAULT_DELIVERY_CHARGE_BDT,
+  freeDeliveryMinOrder = 0,
+): number {
+  if (subtotal <= 0) return 0;
+  if (freeDeliveryMinOrder > 0 && subtotal >= freeDeliveryMinOrder) return 0;
+  return defaultCharge;
+}

@@ -12,8 +12,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default async function OrderSuccessPage() {
-  const t = await getTranslations("OrderSuccess");
+interface OrderSuccessPageProps {
+  searchParams: Promise<{ orderNumber?: string }>;
+}
+
+export default async function OrderSuccessPage({
+  searchParams,
+}: OrderSuccessPageProps) {
+  const [{ orderNumber }, t] = await Promise.all([
+    searchParams,
+    getTranslations("OrderSuccess"),
+  ]);
 
   return (
     <PageWrapper padding="spacious">
@@ -24,7 +33,9 @@ export default async function OrderSuccessPage() {
               <CheckCircle2 className="size-9" />
             </div>
             <div className="flex justify-center">
-              <Badge variant="secondary">{t("orderRef")}</Badge>
+              <Badge variant="secondary">
+                {orderNumber ? `#${orderNumber}` : t("orderRef")}
+              </Badge>
             </div>
             <CardTitle>{t("title")}</CardTitle>
           </CardHeader>
