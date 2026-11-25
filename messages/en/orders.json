@@ -8,8 +8,16 @@
   "filterInTransit": "In Transit",
   "filterDelivered": "Delivered",
   "statusProcessing": "Packing",
+  "statusPending": "Order Placed",
   "statusInTransit": "In Transit",
   "statusDelivered": "Delivered",
+  "statusCancelled": "Cancelled",
+  "trackSectionTitle": "Track Your Order",
+  "trackSectionDesc": "Enter your order number and receiver phone number to check live delivery status.",
+  "orderNumberPlaceholder": "Order number (e.g., BB-2026-123456)",
+  "phonePlaceholder": "Receiver phone number",
+  "trackSubmit": "Track Order",
+  "trackingLoading": "Searching...",
   "orderDateLabel": "Order Date:",
   "receiverLabel": "Receiver:",
   "paymentCod": "Cash on Delivery",
@@ -23,5 +31,8 @@
   "stepDelivered": "Delivered",
   "emptyTitle": "No orders found",
   "emptyDesc": "No orders match your selected status filter or search query.",
-  "browseProducts": "Browse Products"
+  "browseProducts": "Browse Products",
+  "loadErrorTitle": "Could not load orders",
+  "loadErrorDescription": "Please try again.",
+  "retry": "Try again"
 }

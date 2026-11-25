@@ -1,8 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Send } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
+import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,18 +15,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { getErrorMessage } from "@/lib/error";
+import { useCreateContactMessage } from "@/services";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(2, { error: "Name must be at least 2 characters." }).max(120),
+  phone: z.string().trim().min(6, { error: "Valid phone number is required." }).max(30),
+  subject: z.string().trim().max(150),
+  message: z
+    .string()
+    .trim()
+    .min(5, { error: "Message must be at least 5 characters." })
+    .max(2000),
+});
 
 export function ContactForm() {
   const t = useTranslations("Contact");
   const [submitted, setSubmitted] = React.useState(false);
+  const createContact = useCreateContactMessage();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
+    validators: {
+      onSubmit: contactSchema,
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        await createContact.mutateAsync({
+          name: value.name.trim(),
+          phone: value.phone.trim(),
+          subject: value.subject.trim() || undefined,
+          message: value.message.trim(),
+        });
+        form.reset();
+        setSubmitted(true);
+      } catch (error) {
+        toast.error(getErrorMessage(error));
+      }
+    },
+  });
 
   if (submitted) {
     return (
@@ -60,45 +98,79 @@ export function ContactForm() {
         <CardDescription>{t("formDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-4"
+        >
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="contact-name">{t("nameLabel")}</Label>
-              <Input
-                id="contact-name"
-                required
-                placeholder={t("namePlaceholder")}
+            <form.Field name="name">
+              {(field) => (
+                <FormInput
+                  field={field}
+                  label={t("nameLabel")}
+                  placeholder={t("namePlaceholder")}
+                />
+              )}
+            </form.Field>
+            <form.Field name="phone">
+              {(field) => (
+                <FormInput
+                  field={field}
+                  type="tel"
+                  label={t("phoneLabel")}
+                  placeholder={t("phonePlaceholder")}
+                />
+              )}
+            </form.Field>
+          </div>
+
+          <form.Field name="subject">
+            {(field) => (
+              <FormInput
+                field={field}
+                label={t("subjectLabel")}
+                placeholder={t("subjectPlaceholder")}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="contact-phone">{t("phoneLabel")}</Label>
-              <Input
-                id="contact-phone"
-                required
-                placeholder={t("phonePlaceholder")}
-              />
-            </div>
-          </div>
+            )}
+          </form.Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="contact-subject">{t("subjectLabel")}</Label>
-            <Input
-              id="contact-subject"
-              placeholder={t("subjectPlaceholder")}
-            />
-          </div>
+          <form.Field name="message">
+            {(field) => {
+              const hasError =
+                field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0;
+              return (
+                <Field data-invalid={hasError}>
+                  <FieldLabel htmlFor="contact-message">
+                    {t("messageLabel")}
+                  </FieldLabel>
+                  <Textarea
+                    id="contact-message"
+                    rows={4}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder={t("messagePlaceholder")}
+                    aria-invalid={hasError}
+                  />
+                  {hasError && (
+                    <FieldError errors={field.state.meta.errors} />
+                  )}
+                </Field>
+              );
+            }}
+          </form.Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="contact-message">{t("messageLabel")}</Label>
-            <Textarea
-              id="contact-message"
-              required
-              rows={4}
-              placeholder={t("messagePlaceholder")}
-            />
-          </div>
-
-          <Button type="submit" size="xl" className="w-full sm:w-auto">
+          <Button
+            type="submit"
+            size="xl"
+            className="w-full sm:w-auto"
+            disabled={createContact.isPending}
+          >
             <Send />
             {t("submitButton")}
           </Button>

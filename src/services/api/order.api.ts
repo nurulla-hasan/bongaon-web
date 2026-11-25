@@ -17,6 +17,18 @@ export interface CreateOrderPayload {
   items: CreateOrderItemPayload[];
 }
 
+export interface ApiOrderItem {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string | null;
+  selectedPack: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
 export interface ApiOrder {
   id: string;
   orderNumber: string;
@@ -28,8 +40,9 @@ export interface ApiOrder {
   deliveryCharge: number;
   total: number;
   paymentMethod: string;
-  status: string;
+  status: "PENDING" | "PROCESSING" | "IN_TRANSIT" | "DELIVERED" | "CANCELLED";
   createdAt: string;
+  items: ApiOrderItem[];
 }
 
 export const orderApi = {
@@ -38,4 +51,15 @@ export const orderApi = {
       method: "POST",
       body: payload,
     }),
+
+  getMyOrders: (params?: { status?: string; page?: number; limit?: number }) =>
+    apiClient<ApiResponse<ApiOrder[]>>("/orders/my-orders", {
+      query: params,
+    }),
+
+  trackOrder: (orderNumber: string, phone: string) =>
+    apiClient<ApiResponse<ApiOrder>>(
+      `/orders/track/${encodeURIComponent(orderNumber)}`,
+      { query: { phone } },
+    ),
 };

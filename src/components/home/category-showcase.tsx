@@ -36,7 +36,7 @@ export async function CategoryShowcaseSection({
               <Button
                 variant="outline"
                 size="lg"
-                render={<Link href={`/products?category=${category.slug}`} />}
+                render={<Link href={`/products?category=${category.id}`} />}
               >
                 {t("featuredCta")}
                 <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />

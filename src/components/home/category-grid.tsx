@@ -37,7 +37,7 @@ export async function CategoryGrid({
         {categories.map((category, index) => (
           <AnimationWrapper key={category.id} delay={index * 0.04}>
             <Link
-              href={`/products?category=${category.slug}`}
+              href={`/products?category=${category.id}`}
               className="group flex flex-col items-center gap-3 text-center"
             >
               <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-card p-3 shadow-xs transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/35 group-hover:shadow-md">

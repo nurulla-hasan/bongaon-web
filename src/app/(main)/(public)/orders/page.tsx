@@ -1,18 +1,15 @@
 import { ShieldCheck, Truck } from "lucide-react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { getMockOrders } from "@/data/mock-orders";
 import { OrdersView } from "./_components/orders-view";
 
 export default async function OrdersPage() {
-  const locale = await getLocale();
-  const [tCommon, tOrders, tProducts, orders] = await Promise.all([
+  const [tCommon, tOrders, tProducts] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Orders"),
     getTranslations("Products"),
-    getMockOrders(locale),
   ]);
 
   return (
@@ -44,7 +41,7 @@ export default async function OrdersPage() {
         </div>
       </SectionHeading>
 
-      <OrdersView orders={orders} />
+      <OrdersView />
     </PageWrapper>
   );
 }
