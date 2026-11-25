@@ -30,46 +30,58 @@ export function VerifyEmailForm({ email }: { email: string }) {
   const t = useTranslations("Auth");
   const router = useRouter();
   const { secondsLeft, isRunning, start } = useCountdown(60, "web-verify-otp");
-  const verifyEmail = useVerifyEmail();
-  const resendOtp = useResendOtp();
+  const { mutate: verifyEmail, isPending } = useVerifyEmail();
+  const { mutate: resendOtp, isPending: isResending } = useResendOtp();
 
   const form = useForm({
     defaultValues: {
       otp: "",
     },
     validators: {
-      onSubmit: verifyEmailSchema,
+      onChange: verifyEmailSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       if (!email) {
         toast.error("Email is missing. Please register again.");
         router.push("/auth/register");
         return;
       }
 
-      try {
-        const res = await verifyEmail.mutateAsync({ email, otp: value.otp });
-        toast.success(res.message || "Email verified! Please sign in.");
-        router.push("/auth/login");
-      } catch (err) {
-        toast.error(getErrorMessage(err, "Invalid or expired verification code"));
-      }
+      verifyEmail(
+        { email, otp: value.otp },
+        {
+          onSuccess: (res) => {
+            toast.success(res.message || "Email verified! Please sign in.");
+            router.push("/auth/login");
+          },
+          onError: (err) => {
+            toast.error(
+              getErrorMessage(err, "Invalid or expired verification code"),
+            );
+          },
+        },
+      );
     },
   });
 
-  const handleResend = async () => {
+  const handleResend = () => {
     if (!email) {
       toast.error("Email is missing.");
       return;
     }
 
-    try {
-      const res = await resendOtp.mutateAsync({ email });
-      start();
-      toast.success(res.message || `Verification OTP resent to ${email}`);
-    } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to resend OTP"));
-    }
+    resendOtp(
+      { email },
+      {
+        onSuccess: (res) => {
+          start();
+          toast.success(res.message || `Verification OTP resent to ${email}`);
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, "Failed to resend OTP"));
+        },
+      },
+    );
   };
 
   return (
@@ -118,7 +130,7 @@ export function VerifyEmailForm({ email }: { email: string }) {
                       maxLength={6}
                       value={field.state.value}
                       onChange={(val) => field.handleChange(val)}
-                      disabled={verifyEmail.isPending}
+                      disabled={isPending}
                     >
                       <InputOTPGroup>
                         <InputOTPSlot index={0} />
@@ -139,19 +151,15 @@ export function VerifyEmailForm({ email }: { email: string }) {
             }}
           </form.Field>
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full"
-                loading={isSubmitting || verifyEmail.isPending}
-                loadingText={t("verifying")}
-              >
-                {t("verifyEmailButton")}
-              </Button>
-            )}
-          </form.Subscribe>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isPending}
+            loadingText={t("verifying")}
+          >
+            {t("verifyEmailButton")}
+          </Button>
 
           <div className="flex items-center justify-between text-xs">
             <Link
@@ -164,11 +172,11 @@ export function VerifyEmailForm({ email }: { email: string }) {
 
             <button
               type="button"
-              disabled={isRunning || resendOtp.isPending}
+              disabled={isRunning || isResending}
               onClick={handleResend}
               className="cursor-pointer font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {resendOtp.isPending
+              {isResending
                 ? t("sendingOtp")
                 : isRunning
                   ? `${t("resendIn")} ${secondsLeft}`

@@ -35,7 +35,7 @@ export function LoginForm({
 }) {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const loginMutation = useLogin();
+  const { mutate: login, isPending } = useLogin();
   const shownAuthErrorRef = React.useRef(false);
 
   React.useEffect(() => {
@@ -51,17 +51,19 @@ export function LoginForm({
       password: "",
     },
     validators: {
-      onSubmit: loginSchema,
+      onChange: loginSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        await loginMutation.mutateAsync(value);
-        toast.success("Signed in successfully");
-        router.push(getSafeRedirect(callbackUrl));
-        router.refresh();
-      } catch (err) {
-        toast.error(getErrorMessage(err, "Invalid email or password"));
-      }
+    onSubmit: ({ value }) => {
+      login(value, {
+        onSuccess: () => {
+          toast.success("Signed in successfully");
+          router.push(getSafeRedirect(callbackUrl));
+          router.refresh();
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, "Invalid email or password"));
+        },
+      });
     },
   });
 
@@ -88,7 +90,7 @@ export function LoginForm({
             type="email"
             placeholder={t("emailPlaceholder")}
             autoComplete="email"
-            disabled={loginMutation.isPending}
+            disabled={isPending}
           />
 
           <div className="space-y-1.5">
@@ -99,7 +101,7 @@ export function LoginForm({
               type="password"
               placeholder="••••••••"
               autoComplete="current-password"
-              disabled={loginMutation.isPending}
+              disabled={isPending}
             />
             <div className="flex justify-end">
               <Link
@@ -111,21 +113,17 @@ export function LoginForm({
             </div>
           </div>
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full"
-                loading={isSubmitting || loginMutation.isPending}
-                loadingText={t("signingIn")}
-              >
-                {t("signInButton")}
-              </Button>
-            )}
-          </form.Subscribe>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isPending}
+            loadingText={t("signingIn")}
+          >
+            {t("signInButton")}
+          </Button>
 
-          <GoogleAuthButton disabled={loginMutation.isPending} />
+          <GoogleAuthButton disabled={isPending} />
 
           <p className="text-center text-xs text-muted-foreground">
             {t("noAccount")}{" "}

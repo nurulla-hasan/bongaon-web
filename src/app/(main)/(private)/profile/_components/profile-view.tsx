@@ -185,21 +185,23 @@ function ProfileDetailsCard({
   phone: string;
 }) {
   const t = useTranslations("Profile");
-  const updateMe = useUpdateMe();
+  const { mutate: updateProfile, isPending } = useUpdateMe();
 
   const form = useForm({
     defaultValues: { name, email, phone },
-    validators: { onSubmit: profileSchema },
-    onSubmit: async ({ value }) => {
-      try {
-        await updateMe.mutateAsync({
-          name: value.name,
-          phone: value.phone,
-        });
-        toast.success(t("profileUpdated"));
-      } catch (err) {
-        toast.error(getErrorMessage(err, t("profileUpdateFailed")));
-      }
+    validators: { onChange: profileSchema },
+    onSubmit: ({ value }) => {
+      updateProfile(
+        { name: value.name, phone: value.phone },
+        {
+          onSuccess: () => {
+            toast.success(t("profileUpdated"));
+          },
+          onError: (err) => {
+            toast.error(getErrorMessage(err, t("profileUpdateFailed")));
+          },
+        },
+      );
     },
   });
 
@@ -225,14 +227,14 @@ function ProfileDetailsCard({
               name="name"
               label={t("nameLabel")}
               placeholder={t("namePlaceholder")}
-              disabled={updateMe.isPending}
+              disabled={isPending}
             />
             <FormInput
               form={form}
               name="phone"
               label={t("phoneLabel")}
               placeholder="01712345678"
-              disabled={updateMe.isPending}
+              disabled={isPending}
             />
           </div>
 
@@ -245,20 +247,16 @@ function ProfileDetailsCard({
             description={t("emailHint")}
           />
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <div className="flex justify-end border-t pt-4">
-                <Button
-                  type="submit"
-                  size="lg"
-                  loading={isSubmitting || updateMe.isPending}
-                  loadingText={t("saving")}
-                >
-                  {t("saveProfile")}
-                </Button>
-              </div>
-            )}
-          </form.Subscribe>
+          <div className="flex justify-end border-t pt-4">
+            <Button
+              type="submit"
+              size="lg"
+              loading={isPending}
+              loadingText={t("saving")}
+            >
+              {t("saveProfile")}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
@@ -267,7 +265,7 @@ function ProfileDetailsCard({
 
 function ChangePasswordCard() {
   const t = useTranslations("Profile");
-  const changePassword = useChangePassword();
+  const { mutate: changePassword, isPending } = useChangePassword();
 
   const form = useForm({
     defaultValues: {
@@ -275,18 +273,27 @@ function ChangePasswordCard() {
       newPassword: "",
       confirmPassword: "",
     },
-    validators: { onSubmit: changePasswordSchema },
-    onSubmit: async ({ value }) => {
-      try {
-        await changePassword.mutateAsync({
+    validators: { onChange: changePasswordSchema },
+    onSubmit: ({ value }) => {
+      changePassword(
+        {
           oldPassword: value.oldPassword,
           newPassword: value.newPassword,
-        });
-        toast.success(t("passwordUpdated"));
-        form.reset({ oldPassword: "", newPassword: "", confirmPassword: "" });
-      } catch (err) {
-        toast.error(getErrorMessage(err, t("passwordUpdateFailed")));
-      }
+        },
+        {
+          onSuccess: () => {
+            toast.success(t("passwordUpdated"));
+            form.reset({
+              oldPassword: "",
+              newPassword: "",
+              confirmPassword: "",
+            });
+          },
+          onError: (err) => {
+            toast.error(getErrorMessage(err, t("passwordUpdateFailed")));
+          },
+        },
+      );
     },
   });
 
@@ -312,7 +319,7 @@ function ChangePasswordCard() {
             label={t("currentPasswordLabel")}
             type="password"
             placeholder="••••••••"
-            disabled={changePassword.isPending}
+            disabled={isPending}
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -322,7 +329,7 @@ function ChangePasswordCard() {
               label={t("newPasswordLabel")}
               type="password"
               placeholder={t("newPasswordPlaceholder")}
-              disabled={changePassword.isPending}
+              disabled={isPending}
             />
             <FormInput
               form={form}
@@ -330,24 +337,20 @@ function ChangePasswordCard() {
               label={t("confirmPasswordLabel")}
               type="password"
               placeholder={t("confirmPasswordPlaceholder")}
-              disabled={changePassword.isPending}
+              disabled={isPending}
             />
           </div>
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <div className="flex justify-end border-t pt-4">
-                <Button
-                  type="submit"
-                  size="lg"
-                  loading={isSubmitting || changePassword.isPending}
-                  loadingText={t("updating")}
-                >
-                  {t("updatePassword")}
-                </Button>
-              </div>
-            )}
-          </form.Subscribe>
+          <div className="flex justify-end border-t pt-4">
+            <Button
+              type="submit"
+              size="lg"
+              loading={isPending}
+              loadingText={t("updating")}
+            >
+              {t("updatePassword")}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { getProductByIdOrSlug } from "@/services/api";
 import { ProductImageGallery } from "./_components/product-image-gallery";
 import { ProductPurchasePanel } from "./_components/product-purchase-panel";
+import { ProductReviewsSection } from "./_components/product-reviews-section";
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -162,6 +163,16 @@ export default async function ProductDetailPage({
           )}
         </div>
       </div>
+
+      <div className="my-12">
+        <Separator />
+      </div>
+
+      <ProductReviewsSection
+        productId={product.id}
+        rating={product.rating}
+        reviewCount={product.reviewCount}
+      />
 
       {relatedProducts.length > 0 && (
         <>

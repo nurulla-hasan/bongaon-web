@@ -15,7 +15,20 @@ export interface ApiReview {
 }
 
 export interface GetReviewsParams {
+  productId?: string;
+  productSlug?: string;
+  page?: number;
   isApproved?: boolean;
   limit?: number;
   sortBy?: string;
+}
+
+export interface CreateReviewPayload {
+  productId: string;
+  customerName: string;
+  location?: string;
+  phone?: string;
+  orderNumber?: string;
+  rating: number;
+  comment: string;
 }

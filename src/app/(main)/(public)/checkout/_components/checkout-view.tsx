@@ -27,10 +27,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
 import {
   CART_UPDATED_EVENT,
   calculateDeliveryCharge,
@@ -47,7 +45,7 @@ export function CheckoutView() {
   const router = useRouter();
   const { data: settingsRes } = useSettings();
   const settings = settingsRes?.data;
-  const createOrder = useCreateOrder();
+  const { mutate: createOrder, isPending } = useCreateOrder();
 
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const [mounted, setMounted] = React.useState(false);
@@ -86,13 +84,13 @@ export function CheckoutView() {
       orderNote: "",
     },
     validators: {
-      onSubmit: checkoutSchema,
+      onChange: checkoutSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       if (cartItems.length === 0 || isOrderingDisabled) return;
 
-      try {
-        const orderRes = await createOrder.mutateAsync({
+      createOrder(
+        {
           receiverName: value.receiverName.trim(),
           receiverPhone: value.receiverPhone.trim(),
           district: value.district.trim(),
@@ -104,15 +102,19 @@ export function CheckoutView() {
             selectedPack: item.selectedPack,
             quantity: item.quantity,
           })),
-        });
-
-        clearCart();
-        router.push(
-          `/order-success?orderNumber=${encodeURIComponent(orderRes.data.orderNumber)}`,
-        );
-      } catch (error) {
-        toast.error(getErrorMessage(error));
-      }
+        },
+        {
+          onSuccess: (orderRes) => {
+            clearCart();
+            router.push(
+              `/order-success?orderNumber=${encodeURIComponent(orderRes.data.orderNumber)}`,
+            );
+          },
+          onError: (error) => {
+            toast.error(getErrorMessage(error));
+          },
+        },
+      );
     },
   });
 
@@ -177,85 +179,51 @@ export function CheckoutView() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <form.Field name="receiverName">
-                {(field) => (
-                  <FormInput
-                    field={field}
-                    label={t("receiverName")}
-                    placeholder={t("receiverNamePlaceholder")}
-                  />
-                )}
-              </form.Field>
-              <form.Field name="receiverPhone">
-                {(field) => (
-                  <FormInput
-                    field={field}
-                    type="tel"
-                    label={t("receiverPhone")}
-                    placeholder={t("receiverPhonePlaceholder")}
-                  />
-                )}
-              </form.Field>
+              <FormInput
+                form={form}
+                name="receiverName"
+                label={t("receiverName")}
+                placeholder={t("receiverNamePlaceholder")}
+              />
+              <FormInput
+                form={form}
+                name="receiverPhone"
+                type="tel"
+                label={t("receiverPhone")}
+                placeholder={t("receiverPhonePlaceholder")}
+              />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <form.Field name="district">
-                {(field) => (
-                  <FormInput
-                    field={field}
-                    label={t("district")}
-                    placeholder={t("districtPlaceholder")}
-                  />
-                )}
-              </form.Field>
-              <form.Field name="whatsappNumber">
-                {(field) => (
-                  <FormInput
-                    field={field}
-                    type="tel"
-                    label={t("whatsapp")}
-                    placeholder={t("whatsappPlaceholder")}
-                  />
-                )}
-              </form.Field>
+              <FormInput
+                form={form}
+                name="district"
+                label={t("district")}
+                placeholder={t("districtPlaceholder")}
+              />
+              <FormInput
+                form={form}
+                name="whatsappNumber"
+                type="tel"
+                label={t("whatsapp")}
+                placeholder={t("whatsappPlaceholder")}
+              />
             </div>
 
-            <form.Field name="fullAddress">
-              {(field) => {
-                const hasError =
-                  field.state.meta.isTouched &&
-                  field.state.meta.errors.length > 0;
-                return (
-                  <Field data-invalid={hasError}>
-                    <FieldLabel htmlFor="full-address">
-                      {t("fullAddress")}
-                    </FieldLabel>
-                    <Textarea
-                      id="full-address"
-                      rows={3}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder={t("fullAddressPlaceholder")}
-                      aria-invalid={hasError}
-                    />
-                    {hasError && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
+            <FormInput
+              form={form}
+              name="fullAddress"
+              type="textarea"
+              label={t("fullAddress")}
+              placeholder={t("fullAddressPlaceholder")}
+            />
 
-            <form.Field name="orderNote">
-              {(field) => (
-                <FormInput
-                  field={field}
-                  label={t("orderNote")}
-                  placeholder={t("orderNotePlaceholder")}
-                />
-              )}
-            </form.Field>
+            <FormInput
+              form={form}
+              name="orderNote"
+              label={t("orderNote")}
+              placeholder={t("orderNotePlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -372,12 +340,12 @@ export function CheckoutView() {
               size="xl"
               type="submit"
               className="w-full"
-              disabled={createOrder.isPending || isOrderingDisabled}
+              loading={isPending}
+              loadingText={t("submittingOrder")}
+              disabled={isOrderingDisabled}
             >
               <CheckCircle2 />
-              {createOrder.isPending
-                ? t("submittingOrder")
-                : t("confirmOrder")}
+              {t("confirmOrder")}
             </Button>
             <Button
               variant="ghost"

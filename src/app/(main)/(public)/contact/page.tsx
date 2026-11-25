@@ -10,35 +10,39 @@ import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Card, CardContent } from "@/components/ui/card";
+import { getSettings } from "@/services/api";
 import { ContactForm } from "./_components/contact-form";
 
 export default async function ContactPage() {
-  const [tCommon, tContact, tProducts] = await Promise.all([
+  const [tCommon, tContact, tProducts, settingsRes] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Contact"),
     getTranslations("Products"),
+    getSettings().catch(() => null),
   ]);
+
+  const settings = settingsRes?.data;
 
   const contactItems = [
     {
       icon: MapPin,
       title: tContact("infoAddressTitle"),
-      value: tContact("infoAddressValue"),
+      value: settings?.storeAddress || tContact("infoAddressValue"),
     },
     {
       icon: PhoneCall,
       title: tContact("infoPhoneTitle"),
-      value: tContact("infoPhoneValue"),
+      value: settings?.supportPhone || tContact("infoPhoneValue"),
     },
     {
       icon: MessageCircle,
       title: tContact("infoWhatsappTitle"),
-      value: tContact("infoWhatsappValue"),
+      value: settings?.whatsappNumber || tContact("infoWhatsappValue"),
     },
     {
       icon: Truck,
       title: tContact("infoDeliveryTitle"),
-      value: tContact("infoDeliveryValue"),
+      value: settings?.estimatedDeliveryDays || tContact("infoDeliveryValue"),
     },
   ];
 

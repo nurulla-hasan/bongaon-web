@@ -28,7 +28,7 @@ export function ResetPasswordForm({
 }) {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const resetPassword = useResetPassword();
+  const { mutate: resetPassword, isPending } = useResetPassword();
 
   const form = useForm({
     defaultValues: {
@@ -38,20 +38,25 @@ export function ResetPasswordForm({
       confirmPassword: "",
     },
     validators: {
-      onSubmit: resetPasswordSchema,
+      onChange: resetPasswordSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        const res = await resetPassword.mutateAsync({
+    onSubmit: ({ value }) => {
+      resetPassword(
+        {
           email: value.email,
           otp: value.otp,
           password: value.password,
-        });
-        toast.success(res.message || "Password reset successfully");
-        router.push("/auth/login");
-      } catch (err) {
-        toast.error(getErrorMessage(err, "Failed to reset password"));
-      }
+        },
+        {
+          onSuccess: (res) => {
+            toast.success(res.message || "Password reset successfully");
+            router.push("/auth/login");
+          },
+          onError: (err) => {
+            toast.error(getErrorMessage(err, "Failed to reset password"));
+          },
+        },
+      );
     },
   });
 
@@ -77,7 +82,7 @@ export function ResetPasswordForm({
             label={t("emailLabel")}
             type="email"
             placeholder={t("emailPlaceholder")}
-            disabled={resetPassword.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -87,7 +92,7 @@ export function ResetPasswordForm({
             placeholder="123456"
             maxLength={6}
             inputMode="numeric"
-            disabled={resetPassword.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -97,7 +102,7 @@ export function ResetPasswordForm({
             type="password"
             placeholder={t("passwordMinPlaceholder")}
             autoComplete="new-password"
-            disabled={resetPassword.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -107,22 +112,18 @@ export function ResetPasswordForm({
             type="password"
             placeholder={t("confirmPasswordPlaceholder")}
             autoComplete="new-password"
-            disabled={resetPassword.isPending}
+            disabled={isPending}
           />
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full"
-                loading={isSubmitting || resetPassword.isPending}
-                loadingText={t("resetting")}
-              >
-                {t("resetButton")}
-              </Button>
-            )}
-          </form.Subscribe>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isPending}
+            loadingText={t("resetting")}
+          >
+            {t("resetButton")}
+          </Button>
 
           <div className="text-center">
             <Link

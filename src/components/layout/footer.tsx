@@ -6,9 +6,15 @@ import { Logo } from "@/components/common/logo";
 import { Separator } from "@/components/ui/separator";
 import { CONTAINER_GUTTER, CONTAINER_MAX_WIDTH } from "@/lib/layout";
 import { cn } from "@/lib/utils";
+import { getSettings } from "@/services/api";
 
 export async function Footer() {
-  const t = await getTranslations("Footer");
+  const [t, settingsRes] = await Promise.all([
+    getTranslations("Footer"),
+    getSettings().catch(() => null),
+  ]);
+
+  const settings = settingsRes?.data;
 
   return (
     <footer className="relative isolate overflow-hidden border-t border-border bg-muted/40">
@@ -80,11 +86,11 @@ export async function Footer() {
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
-                <span>{t("address")}</span>
+                <span>{settings?.storeAddress || t("address")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <PhoneCall className="mt-0.5 size-4 shrink-0 text-primary" />
-                <span>{t("helpline")}</span>
+                <span>{settings?.supportPhone || t("helpline")}</span>
               </li>
             </ul>
           </div>

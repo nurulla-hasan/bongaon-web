@@ -14,8 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
 import { getErrorMessage } from "@/lib/error";
 import { useCreateContactMessage } from "@/services";
 import { contactSchema } from "@/validations";
@@ -23,7 +21,7 @@ import { contactSchema } from "@/validations";
 export function ContactForm() {
   const t = useTranslations("Contact");
   const [submitted, setSubmitted] = React.useState(false);
-  const createContact = useCreateContactMessage();
+  const { mutate: createContact, isPending } = useCreateContactMessage();
 
   const form = useForm({
     defaultValues: {
@@ -33,21 +31,26 @@ export function ContactForm() {
       message: "",
     },
     validators: {
-      onSubmit: contactSchema,
+      onChange: contactSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        await createContact.mutateAsync({
+    onSubmit: ({ value }) => {
+      createContact(
+        {
           name: value.name.trim(),
           phone: value.phone.trim(),
           subject: value.subject.trim() || undefined,
           message: value.message.trim(),
-        });
-        form.reset();
-        setSubmitted(true);
-      } catch (error) {
-        toast.error(getErrorMessage(error));
-      }
+        },
+        {
+          onSuccess: () => {
+            form.reset();
+            setSubmitted(true);
+          },
+          onError: (error) => {
+            toast.error(getErrorMessage(error));
+          },
+        },
+      );
     },
   });
 
@@ -96,69 +99,41 @@ export function ContactForm() {
           className="space-y-4"
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <form.Field name="name">
-              {(field) => (
-                <FormInput
-                  field={field}
-                  label={t("nameLabel")}
-                  placeholder={t("namePlaceholder")}
-                />
-              )}
-            </form.Field>
-            <form.Field name="phone">
-              {(field) => (
-                <FormInput
-                  field={field}
-                  type="tel"
-                  label={t("phoneLabel")}
-                  placeholder={t("phonePlaceholder")}
-                />
-              )}
-            </form.Field>
+            <FormInput
+              form={form}
+              name="name"
+              label={t("nameLabel")}
+              placeholder={t("namePlaceholder")}
+            />
+            <FormInput
+              form={form}
+              name="phone"
+              type="tel"
+              label={t("phoneLabel")}
+              placeholder={t("phonePlaceholder")}
+            />
           </div>
 
-          <form.Field name="subject">
-            {(field) => (
-              <FormInput
-                field={field}
-                label={t("subjectLabel")}
-                placeholder={t("subjectPlaceholder")}
-              />
-            )}
-          </form.Field>
+          <FormInput
+            form={form}
+            name="subject"
+            label={t("subjectLabel")}
+            placeholder={t("subjectPlaceholder")}
+          />
 
-          <form.Field name="message">
-            {(field) => {
-              const hasError =
-                field.state.meta.isTouched &&
-                field.state.meta.errors.length > 0;
-              return (
-                <Field data-invalid={hasError}>
-                  <FieldLabel htmlFor="contact-message">
-                    {t("messageLabel")}
-                  </FieldLabel>
-                  <Textarea
-                    id="contact-message"
-                    rows={4}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder={t("messagePlaceholder")}
-                    aria-invalid={hasError}
-                  />
-                  {hasError && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
-                </Field>
-              );
-            }}
-          </form.Field>
+          <FormInput
+            form={form}
+            name="message"
+            type="textarea"
+            label={t("messageLabel")}
+            placeholder={t("messagePlaceholder")}
+          />
 
           <Button
             type="submit"
             size="xl"
             className="w-full sm:w-auto"
-            disabled={createContact.isPending}
+            loading={isPending}
           >
             <Send />
             {t("submitButton")}

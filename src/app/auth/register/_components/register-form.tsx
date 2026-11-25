@@ -22,7 +22,7 @@ import { GoogleAuthButton } from "../../_components/google-auth-button";
 export function RegisterForm() {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const registerMutation = useRegister();
+  const { mutate: register, isPending } = useRegister();
 
   const form = useForm({
     defaultValues: {
@@ -32,21 +32,28 @@ export function RegisterForm() {
       password: "",
     },
     validators: {
-      onSubmit: registerSchema,
+      onChange: registerSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        const res = await registerMutation.mutateAsync({
+    onSubmit: ({ value }) => {
+      register(
+        {
           name: value.name,
           email: value.email,
           password: value.password,
           ...(value.phone ? { phone: value.phone } : {}),
-        });
-        toast.success(res.message || "Verification OTP sent to your email");
-        router.push(`/auth/verify-email?email=${encodeURIComponent(value.email)}`);
-      } catch (err) {
-        toast.error(getErrorMessage(err, "Registration failed"));
-      }
+        },
+        {
+          onSuccess: (res) => {
+            toast.success(res.message || "Verification OTP sent to your email");
+            router.push(
+              `/auth/verify-email?email=${encodeURIComponent(value.email)}`,
+            );
+          },
+          onError: (err) => {
+            toast.error(getErrorMessage(err, "Registration failed"));
+          },
+        },
+      );
     },
   });
 
@@ -72,7 +79,7 @@ export function RegisterForm() {
             label={t("nameLabel")}
             placeholder={t("namePlaceholder")}
             autoComplete="name"
-            disabled={registerMutation.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -82,7 +89,7 @@ export function RegisterForm() {
             type="email"
             placeholder={t("emailPlaceholder")}
             autoComplete="email"
-            disabled={registerMutation.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -91,7 +98,7 @@ export function RegisterForm() {
             label={t("phoneLabel")}
             placeholder={t("phonePlaceholder")}
             autoComplete="tel"
-            disabled={registerMutation.isPending}
+            disabled={isPending}
           />
 
           <FormInput
@@ -101,24 +108,20 @@ export function RegisterForm() {
             type="password"
             placeholder={t("passwordMinPlaceholder")}
             autoComplete="new-password"
-            disabled={registerMutation.isPending}
+            disabled={isPending}
           />
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full"
-                loading={isSubmitting || registerMutation.isPending}
-                loadingText={t("creatingAccount")}
-              >
-                {t("registerButton")}
-              </Button>
-            )}
-          </form.Subscribe>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isPending}
+            loadingText={t("creatingAccount")}
+          >
+            {t("registerButton")}
+          </Button>
 
-          <GoogleAuthButton disabled={registerMutation.isPending} />
+          <GoogleAuthButton disabled={isPending} />
 
           <p className="text-center text-xs text-muted-foreground">
             {t("haveAccount")}{" "}

@@ -22,23 +22,27 @@ import { forgotPasswordSchema } from "@/validations";
 export function ForgotPasswordForm() {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const forgotPassword = useForgotPassword();
+  const { mutate: forgotPassword, isPending } = useForgotPassword();
 
   const form = useForm({
     defaultValues: {
       email: "",
     },
     validators: {
-      onSubmit: forgotPasswordSchema,
+      onChange: forgotPasswordSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        const res = await forgotPassword.mutateAsync(value);
-        toast.success(res.message || "Reset OTP sent to your email");
-        router.push(`/auth/verify-reset-otp?email=${encodeURIComponent(value.email)}`);
-      } catch (err) {
-        toast.error(getErrorMessage(err, "Failed to send reset OTP"));
-      }
+    onSubmit: ({ value }) => {
+      forgotPassword(value, {
+        onSuccess: (res) => {
+          toast.success(res.message || "Reset OTP sent to your email");
+          router.push(
+            `/auth/verify-reset-otp?email=${encodeURIComponent(value.email)}`,
+          );
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, "Failed to send reset OTP"));
+        },
+      });
     },
   });
 
@@ -65,22 +69,18 @@ export function ForgotPasswordForm() {
             type="email"
             placeholder={t("emailPlaceholder")}
             autoComplete="email"
-            disabled={forgotPassword.isPending}
+            disabled={isPending}
           />
 
-          <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full"
-                loading={isSubmitting || forgotPassword.isPending}
-                loadingText={t("sendingResetOtp")}
-              >
-                {t("sendResetOtpButton")}
-              </Button>
-            )}
-          </form.Subscribe>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            loading={isPending}
+            loadingText={t("sendingResetOtp")}
+          >
+            {t("sendResetOtpButton")}
+          </Button>
 
           <div className="text-center">
             <Link

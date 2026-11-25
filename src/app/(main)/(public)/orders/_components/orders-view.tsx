@@ -75,7 +75,7 @@ export function OrdersView() {
     },
     Boolean(me),
   );
-  const trackOrderMutation = useTrackOrder();
+  const { mutate: trackOrder, isPending: isTracking } = useTrackOrder();
 
   const orders = React.useMemo(
     () => (me ? (myOrdersRes?.data ?? []) : trackedOrder ? [trackedOrder] : []),
@@ -113,23 +113,25 @@ export function OrdersView() {
     { label: t("stepDelivered"), icon: PackageCheck },
   ];
 
-  const handleTrackSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleTrackSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const orderNumber = trackOrderNumber.trim().replace(/^#/, "");
     const phone = trackPhone.trim();
     if (!orderNumber || !phone) return;
 
-    try {
-      const orderRes = await trackOrderMutation.mutateAsync({
-        orderNumber,
-        phone,
-      });
-      setTrackedOrder(orderRes.data);
-      setExpandedOrderId(orderRes.data.id);
-    } catch (error) {
-      setTrackedOrder(null);
-      toast.error(getErrorMessage(error));
-    }
+    trackOrder(
+      { orderNumber, phone },
+      {
+        onSuccess: (orderRes) => {
+          setTrackedOrder(orderRes.data);
+          setExpandedOrderId(orderRes.data.id);
+        },
+        onError: (error) => {
+          setTrackedOrder(null);
+          toast.error(getErrorMessage(error));
+        },
+      },
+    );
   };
 
   const normalizedQuery = query.trim().toLowerCase();
@@ -180,12 +182,11 @@ export function OrdersView() {
               />
               <Button
                 type="submit"
-                disabled={trackOrderMutation.isPending}
+                loading={isTracking}
+                loadingText={t("trackingLoading")}
               >
                 <Search />
-                {trackOrderMutation.isPending
-                  ? t("trackingLoading")
-                  : t("trackSubmit")}
+                {t("trackSubmit")}
               </Button>
             </form>
           </CardContent>
