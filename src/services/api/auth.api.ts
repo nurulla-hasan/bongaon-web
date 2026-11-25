@@ -43,10 +43,10 @@ export const authApi = {
       method: "POST",
     }),
 
-  getMe: () => apiClient<ApiResponse<AuthUser>>("/auth/me"),
+  getMe: () => apiClient<ApiResponse<{ user: AuthUser }>>("/auth/me"),
 
   updateMe: (payload: UpdateMePayload) =>
-    apiClient<ApiResponse<AuthUser>>("/auth/me", {
+    apiClient<ApiResponse<{ user: AuthUser }>>("/auth/me", {
       method: "PATCH",
       body: payload,
     }),

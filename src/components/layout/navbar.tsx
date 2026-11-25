@@ -1,12 +1,8 @@
-import Link from "next/link";
-import { ShoppingBag } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { GrassTuft, LeafSprig } from "@/components/common/leaf-decor";
 import { LanguageToggle } from "@/components/common/language-toggle";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { MOCK_CART_ITEMS } from "@/data/mock-bazar";
 import {
   CONTAINER_GUTTER,
   CONTAINER_MAX_WIDTH,
@@ -17,6 +13,7 @@ import { settingApi } from "@/services/api";
 import { AnnouncementBar } from "./announcement-bar";
 import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
+import { NavbarCartButton } from "./navbar-cart-button";
 import { NavbarUserMenu } from "./navbar-user-menu";
 
 async function getAnnouncementMessage(fallback: string): Promise<string | null> {
@@ -33,10 +30,6 @@ async function getAnnouncementMessage(fallback: string): Promise<string | null> 
 export async function Navbar() {
   const t = await getTranslations("Navbar");
   const announcement = await getAnnouncementMessage(t("announcement"));
-  const totalItems = MOCK_CART_ITEMS.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
 
   return (
     <>
@@ -68,20 +61,7 @@ export async function Navbar() {
             <ThemeToggle />
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={`${t("cart")} (${totalItems})`}
-            className="relative"
-            render={<Link href="/cart" />}
-          >
-            <ShoppingBag />
-            {totalItems > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                {totalItems > 99 ? "99+" : totalItems}
-              </span>
-            )}
-          </Button>
+          <NavbarCartButton label={t("cart")} />
 
           <NavbarUserMenu />
 

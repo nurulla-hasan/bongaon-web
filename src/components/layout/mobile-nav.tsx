@@ -19,7 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { getErrorMessage } from "@/lib/error";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import { useLogout, useMe } from "@/services";
 import { isNavLinkActive, NAV_LINKS } from "./nav-items";
 
@@ -49,7 +49,7 @@ export function MobileNav({ className }: MobileNavProps) {
 
   const displayName = user?.name || "Customer";
   const displaySub = user?.phone || user?.email || "";
-  const initials = displayName.trim().slice(0, 2).toUpperCase();
+  const initials = getInitials(displayName);
 
   return (
     <div className={cn("flex md:hidden", className)}>

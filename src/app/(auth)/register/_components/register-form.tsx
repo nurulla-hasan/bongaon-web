@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useRegister } from "@/services";
+import { GoogleAuthButton } from "../../_components/google-auth-button";
 
 const registerSchema = z.object({
   name: z
@@ -130,6 +131,8 @@ export function RegisterForm() {
               </Button>
             )}
           </form.Subscribe>
+
+          <GoogleAuthButton disabled={registerMutation.isPending} />
 
           <p className="text-center text-xs text-muted-foreground">
             {t("haveAccount")}{" "}

@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
@@ -17,10 +18,13 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useLogin } from "@/services";
+import { GoogleAuthButton } from "../../_components/google-auth-button";
 
 const loginSchema = z.object({
   email: z.email({ error: "Please enter a valid email address." }),
-  password: z.string().min(1, { error: "Password is required." }),
+  password: z
+    .string()
+    .min(6, { error: "Password must be at least 6 characters." }),
 });
 
 function getSafeRedirect(callbackUrl?: string): string {
@@ -29,10 +33,24 @@ function getSafeRedirect(callbackUrl?: string): string {
   return callbackUrl;
 }
 
-export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
+export function LoginForm({
+  callbackUrl,
+  authError,
+}: {
+  callbackUrl?: string;
+  authError?: string;
+}) {
   const t = useTranslations("Auth");
   const router = useRouter();
   const loginMutation = useLogin();
+  const shownAuthErrorRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (authError && !shownAuthErrorRef.current) {
+      shownAuthErrorRef.current = true;
+      toast.error(t("googleSignInFailed"));
+    }
+  }, [authError, t]);
 
   const form = useForm({
     defaultValues: {
@@ -113,6 +131,8 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
               </Button>
             )}
           </form.Subscribe>
+
+          <GoogleAuthButton disabled={loginMutation.isPending} />
 
           <p className="text-center text-xs text-muted-foreground">
             {t("noAccount")}{" "}

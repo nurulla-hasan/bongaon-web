@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getErrorMessage } from "@/lib/error";
+import { getInitials } from "@/lib/utils";
 import { useLogout, useMe } from "@/services";
 
 interface NavbarUserMenuProps {
@@ -64,7 +65,7 @@ export function NavbarUserMenu({ isLoggedIn }: NavbarUserMenuProps) {
 
   const displayName = user?.name || "Customer";
   const displaySub = user?.phone || user?.email || "";
-  const initials = displayName.trim().slice(0, 2).toUpperCase();
+  const initials = getInitials(displayName);
 
   return (
     <div className="hidden md:flex">

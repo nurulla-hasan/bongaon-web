@@ -18,6 +18,7 @@ export const PRIVATE_ROUTES = [
 
 export const PUBLIC_ROUTES = [
   "/",
+  "/auth/success",
   "/products",
   "/cart",
   "/checkout",

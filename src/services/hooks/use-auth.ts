@@ -19,7 +19,7 @@ export function useMe() {
     queryKey: queryKeys.auth.me,
     queryFn: async () => {
       const res = await authApi.getMe();
-      return res.data;
+      return res.data.user;
     },
     retry: false,
   });
