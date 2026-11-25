@@ -8,7 +8,12 @@ import type {
 
 export interface GetProductsParams {
   searchTerm?: string;
+  categoryId?: string;
   categorySlug?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  onlyDiscounted?: boolean;
   isFeatured?: boolean;
   isActive?: boolean;
   page?: number;

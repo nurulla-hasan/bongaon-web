@@ -13,39 +13,32 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
-import { useProductFilters } from "@/hooks/useProductFilters";
+import { useNextFilter } from "@/hooks/useNextFilter";
 import { cn } from "@/lib/utils";
-import type { ApiCategory, ApiProduct } from "@/types";
+import type { ApiCategory } from "@/types";
+
+const MAX_PRICE = 5000;
 
 interface ProductFiltersProps {
-  products: ApiProduct[];
   categories: ApiCategory[];
   hideHeader?: boolean;
 }
 
 export function ProductFilters({
-  products,
   categories,
   hideHeader = false,
 }: ProductFiltersProps) {
   const t = useTranslations("Products");
-  const {
-    options,
-    total,
-    categoryId,
-    priceRange,
-    priceMin,
-    priceMax,
-    onlyDiscounted,
-    rating,
-    isActive,
-    setCategory,
-    setPriceRange,
-    setOnlyDiscounted,
-    setRating,
-    resetFilters,
-  } = useProductFilters(products, categories);
+  const { getFilter, updateFilter, clearAll, isFilterActive } = useNextFilter();
+
+  const categoryId = getFilter("category") || null;
+  const priceRange: [number, number] = getFilter("price")
+    ? (getFilter("price").split("-").map(Number) as [number, number])
+    : [0, MAX_PRICE];
+  const rating = Number(getFilter("rating", "0")) || 0;
+  const onlyDiscounted = getFilter("discount") === "1";
 
   return (
     <FieldGroup className="gap-4">
@@ -56,12 +49,12 @@ export function ProductFilters({
               <SlidersHorizontal className="size-4 text-primary" />
               {t("filtersTitle")}
             </h2>
-            {isActive && (
+            {isFilterActive(["category", "price", "discount", "rating"]) && (
               <Button
                 type="button"
                 variant="ghost"
                 size="default"
-                onClick={resetFilters}
+                onClick={() => clearAll({ exclude: ["sort"] })}
               >
                 <RotateCcw />
                 {t("clearFilters")}
@@ -78,7 +71,7 @@ export function ProductFilters({
         <div className="flex flex-col gap-1">
           <button
             type="button"
-            onClick={() => setCategory(null)}
+            onClick={() => updateFilter("category", null)}
             className={cn(
               "flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors",
               categoryId === null
@@ -95,17 +88,22 @@ export function ProductFilters({
                   : "bg-muted text-muted-foreground",
               )}
             >
-              {total}
+              {categories.reduce(
+                (sum, category) => sum + (category._count?.products ?? 0),
+                0,
+              )}
             </span>
           </button>
 
-          {options.map((item) => {
-            const active = categoryId === item.id;
+          {categories.map((category) => {
+            const active = categoryId === category.id;
             return (
               <button
-                key={item.id}
+                key={category.id}
                 type="button"
-                onClick={() => setCategory(active ? null : item.id)}
+                onClick={() =>
+                  updateFilter("category", active ? null : category.id)
+                }
                 className={cn(
                   "flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors",
                   active
@@ -113,7 +111,7 @@ export function ProductFilters({
                     : "text-foreground/85 hover:bg-muted/70 hover:text-foreground",
                 )}
               >
-                <span className="truncate">{item.name}</span>
+                <span className="truncate">{category.name}</span>
                 <span
                   className={cn(
                     "shrink-0 rounded-full px-2 py-0.5 text-xs tabular-nums",
@@ -122,7 +120,7 @@ export function ProductFilters({
                       : "bg-muted text-muted-foreground",
                   )}
                 >
-                  {item.count}
+                  {category._count?.products ?? 0}
                 </span>
               </button>
             );
@@ -136,12 +134,17 @@ export function ProductFilters({
         <FieldLegend variant="label">{t("priceTitle")}</FieldLegend>
         <Slider
           value={priceRange}
-          min={priceMin}
-          max={priceMax}
+          min={0}
+          max={MAX_PRICE}
           step={50}
-          onValueChange={(value) =>
-            setPriceRange(value as unknown as [number, number])
-          }
+          onValueChange={(value) => {
+            const [min, max] = value as unknown as [number, number];
+            updateFilter(
+              "price",
+              min <= 0 && max >= MAX_PRICE ? null : `${min}-${max}`,
+              { debounce: 300 },
+            );
+          }}
         />
         <div className="flex items-center justify-between gap-2">
           <span className="rounded-md bg-muted px-2.5 py-1 text-xs font-medium tabular-nums text-foreground">
@@ -150,7 +153,7 @@ export function ProductFilters({
           <span className="text-xs text-muted-foreground">–</span>
           <span className="rounded-md bg-muted px-2.5 py-1 text-xs font-medium tabular-nums text-foreground">
             ৳{priceRange[1]}
-            {priceRange[1] >= priceMax ? "+" : ""}
+            {priceRange[1] >= MAX_PRICE ? "+" : ""}
           </span>
         </div>
       </FieldSet>
@@ -160,7 +163,14 @@ export function ProductFilters({
       <FieldSet>
         <FieldLegend variant="label">{t("ratingTitle")}</FieldLegend>
         <div className="flex items-center justify-between gap-2">
-          <StarRating rating={rating} onRate={setRating} size={22} gap={2} />
+          <StarRating
+            rating={rating}
+            onRate={(val) =>
+              updateFilter("rating", val > 0 ? String(val) : null)
+            }
+            size={22}
+            gap={2}
+          />
           <span className="text-xs font-medium text-muted-foreground">
             {rating > 0 ? `${rating}+` : t("anyRating")}
           </span>
@@ -173,12 +183,74 @@ export function ProductFilters({
         <Checkbox
           id="filter-discounted"
           checked={onlyDiscounted}
-          onCheckedChange={setOnlyDiscounted}
+          onCheckedChange={(checked) =>
+            updateFilter("discount", checked ? "1" : null)
+          }
         />
         <FieldLabel htmlFor="filter-discounted">
           {t("onlyDiscounted")}
         </FieldLabel>
       </Field>
     </FieldGroup>
+  );
+}
+
+export function ProductFiltersSkeleton() {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-xs">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="size-4 rounded" />
+          <Skeleton className="h-5 w-24" />
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2.5">
+          <Skeleton className="h-4 w-20" />
+          <div className="flex flex-col gap-1.5">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between gap-2 rounded-xl px-3 py-2"
+              >
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-5 w-7 rounded-full" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-3">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-2 w-full rounded-full" />
+          <div className="flex items-center justify-between gap-2">
+            <Skeleton className="h-6 w-12 rounded-md" />
+            <Skeleton className="h-6 w-14 rounded-md" />
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2.5">
+          <Skeleton className="h-4 w-24" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="size-4 rounded" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-20" />
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="h-8 w-full rounded-xl" />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

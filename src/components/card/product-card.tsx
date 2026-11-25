@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Star, Truck } from "lucide-react";
 import { ProductVisual } from "@/components/card/product-visual";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { ApiProduct } from "@/types";
 
 interface ProductCardProps {
@@ -89,5 +90,35 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
         </div>
       </div>
     </article>
+  );
+}
+
+export function ProductCardSkeleton() {
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm">
+      <Skeleton className="aspect-4/3 w-full rounded-none rounded-b-2xl" />
+
+      <div className="flex flex-1 flex-col gap-2.5 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-5 w-14 rounded-full" />
+        </div>
+
+        <Skeleton className="h-4 w-4/5" />
+
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-3.5 w-14" />
+          <Skeleton className="h-3.5 w-16" />
+        </div>
+
+        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+          <div className="flex items-baseline gap-2">
+            <Skeleton className="h-6 w-14" />
+            <Skeleton className="h-3.5 w-10" />
+          </div>
+          <Skeleton className="size-8 shrink-0 rounded-full" />
+        </div>
+      </div>
+    </div>
   );
 }

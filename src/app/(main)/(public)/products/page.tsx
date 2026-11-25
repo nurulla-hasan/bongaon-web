@@ -4,20 +4,13 @@ import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { productApi } from "@/services/api";
-import type { ApiCategory, ApiProduct } from "@/types";
 import { ProductCatalog } from "./_components/product-catalog";
 
 export default async function ProductsPage() {
-  const [tCommon, tProducts, productsRes, categoriesRes] = await Promise.all([
+  const [tCommon, tProducts] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Products"),
-    productApi.getProducts({ isActive: true, limit: 100 }).catch(() => null),
-    productApi.getCategories({ isActive: true, limit: 100 }).catch(() => null),
   ]);
-
-  const products: ApiProduct[] = productsRes?.data ?? [];
-  const categories: ApiCategory[] = categoriesRes?.data ?? [];
 
   return (
     <PageWrapper>
@@ -49,7 +42,7 @@ export default async function ProductsPage() {
       </SectionHeading>
 
       <Suspense fallback={null}>
-        <ProductCatalog products={products} categories={categories} />
+        <ProductCatalog />
       </Suspense>
     </PageWrapper>
   );
