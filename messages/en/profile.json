@@ -18,5 +18,21 @@
   "confirmPasswordLabel": "Confirm New Password",
   "confirmPasswordPlaceholder": "Re-enter new password",
   "updatePassword": "Update Password",
-  "updating": "Updating..."
+  "updating": "Updating...",
+  "verifiedBadge": "Verified",
+  "unverifiedBadge": "Unverified",
+  "memberSince": "Member since",
+  "phoneNotSet": "Not added yet",
+  "navAccount": "Account Details",
+  "navSecurity": "Security & Password",
+  "navOrders": "My Orders",
+  "signOut": "Sign Out",
+  "signedOut": "Signed out",
+  "signOutFailed": "Failed to sign out",
+  "profileUpdated": "Profile updated",
+  "profileUpdateFailed": "Failed to update profile",
+  "passwordUpdated": "Password updated",
+  "passwordUpdateFailed": "Failed to update password",
+  "googlePasswordTitle": "Password Managed by Google",
+  "googlePasswordDescription": "You signed in with your Google account, so no local password is required to access Bongaon Bazar."
 }

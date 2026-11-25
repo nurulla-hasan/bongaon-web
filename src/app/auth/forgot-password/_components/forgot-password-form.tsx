@@ -39,7 +39,7 @@ export function ForgotPasswordForm() {
       try {
         const res = await forgotPassword.mutateAsync(value);
         toast.success(res.message || "Reset OTP sent to your email");
-        router.push(`/verify-reset-otp?email=${encodeURIComponent(value.email)}`);
+        router.push(`/auth/verify-reset-otp?email=${encodeURIComponent(value.email)}`);
       } catch (err) {
         toast.error(getErrorMessage(err, "Failed to send reset OTP"));
       }
@@ -88,7 +88,7 @@ export function ForgotPasswordForm() {
 
           <div className="text-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />

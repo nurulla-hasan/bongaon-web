@@ -2,12 +2,12 @@ export const ACCESS_COOKIE_NAME = "accessToken";
 export const REFRESH_COOKIE_NAME = "refreshToken";
 
 export const AUTH_ROUTES = [
-  "/login",
-  "/register",
-  "/verify-email",
-  "/forgot-password",
-  "/verify-reset-otp",
-  "/reset-password",
+  "/auth/login",
+  "/auth/register",
+  "/auth/verify-email",
+  "/auth/forgot-password",
+  "/auth/verify-reset-otp",
+  "/auth/reset-password",
 ] as const;
 
 export const PRIVATE_ROUTES = [

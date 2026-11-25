@@ -18,5 +18,21 @@
   "confirmPasswordLabel": "নতুন পাসওয়ার্ড নিশ্চিত করুন",
   "confirmPasswordPlaceholder": "আবার নতুন পাসওয়ার্ড লিখুন",
   "updatePassword": "পাসওয়ার্ড আপডেট করুন",
-  "updating": "আপডেট হচ্ছে..."
+  "updating": "আপডেট হচ্ছে...",
+  "verifiedBadge": "ভেরিফায়েড",
+  "unverifiedBadge": "ভেরিফায়েড নয়",
+  "memberSince": "সদস্য হয়েছেন",
+  "phoneNotSet": "এখনও যোগ করা হয়নি",
+  "navAccount": "অ্যাকাউন্টের তথ্য",
+  "navSecurity": "নিরাপত্তা ও পাসওয়ার্ড",
+  "navOrders": "আমার অর্ডার",
+  "signOut": "সাইন আউট",
+  "signedOut": "সাইন আউট হয়েছে",
+  "signOutFailed": "সাইন আউট করা যায়নি",
+  "profileUpdated": "প্রোফাইল আপডেট হয়েছে",
+  "profileUpdateFailed": "প্রোফাইল আপডেট করা যায়নি",
+  "passwordUpdated": "পাসওয়ার্ড আপডেট হয়েছে",
+  "passwordUpdateFailed": "পাসওয়ার্ড আপডেট করা যায়নি",
+  "googlePasswordTitle": "Google দিয়ে লগইন করা অ্যাকাউন্ট",
+  "googlePasswordDescription": "আপনি Google অ্যাকাউন্ট দিয়ে সাইন ইন করেছেন, তাই আলাদা লোকাল পাসওয়ার্ডের প্রয়োজন নেই।"
 }

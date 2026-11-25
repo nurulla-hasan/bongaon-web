@@ -47,7 +47,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
     onSubmit: async ({ value }) => {
       if (!email) {
         toast.error("Email is missing. Please restart from Forgot Password.");
-        router.push("/forgot-password");
+        router.push("/auth/forgot-password");
         return;
       }
 
@@ -55,7 +55,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
         const res = await verifyOtp.mutateAsync({ email, otp: value.otp });
         toast.success(res.message || "OTP verified");
         router.push(
-          `/reset-password?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(value.otp)}`,
+          `/auth/reset-password?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(value.otp)}`,
         );
       } catch (err) {
         toast.error(getErrorMessage(err, "Invalid or expired OTP"));
@@ -161,7 +161,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
 
           <div className="flex items-center justify-between text-xs">
             <Link
-              href="/forgot-password"
+              href="/auth/forgot-password"
               className="inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />

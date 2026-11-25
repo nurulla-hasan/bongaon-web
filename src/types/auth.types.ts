@@ -8,6 +8,7 @@ export interface AuthUser {
   role: UserRole;
   status: UserStatus;
   emailVerified: boolean;
+  hasPassword?: boolean;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;

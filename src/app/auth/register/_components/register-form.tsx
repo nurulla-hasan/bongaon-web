@@ -57,7 +57,7 @@ export function RegisterForm() {
           ...(value.phone ? { phone: value.phone } : {}),
         });
         toast.success(res.message || "Verification OTP sent to your email");
-        router.push(`/verify-email?email=${encodeURIComponent(value.email)}`);
+        router.push(`/auth/verify-email?email=${encodeURIComponent(value.email)}`);
       } catch (err) {
         toast.error(getErrorMessage(err, "Registration failed"));
       }
@@ -136,7 +136,7 @@ export function RegisterForm() {
 
           <p className="text-center text-xs text-muted-foreground">
             {t("haveAccount")}{" "}
-            <Link href="/login" className="font-medium text-primary hover:underline">
+            <Link href="/auth/login" className="font-medium text-primary hover:underline">
               {t("signInLink")}
             </Link>
           </p>

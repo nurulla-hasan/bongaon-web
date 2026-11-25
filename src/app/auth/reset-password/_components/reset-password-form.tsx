@@ -64,7 +64,7 @@ export function ResetPasswordForm({
           password: value.password,
         });
         toast.success(res.message || "Password reset successfully");
-        router.push("/login");
+        router.push("/auth/login");
       } catch (err) {
         toast.error(getErrorMessage(err, "Failed to reset password"));
       }
@@ -142,7 +142,7 @@ export function ResetPasswordForm({
 
           <div className="text-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />

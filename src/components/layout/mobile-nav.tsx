@@ -40,7 +40,7 @@ export function MobileNav({ className }: MobileNavProps) {
       await logout.mutateAsync();
       setOpen(false);
       toast.success("Signed out");
-      router.push("/login");
+      router.push("/auth/login");
       router.refresh();
     } catch (err) {
       toast.error(getErrorMessage(err, "Failed to sign out"));
@@ -151,7 +151,7 @@ export function MobileNav({ className }: MobileNavProps) {
               ) : (
                 <Button
                   className="w-full"
-                  render={<Link href="/login" />}
+                  render={<Link href="/auth/login" />}
                   onClick={() => setOpen(false)}
                 >
                   <LogIn />

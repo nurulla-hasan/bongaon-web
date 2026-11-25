@@ -110,7 +110,7 @@ export function LoginForm({
             />
             <div className="flex justify-end">
               <Link
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 className="text-xs font-medium text-primary hover:underline"
               >
                 {t("forgotPasswordLink")}
@@ -136,7 +136,7 @@ export function LoginForm({
 
           <p className="text-center text-xs text-muted-foreground">
             {t("noAccount")}{" "}
-            <Link href="/register" className="font-medium text-primary hover:underline">
+            <Link href="/auth/register" className="font-medium text-primary hover:underline">
               {t("createAccountLink")}
             </Link>
           </p>

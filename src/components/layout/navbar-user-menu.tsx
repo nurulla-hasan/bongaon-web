@@ -45,7 +45,7 @@ export function NavbarUserMenu({ isLoggedIn }: NavbarUserMenuProps) {
     try {
       await logout.mutateAsync();
       toast.success("Signed out");
-      router.push("/login");
+      router.push("/auth/login");
       router.refresh();
     } catch (err) {
       toast.error(getErrorMessage(err, "Failed to sign out"));
@@ -55,7 +55,7 @@ export function NavbarUserMenu({ isLoggedIn }: NavbarUserMenuProps) {
   if (!signedIn) {
     return (
       <div className="hidden md:flex">
-        <Button variant="ghost" size="lg" render={<Link href="/login" />}>
+        <Button variant="ghost" size="lg" render={<Link href="/auth/login" />}>
           <LogIn />
           <span>{t("login")}</span>
         </Button>

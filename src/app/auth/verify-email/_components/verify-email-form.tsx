@@ -47,14 +47,14 @@ export function VerifyEmailForm({ email }: { email: string }) {
     onSubmit: async ({ value }) => {
       if (!email) {
         toast.error("Email is missing. Please register again.");
-        router.push("/register");
+        router.push("/auth/register");
         return;
       }
 
       try {
         const res = await verifyEmail.mutateAsync({ email, otp: value.otp });
         toast.success(res.message || "Email verified! Please sign in.");
-        router.push("/login");
+        router.push("/auth/login");
       } catch (err) {
         toast.error(getErrorMessage(err, "Invalid or expired verification code"));
       }
@@ -159,7 +159,7 @@ export function VerifyEmailForm({ email }: { email: string }) {
 
           <div className="flex items-center justify-between text-xs">
             <Link
-              href="/register"
+              href="/auth/register"
               className="inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />

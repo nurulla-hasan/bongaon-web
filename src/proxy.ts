@@ -67,7 +67,7 @@ function createRouteResponse(
 
   if (isPrivateRoute(pathname)) {
     if (!session) {
-      const loginUrl = new URL("/login", request.url);
+      const loginUrl = new URL("/auth/login", request.url);
       loginUrl.searchParams.set("callbackUrl", pathname + search);
       return NextResponse.redirect(loginUrl);
     }

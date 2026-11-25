@@ -39,7 +39,7 @@ function PageWrapper({
         paddingMap[padding],
       )}
     >
-      <div className={cn("grow", className)}>{children}</div>
+      <div className={cn("grow space-y-6", className)}>{children}</div>
       {pagination}
     </div>
   );
