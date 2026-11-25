@@ -7,31 +7,20 @@ type HeadingVariant = "default" | "plain";
 
 interface SectionHeadingProps {
   badge?: string;
-  /** Small uppercase label shown above the title, with a leading dot. */
   eyebrow?: string;
   title: ReactNode;
   description?: string;
   alignment?: HeadingAlignment;
   className?: string;
   children?: ReactNode;
-  /** Heading HTML tag: h1-h4 (default: h2) */
   as?: "h1" | "h2" | "h3" | "h4";
-  /** `default` uses the brand primary uppercase style. `plain` uses normal-case foreground. */
   variant?: HeadingVariant;
-  /** Override default title size classes */
   titleClassName?: string;
-  /** Extra classes for the description (e.g. spacing or max-width). */
   descriptionClassName?: string;
-  /** Whether to constrain width to max-w-2xl (default: true). Set false inside grid/flex layouts */
   constrain?: boolean;
 }
 
-const alignmentClasses: Record<HeadingAlignment, string> = {
-  left: "text-left",
-  center: "text-center",
-};
-
-const headingSizes: Record<string, string> = {
+const headingSizes: Record<NonNullable<SectionHeadingProps["as"]>, string> = {
   h1: "text-3xl font-bold sm:text-4xl",
   h2: "text-2xl font-semibold sm:text-3xl",
   h3: "text-xl font-semibold sm:text-2xl",
@@ -58,52 +47,45 @@ export function SectionHeading({
     <div
       className={cn(
         constrain && !children && "max-w-2xl",
-        alignment === "center" && "mx-auto",
-        alignmentClasses[alignment],
-        !children && className
+        alignment === "center" ? "mx-auto text-center" : "text-left",
+        children && "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
+        className,
       )}
     >
-      <div
-        className={cn(
-          children && "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
-          children && className
+      <div className="min-w-0 space-y-0.5">
+        {eyebrow && (
+          <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+            <span className="size-1.5 rounded-full bg-clay" aria-hidden />
+            {eyebrow}
+          </p>
         )}
-      >
-        <div className="min-w-0">
-          {eyebrow && (
-            <p className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
-              <span className="size-1.5 rounded-full bg-clay" aria-hidden />
-              {eyebrow}
-            </p>
+
+        {badge && <Badge variant="default">{badge}</Badge>}
+
+        <Tag
+          className={cn(
+            hasKicker && "mt-3",
+            "font-heading leading-tight font-semibold tracking-tight text-foreground",
+            variant === "plain" && "text-foreground",
+            titleClassName ?? headingSizes[Tag],
           )}
+        >
+          {title}
+        </Tag>
 
-          {badge && <Badge variant="default">{badge}</Badge>}
-
-          <Tag
+        {description && (
+          <p
             className={cn(
-              hasKicker ? "mt-3" : "",
-              "font-heading font-semibold tracking-tight text-foreground",
-              variant === "plain" && "text-foreground",
-              titleClassName ?? headingSizes[Tag]
+              "text-sm leading-5 text-muted-foreground sm:text-base",
+              descriptionClassName,
             )}
           >
-            {title}
-          </Tag>
-
-          {description && (
-            <p
-              className={cn(
-                "text-sm leading-6 text-muted-foreground sm:text-base",
-                descriptionClassName
-              )}
-            >
-              {description}
-            </p>
-          )}
-        </div>
-
-        {children}
+            {description}
+          </p>
+        )}
       </div>
+
+      {children}
     </div>
   );
 }
