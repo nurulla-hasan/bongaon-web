@@ -96,7 +96,17 @@ export async function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-2 text-xs text-muted-foreground sm:flex-row">
           <p>{t("copyright")}</p>
-          <p>{t("prototypeNote")}</p>
+          <p>
+            {t("craftedBy")}{" "}
+            <a
+              href="https://nurulla-hasan.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+            >
+              Nurulla Hasan
+            </a>
+          </p>
         </div>
       </div>
     </footer>
