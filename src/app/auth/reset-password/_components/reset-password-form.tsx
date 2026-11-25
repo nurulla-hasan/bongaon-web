@@ -6,7 +6,6 @@ import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,22 +17,7 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useResetPassword } from "@/services";
-
-const resetPasswordSchema = z
-  .object({
-    email: z.email({ error: "Please enter a valid email address." }),
-    otp: z.string().length(6, { error: "Reset code must be 6 digits." }),
-    password: z
-      .string()
-      .min(6, { error: "Password must be at least 6 characters." }),
-    confirmPassword: z
-      .string()
-      .min(1, { error: "Please confirm your new password." }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    error: "Passwords do not match.",
-  });
+import { resetPasswordSchema } from "@/validations";
 
 export function ResetPasswordForm({
   email,

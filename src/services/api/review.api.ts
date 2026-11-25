@@ -1,26 +1,6 @@
 import { apiClient } from "@/lib/api-client";
-import type { ApiResponse } from "@/types";
+import type { ApiResponse, ApiReview, GetReviewsParams } from "@/types";
 
-export interface ApiReview {
-  id: string;
-  productId: string;
-  product?: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  customerName: string;
-  location: string;
-  rating: number;
-  comment: string;
-  isApproved: boolean;
-  createdAt: string;
+export function getReviews(params?: GetReviewsParams) {
+  return apiClient<ApiResponse<ApiReview[]>>("/reviews", { query: params });
 }
-
-export const reviewApi = {
-  getReviews: (params?: {
-    isApproved?: boolean;
-    limit?: number;
-    sortBy?: string;
-  }) => apiClient<ApiResponse<ApiReview[]>>("/reviews", { query: params }),
-};

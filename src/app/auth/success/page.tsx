@@ -7,7 +7,6 @@ import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
-import { queryKeys } from "@/services/query-keys";
 
 export default function GoogleAuthSuccessPage() {
   const t = useTranslations("Auth");
@@ -20,7 +19,7 @@ export default function GoogleAuthSuccessPage() {
     handledRef.current = true;
 
     const completeSignIn = async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me });
+      await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       toast.success(t("googleSignInSuccess"));
       router.replace("/");
       router.refresh();

@@ -16,7 +16,6 @@ import {
   User,
 } from "lucide-react";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -34,33 +33,9 @@ import { getErrorMessage } from "@/lib/error";
 import { cn, formatDate, getInitials } from "@/lib/utils";
 import { useChangePassword, useLogout, useMe, useUpdateMe } from "@/services";
 import type { AuthUser } from "@/types";
+import { changePasswordSchema, profileSchema } from "@/validations";
 
 type ProfileSection = "account" | "security";
-
-const profileSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, { error: "Name must be at least 2 characters." })
-    .max(100),
-  email: z.email({ error: "Invalid email address." }),
-  phone: z.string().trim().max(30),
-});
-
-const changePasswordSchema = z
-  .object({
-    oldPassword: z.string().min(1, { error: "Current password is required." }),
-    newPassword: z
-      .string()
-      .min(6, { error: "New password must be at least 6 characters." }),
-    confirmPassword: z
-      .string()
-      .min(1, { error: "Please confirm your new password." }),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    path: ["confirmPassword"],
-    error: "Passwords do not match.",
-  });
 
 function ProfileSidebar({
   user,
@@ -406,7 +381,8 @@ function GooglePasswordNoticeCard() {
 }
 
 export function ProfileView() {
-  const { data: user, isLoading } = useMe();
+  const { data: meRes, isLoading } = useMe();
+  const user = meRes?.data?.user;
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>("account");
 

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,14 +17,8 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useLogin } from "@/services";
+import { loginSchema } from "@/validations";
 import { GoogleAuthButton } from "../../_components/google-auth-button";
-
-const loginSchema = z.object({
-  email: z.email({ error: "Please enter a valid email address." }),
-  password: z
-    .string()
-    .min(6, { error: "Password must be at least 6 characters." }),
-});
 
 function getSafeRedirect(callbackUrl?: string): string {
   if (!callbackUrl) return "/";

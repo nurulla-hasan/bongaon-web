@@ -28,7 +28,8 @@ interface NavbarUserMenuProps {
 export function NavbarUserMenu({ isLoggedIn }: NavbarUserMenuProps) {
   const t = useTranslations("Navbar");
   const router = useRouter();
-  const { data: user, isLoading } = useMe();
+  const { data: meRes, isLoading } = useMe();
+  const user = meRes?.data?.user;
   const logout = useLogout();
 
   if (isLoading) {

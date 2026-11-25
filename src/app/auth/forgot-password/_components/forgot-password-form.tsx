@@ -6,7 +6,6 @@ import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +17,7 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useForgotPassword } from "@/services";
-
-const forgotPasswordSchema = z.object({
-  email: z.email({ error: "Please enter a valid email address." }),
-});
+import { forgotPasswordSchema } from "@/validations";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("Auth");

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,21 +16,8 @@ import {
 } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error";
 import { useRegister } from "@/services";
+import { registerSchema } from "@/validations";
 import { GoogleAuthButton } from "../../_components/google-auth-button";
-
-const registerSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, { error: "Name must be at least 2 characters." })
-    .max(100),
-  email: z.email({ error: "Please enter a valid email address." }),
-  phone: z.string().trim(),
-  password: z
-    .string()
-    .min(6, { error: "Password must be at least 6 characters." })
-    .max(100),
-});
 
 export function RegisterForm() {
   const t = useTranslations("Auth");

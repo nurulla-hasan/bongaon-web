@@ -6,7 +6,6 @@ import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,10 +24,7 @@ import {
 import { useCountdown } from "@/hooks/useUtilityHooks";
 import { getErrorMessage } from "@/lib/error";
 import { useResendOtp, useVerifyEmail } from "@/services";
-
-const verifyEmailSchema = z.object({
-  otp: z.string().length(6, { error: "Verification code must be 6 digits." }),
-});
+import { verifyEmailSchema } from "@/validations";
 
 export function VerifyEmailForm({ email }: { email: string }) {
   const t = useTranslations("Auth");

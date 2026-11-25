@@ -16,7 +16,6 @@ import {
   Truck,
 } from "lucide-react";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,28 +40,13 @@ import {
 } from "@/lib/cart";
 import { getErrorMessage } from "@/lib/error";
 import { useCreateOrder, useSettings } from "@/services";
-
-const checkoutSchema = z.object({
-  receiverName: z.string().trim().min(2, { error: "Receiver name is required." }),
-  receiverPhone: z
-    .string()
-    .trim()
-    .min(6, { error: "Valid receiver phone is required." })
-    .max(30),
-  district: z.string().trim().min(2, { error: "District is required." }).max(100),
-  fullAddress: z
-    .string()
-    .trim()
-    .min(5, { error: "Full address is required." })
-    .max(500),
-  whatsappNumber: z.string().trim().max(30),
-  orderNote: z.string().trim().max(500),
-});
+import { checkoutSchema } from "@/validations";
 
 export function CheckoutView() {
   const t = useTranslations("Checkout");
   const router = useRouter();
-  const { data: settings } = useSettings();
+  const { data: settingsRes } = useSettings();
+  const settings = settingsRes?.data;
   const createOrder = useCreateOrder();
 
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
@@ -108,7 +92,7 @@ export function CheckoutView() {
       if (cartItems.length === 0 || isOrderingDisabled) return;
 
       try {
-        const order = await createOrder.mutateAsync({
+        const orderRes = await createOrder.mutateAsync({
           receiverName: value.receiverName.trim(),
           receiverPhone: value.receiverPhone.trim(),
           district: value.district.trim(),
@@ -124,7 +108,7 @@ export function CheckoutView() {
 
         clearCart();
         router.push(
-          `/order-success?orderNumber=${encodeURIComponent(order.orderNumber)}`,
+          `/order-success?orderNumber=${encodeURIComponent(orderRes.data.orderNumber)}`,
         );
       } catch (error) {
         toast.error(getErrorMessage(error));

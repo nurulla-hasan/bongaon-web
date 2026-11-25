@@ -8,12 +8,12 @@ import {
   ReviewsSection,
   StorySection,
 } from "@/components/home";
-import { productApi, settingApi } from "@/services/api";
+import { getHomeSections, getSettings } from "@/services/api";
 
 export default async function HomePage() {
   const [homeRes, settingsRes] = await Promise.all([
-    productApi.getHomeSections().catch(() => null),
-    settingApi.getSettings().catch(() => null),
+    getHomeSections().catch(() => null),
+    getSettings().catch(() => null),
   ]);
 
   const homeData = homeRes?.data ?? null;

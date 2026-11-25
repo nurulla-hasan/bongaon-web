@@ -1,18 +1,9 @@
 import { apiClient } from "@/lib/api-client";
-import type { ApiResponse } from "@/types";
+import type { ApiResponse, CreateContactPayload } from "@/types";
 
-export interface CreateContactPayload {
-  name: string;
-  phone: string;
-  email?: string;
-  subject?: string;
-  message: string;
+export function createContactMessage(payload: CreateContactPayload) {
+  return apiClient<ApiResponse<unknown>>("/contacts", {
+    method: "POST",
+    body: payload,
+  });
 }
-
-export const contactApi = {
-  createMessage: (payload: CreateContactPayload) =>
-    apiClient<ApiResponse<unknown>>("/contacts", {
-      method: "POST",
-      body: payload,
-    }),
-};

@@ -14,7 +14,7 @@ import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { productApi } from "@/services/api";
+import { getProductByIdOrSlug } from "@/services/api";
 import { ProductImageGallery } from "./_components/product-image-gallery";
 import { ProductPurchasePanel } from "./_components/product-purchase-panel";
 
@@ -29,7 +29,7 @@ export default async function ProductDetailPage({
   const [tCommon, tProducts, productRes] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Products"),
-    productApi.getProductByIdOrSlug(slug).catch(() => null),
+    getProductByIdOrSlug(slug).catch(() => null),
   ]);
 
   const product = productRes?.data;

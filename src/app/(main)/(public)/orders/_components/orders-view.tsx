@@ -35,9 +35,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getErrorMessage } from "@/lib/error";
 import { cn, formatDate } from "@/lib/utils";
 import { useMe, useMyOrders, useTrackOrder } from "@/services";
-import type { ApiOrder } from "@/services/api";
+import type { ApiOrder, OrderStatus } from "@/types";
 
-type OrderStatus = ApiOrder["status"];
 type StatusFilter = "all" | "PROCESSING" | "IN_TRANSIT" | "DELIVERED";
 
 const statusStepIndex: Record<OrderStatus, number> = {
@@ -52,7 +51,8 @@ export function OrdersView() {
   const t = useTranslations("Orders");
   const tCommon = useTranslations("Common");
 
-  const { data: me, isLoading: isMeLoading } = useMe();
+  const { data: meRes, isLoading: isMeLoading } = useMe();
+  const me = meRes?.data?.user;
   const [filter, setFilter] = React.useState<StatusFilter>("all");
   const [query, setQuery] = React.useState("");
   const [expandedOrderId, setExpandedOrderId] = React.useState<string | null>(
@@ -120,9 +120,12 @@ export function OrdersView() {
     if (!orderNumber || !phone) return;
 
     try {
-      const order = await trackOrderMutation.mutateAsync({ orderNumber, phone });
-      setTrackedOrder(order);
-      setExpandedOrderId(order.id);
+      const orderRes = await trackOrderMutation.mutateAsync({
+        orderNumber,
+        phone,
+      });
+      setTrackedOrder(orderRes.data);
+      setExpandedOrderId(orderRes.data.id);
     } catch (error) {
       setTrackedOrder(null);
       toast.error(getErrorMessage(error));

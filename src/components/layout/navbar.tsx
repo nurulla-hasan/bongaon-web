@@ -9,7 +9,7 @@ import {
   SURFACE_WARM,
 } from "@/lib/layout";
 import { cn } from "@/lib/utils";
-import { settingApi } from "@/services/api";
+import { getSettings } from "@/services/api";
 import { AnnouncementBar } from "./announcement-bar";
 import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
@@ -18,7 +18,7 @@ import { NavbarUserMenu } from "./navbar-user-menu";
 
 async function getAnnouncementMessage(fallback: string): Promise<string | null> {
   try {
-    const res = await settingApi.getSettings();
+    const res = await getSettings();
     const settings = res.data;
     if (!settings.announcementEnabled) return null;
     return settings.announcementText.trim() || fallback;

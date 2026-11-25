@@ -36,7 +36,8 @@ import { useSettings } from "@/services";
 
 export function CartView() {
   const t = useTranslations("Cart");
-  const { data: settings } = useSettings();
+  const { data: settingsRes } = useSettings();
+  const settings = settingsRes?.data;
   const [items, setItems] = React.useState<CartItem[]>([]);
   const [mounted, setMounted] = React.useState(false);
 

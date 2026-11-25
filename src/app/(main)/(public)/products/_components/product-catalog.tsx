@@ -71,13 +71,16 @@ export function ProductCatalog() {
     minRating,
     sortBy: sort === "all" ? "popular" : sort,
   });
-  const { data: categories = [], isLoading: isCategoriesLoading } =
+  const { data: categoriesRes, isLoading: isCategoriesLoading } =
     useCategories({
       isActive: true,
       limit: 100,
     });
 
-  const products = productsRes?.data ?? [];
+  const categories = Array.isArray(categoriesRes?.data)
+    ? categoriesRes.data
+    : [];
+  const products = Array.isArray(productsRes?.data) ? productsRes.data : [];
   const meta = productsRes?.meta;
   const totalCount = meta?.total ?? products.length;
 

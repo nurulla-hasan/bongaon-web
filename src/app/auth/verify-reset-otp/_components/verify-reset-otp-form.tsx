@@ -6,7 +6,6 @@ import { useForm } from "@tanstack/react-form";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,10 +24,7 @@ import {
 import { useCountdown } from "@/hooks/useUtilityHooks";
 import { getErrorMessage } from "@/lib/error";
 import { useResendResetOtp, useVerifyResetOtp } from "@/services";
-
-const verifyOtpSchema = z.object({
-  otp: z.string().length(6, { error: "Reset code must be 6 digits." }),
-});
+import { verifyResetOtpSchema } from "@/validations";
 
 export function VerifyResetOtpForm({ email }: { email: string }) {
   const t = useTranslations("Auth");
@@ -42,7 +38,7 @@ export function VerifyResetOtpForm({ email }: { email: string }) {
       otp: "",
     },
     validators: {
-      onSubmit: verifyOtpSchema,
+      onSubmit: verifyResetOtpSchema,
     },
     onSubmit: async ({ value }) => {
       if (!email) {

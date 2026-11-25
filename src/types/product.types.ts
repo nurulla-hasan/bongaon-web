@@ -60,3 +60,23 @@ export interface HomeSectionsResponse {
   featuredProducts: ApiProduct[];
   showcases: HomeShowcase[];
 }
+
+export interface GetProductsParams {
+  searchTerm?: string;
+  categoryId?: string;
+  categorySlug?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  onlyDiscounted?: boolean;
+  isFeatured?: boolean;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+}
+
+export interface GetCategoriesParams {
+  isActive?: boolean;
+  limit?: number;
+}

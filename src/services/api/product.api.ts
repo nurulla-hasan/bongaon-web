@@ -3,34 +3,23 @@ import type {
   ApiCategory,
   ApiProduct,
   ApiResponse,
+  GetCategoriesParams,
+  GetProductsParams,
   HomeSectionsResponse,
 } from "@/types";
 
-export interface GetProductsParams {
-  searchTerm?: string;
-  categoryId?: string;
-  categorySlug?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  minRating?: number;
-  onlyDiscounted?: boolean;
-  isFeatured?: boolean;
-  isActive?: boolean;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
+export function getHomeSections() {
+  return apiClient<ApiResponse<HomeSectionsResponse>>("/products/home");
 }
 
-export const productApi = {
-  getHomeSections: () =>
-    apiClient<ApiResponse<HomeSectionsResponse>>("/products/home"),
+export function getProducts(params?: GetProductsParams) {
+  return apiClient<ApiResponse<ApiProduct[]>>("/products", { query: params });
+}
 
-  getProducts: (params?: GetProductsParams) =>
-    apiClient<ApiResponse<ApiProduct[]>>("/products", { query: params }),
+export function getProductByIdOrSlug(idOrSlug: string) {
+  return apiClient<ApiResponse<ApiProduct>>(`/products/${idOrSlug}`);
+}
 
-  getProductByIdOrSlug: (idOrSlug: string) =>
-    apiClient<ApiResponse<ApiProduct>>(`/products/${idOrSlug}`),
-
-  getCategories: (params?: { isActive?: boolean; limit?: number }) =>
-    apiClient<ApiResponse<ApiCategory[]>>("/categories", { query: params }),
-};
+export function getCategories(params?: GetCategoriesParams) {
+  return apiClient<ApiResponse<ApiCategory[]>>("/categories", { query: params });
+}

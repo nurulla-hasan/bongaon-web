@@ -32,7 +32,8 @@ export function MobileNav({ className }: MobileNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const { data: user } = useMe();
+  const { data: meRes } = useMe();
+  const user = meRes?.data?.user;
   const logout = useLogout();
 
   const handleLogout = async () => {

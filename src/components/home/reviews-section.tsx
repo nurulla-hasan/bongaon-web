@@ -13,11 +13,18 @@ import { useReviews } from "@/services";
 export function ReviewsSection() {
   const t = useTranslations("Home");
   const tProducts = useTranslations("Products");
-  const { data: reviews = [], isLoading, isError, refetch } = useReviews({
+  const {
+    data: reviewsRes,
+    isLoading,
+    isError,
+    refetch,
+  } = useReviews({
     isApproved: true,
     limit: 3,
     sortBy: "rating_desc",
   });
+
+  const reviews = Array.isArray(reviewsRes?.data) ? reviewsRes.data : [];
 
   if (!isLoading && !isError && reviews.length === 0) return null;
 

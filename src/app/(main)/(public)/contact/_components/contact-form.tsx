@@ -5,7 +5,6 @@ import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Send } from "lucide-react";
 import { toast } from "sonner";
-import { z } from "zod";
 import { FormInput } from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,17 +18,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { getErrorMessage } from "@/lib/error";
 import { useCreateContactMessage } from "@/services";
-
-const contactSchema = z.object({
-  name: z.string().trim().min(2, { error: "Name must be at least 2 characters." }).max(120),
-  phone: z.string().trim().min(6, { error: "Valid phone number is required." }).max(30),
-  subject: z.string().trim().max(150),
-  message: z
-    .string()
-    .trim()
-    .min(5, { error: "Message must be at least 5 characters." })
-    .max(2000),
-});
+import { contactSchema } from "@/validations";
 
 export function ContactForm() {
   const t = useTranslations("Contact");
