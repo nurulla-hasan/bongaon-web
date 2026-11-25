@@ -1,28 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import type { BazarProduct } from "@/data/mock-bazar";
+import { addToCart } from "@/lib/cart";
+import type { ApiProduct } from "@/types";
 
 interface ProductPurchasePanelProps {
-  product: BazarProduct;
+  product: ApiProduct;
 }
 
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
+  const router = useRouter();
   const tCommon = useTranslations("Common");
   const tProducts = useTranslations("Products");
 
   const options =
-    product.packOptions.length > 0
+    product.packOptions && product.packOptions.length > 0
       ? product.packOptions
       : [
           {
             label: product.unit,
             price: product.price,
-            originalPrice: product.originalPrice,
+            originalPrice: product.originalPrice ?? undefined,
           },
         ];
 
@@ -128,14 +131,43 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
       </div>
 
       <div className="flex flex-wrap gap-3 pt-1">
-        <Button size="xl" render={<Link href="/cart" />}>
+        <Button
+          size="xl"
+          type="button"
+          onClick={() => {
+            addToCart({
+              productId: product.id,
+              slug: product.slug,
+              name: product.name,
+              categoryName: product.category?.name ?? "",
+              image: product.imageUrl || undefined,
+              selectedPack: selected.label,
+              quantity,
+              unitPrice: selected.price,
+            });
+            toast.success(`${product.name} added to cart`);
+          }}
+        >
           <ShoppingBag />
           {tProducts("addToCart")}
         </Button>
         <Button
           variant="secondary"
           size="xl"
-          render={<Link href="/checkout" />}
+          type="button"
+          onClick={() => {
+            addToCart({
+              productId: product.id,
+              slug: product.slug,
+              name: product.name,
+              categoryName: product.category?.name ?? "",
+              image: product.imageUrl || undefined,
+              selectedPack: selected.label,
+              quantity,
+              unitPrice: selected.price,
+            });
+            router.push("/checkout");
+          }}
         >
           {tProducts("orderCodNow")}
         </Button>

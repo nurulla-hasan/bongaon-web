@@ -22,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { BazarProduct, CategoryItem } from "@/data/mock-bazar";
 import { useProductFilters, type SortKey } from "@/hooks/useProductFilters";
+import type { ApiCategory, ApiProduct } from "@/types";
 
 const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
   { value: "popular", labelKey: "sortPopular" },
@@ -33,8 +33,8 @@ const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
 ];
 
 interface ProductCatalogProps {
-  products: BazarProduct[];
-  categories: CategoryItem[];
+  products: ApiProduct[];
+  categories: ApiCategory[];
 }
 
 export function ProductCatalog({ products, categories }: ProductCatalogProps) {

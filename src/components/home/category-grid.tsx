@@ -1,45 +1,22 @@
+import Image from "next/image";
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
-import {
-  ArrowRight,
-  Droplet,
-  Flame,
-  Gift,
-  Package,
-  Sparkles,
-  UtensilsCrossed,
-} from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { ArrowRight, Package } from "lucide-react";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
 import AnimationWrapper from "@/components/common/animation-wrapper";
-import { getBazarData, type CategoryItem } from "@/data/mock-bazar";
-import { cn } from "@/lib/utils";
+import type { ApiCategory } from "@/types";
 
-const categoryIconMap: Record<CategoryItem["iconName"], typeof Flame> = {
-  flame: Flame,
-  jar: UtensilsCrossed,
-  droplet: Droplet,
-  sparkles: Sparkles,
-  package: Package,
-  gift: Gift,
-};
+export async function CategoryGrid({
+  apiCategories,
+}: {
+  apiCategories?: ApiCategory[];
+}) {
+  const categories = apiCategories ?? [];
+  if (categories.length === 0) return null;
 
-const categoryTints = [
-  "bg-primary/5",
-  "bg-clay/5",
-  "bg-gold/10",
-  "bg-secondary",
-  "bg-muted",
-  "bg-accent/30",
-];
-
-export async function CategoryGrid() {
-  const locale = await getLocale();
-  const [t, { categories }] = await Promise.all([
-    getTranslations("Home"),
-    getBazarData(locale),
-  ]);
+  const t = await getTranslations("Home");
 
   return (
     <SectionWrapper id="categories" padding="md">
@@ -56,41 +33,49 @@ export async function CategoryGrid() {
         </Button>
       </SectionHeading>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map((category, index) => {
-          const Icon = categoryIconMap[category.iconName];
-          return (
-            <AnimationWrapper key={category.id} delay={index * 0.05}>
-              <Link
-                href={`/products?category=${category.id}`}
-                className={cn(
-                  "group flex h-full flex-col gap-3 rounded-3xl border border-border/70 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5",
-                  categoryTints[index % categoryTints.length],
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {categories.map((category, index) => (
+          <AnimationWrapper key={category.id} delay={index * 0.04}>
+            <Link
+              href={`/products?category=${category.slug}`}
+              className="group flex flex-col items-center gap-3 text-center"
+            >
+              <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-card p-3 shadow-xs transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/35 group-hover:shadow-md">
+                {category.imageUrl ? (
+                  <div className="relative size-full overflow-hidden rounded-xl">
+                    <Image
+                      src={category.imageUrl}
+                      alt={category.name}
+                      fill
+                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 16vw"
+                      className="object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex size-full items-center justify-center rounded-xl bg-primary/5 text-primary/80 transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary">
+                    <Package
+                      className="size-12 transition-transform duration-300 group-hover:scale-110 sm:size-14"
+                      strokeWidth={1.6}
+                      aria-hidden
+                    />
+                  </div>
                 )}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex size-12 items-center justify-center rounded-2xl bg-background text-primary shadow-sm">
-                    <Icon className="size-6" />
-                  </span>
-                  <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                </div>
+              </div>
 
-                <div className="space-y-1">
-                  <h3 className="text-base font-semibold text-foreground">
-                    {category.name}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {category.subtitle}
+              <div className="space-y-0.5 px-1">
+                <h3 className="line-clamp-2 text-sm font-medium text-foreground transition-colors group-hover:text-primary">
+                  {category.name}
+                </h3>
+                {category._count && (
+                  <p className="text-xs text-muted-foreground">
+                    {category._count.products}{" "}
+                    {category._count.products === 1 ? "Product" : "Products"}
                   </p>
-                </div>
-
-                <span className="mt-auto pt-2 text-xs font-semibold text-clay">
-                  {category.countLabel}
-                </span>
-              </Link>
-            </AnimationWrapper>
-          );
-        })}
+                )}
+              </div>
+            </Link>
+          </AnimationWrapper>
+        ))}
       </div>
     </SectionWrapper>
   );

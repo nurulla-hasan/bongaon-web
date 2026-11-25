@@ -4,24 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const CART_STORAGE_KEY = "bongaon_bajar_cart";
-
-function readCartCount(): number {
-  if (typeof window === "undefined") return 0;
-  try {
-    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return 0;
-    return parsed.reduce((sum, item) => {
-      const qty = typeof item?.quantity === "number" ? item.quantity : 0;
-      return sum + Math.max(0, qty);
-    }, 0);
-  } catch {
-    return 0;
-  }
-}
+import { CART_UPDATED_EVENT, readCartCount } from "@/lib/cart";
 
 interface NavbarCartButtonProps {
   label: string;
@@ -35,10 +18,10 @@ export function NavbarCartButton({ label }: NavbarCartButtonProps) {
     syncCount();
 
     window.addEventListener("storage", syncCount);
-    window.addEventListener("bongaon-cart-updated", syncCount);
+    window.addEventListener(CART_UPDATED_EVENT, syncCount);
     return () => {
       window.removeEventListener("storage", syncCount);
-      window.removeEventListener("bongaon-cart-updated", syncCount);
+      window.removeEventListener(CART_UPDATED_EVENT, syncCount);
     };
   }, []);
 

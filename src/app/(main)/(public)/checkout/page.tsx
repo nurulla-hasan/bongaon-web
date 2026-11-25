@@ -1,18 +1,16 @@
 import { ShieldCheck, Truck } from "lucide-react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
-import { DELIVERY_CHARGE_BDT, getBazarData } from "@/data/mock-bazar";
+import { DEFAULT_DELIVERY_CHARGE_BDT } from "@/lib/cart";
 import { CheckoutView } from "./_components/checkout-view";
 
 export default async function CheckoutPage() {
-  const locale = await getLocale();
-  const [tCommon, tCheckout, tProducts, { cartItems }] = await Promise.all([
+  const [tCommon, tCheckout, tProducts] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Checkout"),
     getTranslations("Products"),
-    getBazarData(locale),
   ]);
 
   return (
@@ -45,10 +43,7 @@ export default async function CheckoutPage() {
         </div>
       </SectionHeading>
 
-      <CheckoutView
-        cartItems={cartItems}
-        deliveryCharge={DELIVERY_CHARGE_BDT}
-      />
+      <CheckoutView deliveryCharge={DEFAULT_DELIVERY_CHARGE_BDT} />
     </PageWrapper>
   );
 }

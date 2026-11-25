@@ -1,22 +1,25 @@
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
 import AnimationWrapper from "@/components/common/animation-wrapper";
 import { ProductCard } from "@/components/card/product-card";
-import { getBazarData } from "@/data/mock-bazar";
+import type { ApiProduct } from "@/types";
 
-export async function FeaturedProductsSection() {
-  const locale = await getLocale();
-  const [t, { products }] = await Promise.all([
-    getTranslations("Home"),
-    getBazarData(locale),
-  ]);
+export async function FeaturedProductsSection({
+  apiProducts,
+}: {
+  apiProducts?: ApiProduct[];
+}) {
+  const products = apiProducts ?? [];
+  if (products.length === 0) return null;
 
-  const withImages = products.filter((product) => Boolean(product.image));
-  const withoutImages = products.filter((product) => !product.image);
+  const t = await getTranslations("Home");
+
+  const withImages = products.filter((product) => Boolean(product.imageUrl));
+  const withoutImages = products.filter((product) => !product.imageUrl);
   const featuredProducts = [...withImages, ...withoutImages].slice(0, 10);
 
   return (
@@ -37,7 +40,7 @@ export async function FeaturedProductsSection() {
 
       <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
         {featuredProducts.map((product, index) => (
-          <AnimationWrapper key={product.slug} delay={index * 0.04}>
+          <AnimationWrapper key={product.id} delay={index * 0.04}>
             <ProductCard product={product} />
           </AnimationWrapper>
         ))}

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import {
   CheckCircle2,
   Clock,
@@ -14,9 +14,9 @@ import { ProductCard } from "@/components/card/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { productApi } from "@/services/api";
 import { ProductImageGallery } from "./_components/product-image-gallery";
 import { ProductPurchasePanel } from "./_components/product-purchase-panel";
-import { getBazarData } from "@/data/mock-bazar";
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -25,24 +25,30 @@ interface ProductDetailPageProps {
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
-  const [tCommon, tProducts, { products }] = await Promise.all([
+  const { slug } = await params;
+  const [tCommon, tProducts, productRes, listRes] = await Promise.all([
     getTranslations("Common"),
     getTranslations("Products"),
-    getBazarData(locale),
+    productApi.getProductByIdOrSlug(slug).catch(() => null),
+    productApi.getProducts({ isActive: true, limit: 12 }).catch(() => null),
   ]);
 
-  const product = products.find((item) => item.slug === slug);
+  const product = productRes?.data;
 
   if (!product) {
     notFound();
   }
 
-  const sameCategory = products.filter(
-    (item) => item.slug !== product.slug && item.category === product.category,
+  const allProducts = listRes?.data ?? [];
+  const sameCategory = allProducts.filter(
+    (item) =>
+      item.slug !== product.slug &&
+      item.category?.slug === product.category?.slug,
   );
-  const otherProducts = products.filter(
-    (item) => item.slug !== product.slug && item.category !== product.category,
+  const otherProducts = allProducts.filter(
+    (item) =>
+      item.slug !== product.slug &&
+      item.category?.slug !== product.category?.slug,
   );
   const relatedProducts = [...sameCategory, ...otherProducts].slice(0, 5);
 
@@ -64,7 +70,7 @@ export default async function ProductDetailPage({
         <div className="space-y-6 lg:col-span-7">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary">{product.category}</Badge>
+              <Badge variant="secondary">{product.category?.name}</Badge>
               {product.badge && (
                 <Badge variant="outline">{product.badge}</Badge>
               )}
@@ -77,14 +83,14 @@ export default async function ProductDetailPage({
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
                 <Star className="size-4 fill-gold text-gold" />
-                {product.rating}
+                {product.rating.toFixed(1)}
                 <span className="font-normal text-muted-foreground">
                   ({product.reviewCount} {tProducts("reviewsLabel")})
                 </span>
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-4 text-primary" />
-                {product.origin}
+                {product.origin || "Bongaon"}
               </span>
             </div>
           </div>

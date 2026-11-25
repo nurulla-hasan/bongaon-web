@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
-import type { BazarProduct, CategoryItem } from "@/data/mock-bazar";
 import { useProductFilters } from "@/hooks/useProductFilters";
 import { cn } from "@/lib/utils";
+import type { ApiCategory, ApiProduct } from "@/types";
 
 interface ProductFiltersProps {
-  products: BazarProduct[];
-  categories: CategoryItem[];
+  products: ApiProduct[];
+  categories: ApiCategory[];
   hideHeader?: boolean;
 }
 

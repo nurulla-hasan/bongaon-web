@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight, CheckCircle2, HandCoins, Truck } from "lucide-react";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { Badge } from "@/components/ui/badge";
@@ -11,21 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { DELIVERY_CHARGE_BDT, getBazarData } from "@/data/mock-bazar";
 
 export default async function OrderSuccessPage() {
-  const locale = await getLocale();
-  const [t, { cartItems }] = await Promise.all([
-    getTranslations("OrderSuccess"),
-    getBazarData(locale),
-  ]);
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.unitPrice * item.quantity,
-    0
-  );
-  const total = subtotal + DELIVERY_CHARGE_BDT;
+  const t = await getTranslations("OrderSuccess");
 
   return (
     <PageWrapper padding="spacious">
@@ -66,31 +54,10 @@ export default async function OrderSuccessPage() {
                     {t("paymentLabel")}
                   </p>
                   <p className="text-sm font-semibold text-foreground">
-                    {t("paymentValuePrefix")} (৳{total})
+                    {t("paymentValuePrefix")}
                   </p>
                 </div>
               </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-2 text-sm">
-              <p className="font-semibold text-foreground">
-                {t("orderedItems")}
-              </p>
-              {cartItems.map((item) => (
-                <div
-                  key={`${item.product.slug}-${item.selectedPack}`}
-                  className="flex items-center justify-between text-muted-foreground"
-                >
-                  <span>
-                    {item.product.name} ({item.selectedPack}) × {item.quantity}
-                  </span>
-                  <span className="font-medium text-foreground">
-                    ৳{item.unitPrice * item.quantity}
-                  </span>
-                </div>
-              ))}
             </div>
           </CardContent>
 

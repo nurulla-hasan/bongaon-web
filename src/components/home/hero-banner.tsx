@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import {
   ArrowRight,
   BadgeCheck,
@@ -8,6 +8,7 @@ import {
   Heart,
   Home,
   Leaf,
+  Package,
   Send,
   ShieldCheck,
   Star,
@@ -17,7 +18,6 @@ import AnimationWrapper from "@/components/common/animation-wrapper";
 import { GrassTuft } from "@/components/common/leaf-decor";
 import { SectionWrapper } from "@/components/common/section-wrapper";
 import { Button } from "@/components/ui/button";
-import { getBazarData } from "@/data/mock-bazar";
 import {
   CONTAINER_GUTTER,
   CONTAINER_MAX_WIDTH,
@@ -25,17 +25,14 @@ import {
   SURFACE_WARM,
 } from "@/lib/layout";
 import { cn } from "@/lib/utils";
+import type { ApiProduct } from "@/types";
 
-export async function HeroBanner() {
-  const locale = await getLocale();
-  const [t, { products }] = await Promise.all([
-    getTranslations("Home"),
-    getBazarData(locale),
-  ]);
-
-  const highlightProduct =
-    products.find((product) => product.slug === "deshi-danadar-gawa-ghee") ??
-    products[0];
+export async function HeroBanner({
+  highlightProduct,
+}: {
+  highlightProduct?: ApiProduct;
+}) {
+  const t = await getTranslations("Home");
 
   const points = [
     { icon: ShieldCheck, label: t("heroPoint1") },
@@ -201,46 +198,58 @@ export async function HeroBanner() {
               className="object-cover object-right transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none"
             />
 
-            <span className="absolute top-4 left-4 inline-flex animate-float items-center gap-1.5 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-primary shadow-sm backdrop-blur motion-reduce:animate-none">
-              <Leaf className="size-3.5" />
-              {highlightProduct.shortTag}
-            </span>
+            {highlightProduct?.shortTag && (
+              <span className="absolute top-4 left-4 inline-flex animate-float items-center gap-1.5 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-primary shadow-sm backdrop-blur motion-reduce:animate-none">
+                <Leaf className="size-3.5" />
+                {highlightProduct.shortTag}
+              </span>
+            )}
 
             <span className="absolute top-4 right-4 hidden items-center gap-1.5 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm backdrop-blur sm:inline-flex">
               <Truck className="size-3.5 text-primary" />
               {t("heroPoint2")}
             </span>
 
-            <Link
-              href={`/products/${highlightProduct.slug}`}
-              className="group absolute right-4 bottom-4 left-4 flex items-center gap-3 rounded-2xl border border-border/60 bg-background/95 p-3 pr-4 shadow-lg backdrop-blur transition-transform hover:-translate-y-0.5 sm:right-auto sm:max-w-xs"
-            >
-              <span className="relative size-14 shrink-0 overflow-hidden rounded-xl">
-                <Image
-                  src={highlightProduct.image ?? "/images/product-churi-shutki.png"}
-                  alt=""
-                  fill
-                  sizes="56px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"
-                />
-              </span>
-              <span className="flex min-w-0 flex-col">
-                <span className="text-xs text-muted-foreground">
-                  {highlightProduct.badge}
-                </span>
-                <span className="truncate text-sm font-semibold text-foreground">
-                  {highlightProduct.name}
-                </span>
-              </span>
-              <span className="ml-auto text-sm font-bold text-clay">
-                ৳{highlightProduct.price}
-              </span>
-            </Link>
+            {highlightProduct && (
+              <>
+                <Link
+                  href={`/products/${highlightProduct.slug}`}
+                  className="group absolute right-4 bottom-4 left-4 flex items-center gap-3 rounded-2xl border border-border/60 bg-background/95 p-3 pr-4 shadow-lg backdrop-blur transition-transform hover:-translate-y-0.5 sm:right-auto sm:max-w-xs"
+                >
+                  <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground">
+                    {highlightProduct.imageUrl ? (
+                      <Image
+                        src={highlightProduct.imageUrl}
+                        alt=""
+                        fill
+                        sizes="56px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"
+                      />
+                    ) : (
+                      <Package className="size-6" aria-hidden />
+                    )}
+                  </span>
+                  <span className="flex min-w-0 flex-col">
+                    {highlightProduct.badge && (
+                      <span className="text-xs text-muted-foreground">
+                        {highlightProduct.badge}
+                      </span>
+                    )}
+                    <span className="truncate text-sm font-semibold text-foreground">
+                      {highlightProduct.name}
+                    </span>
+                  </span>
+                  <span className="ml-auto text-sm font-bold text-clay">
+                    ৳{highlightProduct.price}
+                  </span>
+                </Link>
 
-            <span className="absolute right-4 bottom-4 hidden items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur sm:inline-flex">
-              <Star className="size-3.5 fill-gold text-gold" />
-              {highlightProduct.rating}
-            </span>
+                <span className="absolute right-4 bottom-4 hidden items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur sm:inline-flex">
+                  <Star className="size-3.5 fill-gold text-gold" />
+                  {highlightProduct.rating.toFixed(1)}
+                </span>
+              </>
+            )}
           </div>
         </AnimationWrapper>
       </div>

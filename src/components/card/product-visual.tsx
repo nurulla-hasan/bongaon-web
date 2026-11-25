@@ -2,10 +2,11 @@ import Image from "next/image";
 import { PackageCheck, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import type { BazarProduct } from "@/data/mock-bazar";
+
+type VisualTone = "primary" | "secondary" | "accent" | "muted";
 
 interface ProductVisualProps {
-  tone: BazarProduct["visualTone"];
+  tone?: VisualTone;
   unit: string;
   shortTag: string;
   image?: string;
@@ -14,7 +15,7 @@ interface ProductVisualProps {
   loading?: "eager" | "lazy";
 }
 
-const toneMap: Record<BazarProduct["visualTone"], string> = {
+const toneMap: Record<VisualTone, string> = {
   primary: "bg-primary/10 text-primary",
   secondary: "bg-secondary text-secondary-foreground",
   accent: "bg-accent text-accent-foreground",
@@ -22,7 +23,7 @@ const toneMap: Record<BazarProduct["visualTone"], string> = {
 };
 
 export function ProductVisual({
-  tone,
+  tone = "primary",
   unit,
   shortTag,
   image,

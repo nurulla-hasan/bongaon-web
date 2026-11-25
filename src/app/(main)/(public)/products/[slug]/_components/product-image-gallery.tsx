@@ -3,31 +3,33 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ProductVisual } from "@/components/card/product-visual";
-import type { BazarProduct } from "@/data/mock-bazar";
 import { cn } from "@/lib/utils";
+import type { ApiProduct } from "@/types";
 
 interface ProductImageGalleryProps {
-  product: BazarProduct;
+  product: ApiProduct;
 }
 
 export function ProductImageGallery({ product }: ProductImageGalleryProps) {
+  const mainImage = product.imageUrl || undefined;
+  const galleryUrls = (product.gallery ?? [])
+    .map((item) => item.url)
+    .filter(Boolean);
   const images = Array.from(
     new Set(
-      [product.image, ...(product.gallery ?? [])].filter(
-        (src): src is string => Boolean(src),
-      ),
+      [mainImage, ...galleryUrls].filter((src): src is string => Boolean(src)),
     ),
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeImage = images[activeIndex] ?? product.image;
+  const activeImage = images[activeIndex] ?? mainImage;
 
   return (
     <div>
       <ProductVisual
-        tone={product.visualTone}
+        tone="primary"
         unit={product.unit}
-        shortTag={product.shortTag}
+        shortTag={product.shortTag || product.category?.name || ""}
         image={activeImage}
         alt={product.name}
         size="detail"

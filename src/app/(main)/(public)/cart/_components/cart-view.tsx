@@ -24,16 +24,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { CartPreviewItem } from "@/data/mock-bazar";
+import {
+  CART_UPDATED_EVENT,
+  readCartItems,
+  writeCartItems,
+  type CartItem,
+} from "@/lib/cart";
 
 interface CartViewProps {
-  initialItems: CartPreviewItem[];
   deliveryCharge: number;
 }
 
-export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
+export function CartView({ deliveryCharge }: CartViewProps) {
   const t = useTranslations("Cart");
-  const [items, setItems] = React.useState<CartPreviewItem[]>(initialItems);
+  const [items, setItems] = React.useState<CartItem[]>([]);
+
+  React.useEffect(() => {
+    const sync = () => setItems(readCartItems());
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener(CART_UPDATED_EVENT, sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener(CART_UPDATED_EVENT, sync);
+    };
+  }, []);
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
@@ -42,22 +57,21 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
   const total = subtotal + (items.length > 0 ? deliveryCharge : 0);
 
   const updateQuantity = (slug: string, selectedPack: string, delta: number) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.product.slug === slug && item.selectedPack === selectedPack
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
+    const next = items.map((item) =>
+      item.slug === slug && item.selectedPack === selectedPack
+        ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+        : item
     );
+    setItems(next);
+    writeCartItems(next);
   };
 
   const removeItem = (slug: string, selectedPack: string) => {
-    setItems((prev) =>
-      prev.filter(
-        (item) =>
-          !(item.product.slug === slug && item.selectedPack === selectedPack)
-      )
+    const next = items.filter(
+      (item) => !(item.slug === slug && item.selectedPack === selectedPack)
     );
+    setItems(next);
+    writeCartItems(next);
   };
 
   if (items.length === 0) {
@@ -94,13 +108,13 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
     <div className="mt-8 grid items-start gap-8 lg:grid-cols-12">
       <div className="space-y-4 lg:col-span-8">
         {items.map((item) => (
-          <Card key={`${item.product.slug}-${item.selectedPack}`}>
+          <Card key={`${item.slug}-${item.selectedPack}`}>
             <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="relative aspect-4/3 w-full shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted sm:w-36">
-                {item.product.image ? (
+                {item.image ? (
                   <Image
-                    src={item.product.image}
-                    alt={item.product.name}
+                    src={item.image}
+                    alt={item.name}
                     fill
                     sizes="(max-width: 640px) 100vw, 144px"
                     className="object-cover"
@@ -115,13 +129,13 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
               <div className="flex flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
-                    <Badge variant="secondary">{item.product.category}</Badge>
+                    <Badge variant="secondary">{item.categoryName}</Badge>
                     <h2 className="mt-1 text-base font-semibold text-foreground">
                       <Link
-                        href={`/products/${item.product.slug}`}
+                        href={`/products/${item.slug}`}
                         className="hover:text-primary"
                       >
-                        {item.product.name}
+                        {item.name}
                       </Link>
                     </h2>
                     <p className="text-xs text-muted-foreground">
@@ -143,11 +157,7 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
                       disabled={item.quantity <= 1}
                       aria-label={t("decrease")}
                       onClick={() =>
-                        updateQuantity(
-                          item.product.slug,
-                          item.selectedPack,
-                          -1
-                        )
+                        updateQuantity(item.slug, item.selectedPack, -1)
                       }
                     >
                       <Minus />
@@ -160,7 +170,7 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
                       size="icon"
                       aria-label={t("increase")}
                       onClick={() =>
-                        updateQuantity(item.product.slug, item.selectedPack, 1)
+                        updateQuantity(item.slug, item.selectedPack, 1)
                       }
                     >
                       <Plus />
@@ -170,9 +180,7 @@ export function CartView({ initialItems, deliveryCharge }: CartViewProps) {
                   <Button
                     variant="ghost"
                     size="default"
-                    onClick={() =>
-                      removeItem(item.product.slug, item.selectedPack)
-                    }
+                    onClick={() => removeItem(item.slug, item.selectedPack)}
                   >
                     <Trash2 />
                     {t("remove")}

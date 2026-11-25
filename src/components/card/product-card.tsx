@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Star, Truck } from "lucide-react";
 import { ProductVisual } from "@/components/card/product-visual";
-import type { BazarProduct } from "@/data/mock-bazar";
+import type { ApiProduct } from "@/types";
 
 interface ProductCardProps {
-  product: BazarProduct;
+  product: ApiProduct;
   eager?: boolean;
 }
 
@@ -23,10 +23,9 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
         className="relative block"
       >
         <ProductVisual
-          tone={product.visualTone}
           unit={product.unit}
-          shortTag={product.shortTag}
-          image={product.image}
+          shortTag={product.shortTag || product.category?.name || ""}
+          image={product.imageUrl || undefined}
           alt={product.name}
           size="card"
           loading={eager ? "eager" : undefined}
@@ -41,7 +40,7 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-center gap-2">
           <span className="truncate text-xs font-medium text-muted-foreground">
-            {product.category}
+            {product.category?.name}
           </span>
           {product.badge && (
             <span className="ml-auto shrink-0 rounded-full bg-clay/10 px-2 py-0.5 text-xs font-semibold text-clay">
@@ -61,7 +60,7 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1">
             <Star className="size-3.5 fill-gold text-gold" />
-            {product.rating} ({product.reviewCount})
+            {product.rating.toFixed(1)} ({product.reviewCount})
           </span>
           <span className="inline-flex items-center gap-1">
             <Truck className="size-3.5 text-primary" />

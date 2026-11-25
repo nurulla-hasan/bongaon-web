@@ -11,6 +11,7 @@ export const queryKeys = {
   },
   products: {
     all: ["products"] as const,
+    home: ["products", "home"] as const,
     list: (params?: QueryParams) => ["products", "list", params ?? {}] as const,
     detail: (idOrSlug: string) => ["products", "detail", idOrSlug] as const,
   },

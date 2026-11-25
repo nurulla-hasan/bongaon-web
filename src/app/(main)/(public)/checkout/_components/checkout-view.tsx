@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -24,24 +25,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import type { CartPreviewItem } from "@/data/mock-bazar";
+import {
+  CART_UPDATED_EVENT,
+  readCartItems,
+  type CartItem,
+} from "@/lib/cart";
 
 interface CheckoutViewProps {
-  cartItems: CartPreviewItem[];
   deliveryCharge: number;
 }
 
-export function CheckoutView({
-  cartItems,
-  deliveryCharge,
-}: CheckoutViewProps) {
+export function CheckoutView({ deliveryCharge }: CheckoutViewProps) {
   const t = useTranslations("Checkout");
+  const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
+
+  React.useEffect(() => {
+    const sync = () => setCartItems(readCartItems());
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener(CART_UPDATED_EVENT, sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener(CART_UPDATED_EVENT, sync);
+    };
+  }, []);
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
     0
   );
-  const total = subtotal + deliveryCharge;
+  const total = subtotal + (cartItems.length > 0 ? deliveryCharge : 0);
 
   return (
     <div className="mt-8 grid items-start gap-8 lg:grid-cols-12">
@@ -137,15 +150,15 @@ export function CheckoutView({
             <div className="space-y-3">
               {cartItems.map((item) => (
                 <div
-                  key={`${item.product.slug}-${item.selectedPack}`}
+                  key={`${item.slug}-${item.selectedPack}`}
                   className="flex items-center justify-between gap-3 text-sm"
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="relative size-14 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted">
-                      {item.product.image ? (
+                      {item.image ? (
                         <Image
-                          src={item.product.image}
-                          alt={item.product.name}
+                          src={item.image}
+                          alt={item.name}
                           fill
                           sizes="56px"
                           className="object-cover"
@@ -158,7 +171,7 @@ export function CheckoutView({
                     </div>
                     <div className="min-w-0">
                       <p className="truncate font-medium text-foreground">
-                        {item.product.name}
+                        {item.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {item.selectedPack} × {item.quantity}

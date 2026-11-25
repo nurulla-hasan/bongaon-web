@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import type { BazarProduct, CategoryItem } from "@/data/mock-bazar";
 import { useNextFilter } from "@/hooks/useNextFilter";
+import type { ApiCategory, ApiProduct } from "@/types";
 
 export type ProductFilterKey =
   | "category"
@@ -20,7 +20,7 @@ interface FilterCategory {
 }
 
 export const PRICE_MIN = 0;
-export const PRICE_MAX = 1500;
+export const PRICE_MAX = 5000;
 
 const SORT_KEYS: SortKey[] = ["popular", "priceAsc", "priceDesc", "discount"];
 const FILTER_KEYS: ProductFilterKey[] = [
@@ -30,7 +30,7 @@ const FILTER_KEYS: ProductFilterKey[] = [
   "rating",
 ];
 
-function discountPercent(product: BazarProduct) {
+function discountPercent(product: ApiProduct) {
   if (!product.originalPrice || product.originalPrice <= product.price) {
     return 0;
   }
@@ -54,27 +54,30 @@ function parsePriceRange(value: string): [number, number] {
 }
 
 function countByCategory(
-  products: BazarProduct[],
-  categories: CategoryItem[],
+  products: ApiProduct[],
+  categories: ApiCategory[],
 ): FilterCategory[] {
   const counts = new Map<string, number>();
 
   products.forEach((product) => {
-    counts.set(product.category, (counts.get(product.category) ?? 0) + 1);
+    const slug = product.category?.slug;
+    if (slug) {
+      counts.set(slug, (counts.get(slug) ?? 0) + 1);
+    }
   });
 
   return categories
     .map((category) => ({
-      id: category.id,
+      id: category.slug,
       name: category.name,
-      count: counts.get(category.name) ?? 0,
+      count: counts.get(category.slug) ?? 0,
     }))
     .filter((category) => category.count > 0);
 }
 
 export function useProductFilters(
-  products: BazarProduct[],
-  categories: CategoryItem[],
+  products: ApiProduct[],
+  categories: ApiCategory[],
 ) {
   const { getFilter, updateFilter, clearAll, getActiveCount } =
     useNextFilter<ProductFilterKey>();
@@ -97,13 +100,13 @@ export function useProductFilters(
   const visibleProducts = useMemo(() => {
     return products
       .filter((product) => {
-        if (activeCategory && product.category !== activeCategory.name) {
+        if (activeCategory && product.category?.slug !== activeCategory.id) {
           return false;
         }
         if (product.price < priceLow) return false;
         if (priceHigh < PRICE_MAX && product.price > priceHigh) return false;
         if (onlyDiscounted && discountPercent(product) === 0) return false;
-        if (rating > 0 && Number(product.rating) < rating) return false;
+        if (rating > 0 && product.rating < rating) return false;
 
         return true;
       })

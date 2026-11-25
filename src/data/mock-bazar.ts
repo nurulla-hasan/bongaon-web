@@ -3,6 +3,7 @@ export interface CategoryItem {
   name: string;
   subtitle: string;
   countLabel: string;
+  image?: string;
   iconName: "flame" | "jar" | "droplet" | "sparkles" | "package" | "gift";
 }
 
