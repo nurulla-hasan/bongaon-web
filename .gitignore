@@ -43,3 +43,5 @@ docs
 .agents
 tasks
 .qoder
+.vercel
+.env*

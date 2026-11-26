@@ -19,9 +19,17 @@ interface RefreshedTokens {
 }
 
 function getBackendBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1"
-  ).replace(/\/$/, "");
+  const backendOrigin = process.env.API_BACKEND_URL?.trim().replace(/\/+$/, "");
+  if (backendOrigin) {
+    return `${backendOrigin}/api/v1`;
+  }
+
+  const publicBase = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
+  if (publicBase && /^https?:\/\//i.test(publicBase)) {
+    return publicBase.replace(/\/+$/, "");
+  }
+
+  return "http://localhost:5000/api/v1";
 }
 
 function isTokenExpiringSoon(payload: JwtPayload | null): boolean {
