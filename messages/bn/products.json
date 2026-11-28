@@ -27,6 +27,7 @@
     "allItems": "সব পণ্য",
     "clearFilters": "ফিল্টার মুছুন",
     "itemsSuffix": "টি পণ্য",
+    "searchPlaceholder": "পণ্য খুঁজুন...",
     "filterButton": "ফিল্টার",
     "noItems": "এই ক্যাটাগরিতে এখন কোনো পণ্য নেই।",
     "noResults": "এই ফিল্টারে কোনো পণ্য মেলেনি। ফিল্টার একটু বদলে দেখুন।",

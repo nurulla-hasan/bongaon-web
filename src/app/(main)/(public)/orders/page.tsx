@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ShieldCheck, Truck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import CustomBreadcrumb from "@/components/common/custom-breadcrumb";
@@ -41,7 +42,9 @@ export default async function OrdersPage() {
         </div>
       </SectionHeading>
 
-      <OrdersView />
+      <Suspense fallback={null}>
+        <OrdersView />
+      </Suspense>
     </PageWrapper>
   );
 }

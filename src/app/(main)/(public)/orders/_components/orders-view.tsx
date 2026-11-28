@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/common/empty-state";
+import { SearchInput } from "@/components/common/search-input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getErrorMessage } from "@/lib/error";
+import { useNextFilter } from "@/hooks/useNextFilter";
 import { cn, formatDate } from "@/lib/utils";
 import { useMe, useMyOrders, useTrackOrder } from "@/services";
 import type { ApiOrder, OrderStatus } from "@/types";
@@ -53,11 +55,12 @@ export function OrdersView() {
 
   const { data: meRes, isLoading: isMeLoading } = useMe();
   const me = meRes?.data?.user;
+  const { getFilter } = useNextFilter<"searchTerm">();
+  const query = getFilter("searchTerm");
   const [filter, setFilter] = React.useState<StatusFilter>("all");
-  const [query, setQuery] = React.useState("");
-  const [expandedOrderId, setExpandedOrderId] = React.useState<string | null>(
-    null,
-  );
+  const [expandedOrderId, setExpandedOrderId] = React.useState<
+    string | null | undefined
+  >(undefined);
 
   const [trackOrderNumber, setTrackOrderNumber] = React.useState("");
   const [trackPhone, setTrackPhone] = React.useState("");
@@ -82,11 +85,8 @@ export function OrdersView() {
     [me, myOrdersRes?.data, trackedOrder],
   );
 
-  React.useEffect(() => {
-    if (orders.length > 0 && !expandedOrderId) {
-      setExpandedOrderId(orders[0].id);
-    }
-  }, [orders, expandedOrderId]);
+  const activeExpandedId =
+    expandedOrderId === undefined ? (orders[0]?.id ?? null) : expandedOrderId;
 
   const filterTabs: Array<{ id: StatusFilter; label: string }> = [
     { id: "all", label: t("filterAll") },
@@ -209,14 +209,11 @@ export function OrdersView() {
             ))}
           </div>
 
-          <div className="flex w-full items-center gap-2 sm:w-72">
-            <Search className="size-4 shrink-0 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={t("searchPlaceholder")}
-            />
-          </div>
+          <SearchInput
+            placeholder={t("searchPlaceholder")}
+            ariaLabel={t("searchPlaceholder")}
+            className="sm:max-w-72"
+          />
         </div>
       )}
 
@@ -263,7 +260,7 @@ export function OrdersView() {
         <div className="space-y-4">
           {filteredOrders.map((order) => {
             const meta = statusMeta[order.status] ?? statusMeta.PENDING;
-            const isExpanded = expandedOrderId === order.id;
+            const isExpanded = activeExpandedId === order.id;
             const currentStep = statusStepIndex[order.status] ?? 0;
 
             return (

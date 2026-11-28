@@ -7,6 +7,7 @@ import { ProductCard, ProductCardSkeleton } from "@/components/card/product-card
 import CustomPagination from "@/components/common/custom-pagination";
 import { EmptyState } from "@/components/common/empty-state";
 import { FilterSelect } from "@/components/common/filter-select";
+import { SearchInput } from "@/components/common/search-input";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -38,6 +39,7 @@ export function ProductCatalog() {
 
   const page = Math.max(1, Number(getFilter("page", "1")) || 1);
   const categoryId = getFilter("category") || undefined;
+  const searchTerm = getFilter("searchTerm") || undefined;
   const priceParts = getFilter("price").split("-").map(Number);
   const hasValidPrice =
     priceParts.length === 2 &&
@@ -53,6 +55,7 @@ export function ProductCatalog() {
     "price",
     "discount",
     "rating",
+    "searchTerm",
   ]);
 
   const {
@@ -65,6 +68,7 @@ export function ProductCatalog() {
     page,
     limit: PAGE_SIZE,
     categoryId,
+    searchTerm,
     minPrice,
     maxPrice,
     onlyDiscounted,
@@ -121,7 +125,12 @@ export function ProductCatalog() {
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+            <SearchInput
+              placeholder={t("searchPlaceholder")}
+              ariaLabel={t("searchPlaceholder")}
+              className="w-full sm:w-64"
+            />
             <div className="flex items-center gap-2">
               <span className="hidden text-xs font-medium text-muted-foreground sm:inline">
                 {t("sortTitle")}:

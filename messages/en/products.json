@@ -27,6 +27,7 @@
     "allItems": "All products",
     "clearFilters": "Clear filters",
     "itemsSuffix": "products",
+    "searchPlaceholder": "Search products...",
     "filterButton": "Filter",
     "noItems": "No products in this category yet.",
     "noResults": "No products match these filters. Try changing them.",
