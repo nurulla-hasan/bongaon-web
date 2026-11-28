@@ -125,7 +125,7 @@ export function AssistantMessageParts({
                     </div>
                   ) : (
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Package className="size-4" />
+                      <Package className="size-4" aria-hidden="true" />
                     </span>
                   )}
 

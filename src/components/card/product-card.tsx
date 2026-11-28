@@ -17,7 +17,7 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
     : 0;
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md">
       <Link
         href={`/products/${product.slug}`}
         aria-label={product.name}
@@ -95,7 +95,7 @@ export function ProductCard({ product, eager = false }: ProductCardProps) {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-xs">
       <Skeleton className="aspect-4/3 w-full rounded-none rounded-b-2xl" />
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">

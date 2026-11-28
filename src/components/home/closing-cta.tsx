@@ -58,7 +58,7 @@ export async function ClosingCta() {
           </div>
 
           <div className="lg:col-span-5">
-            <ul className="space-y-3 rounded-3xl border border-border/70 bg-card/85 p-6 shadow-sm backdrop-blur">
+            <ul className="space-y-3 rounded-2xl border border-border/70 bg-card/85 p-6 shadow-xs backdrop-blur">
               {highlights.map(({ icon: Icon, label }) => (
                 <li
                   key={label}

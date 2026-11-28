@@ -144,7 +144,7 @@ function FormDatePickerField({
           <PopoverContent
             align="start"
             sideOffset={4}
-            className="w-auto p-0 border border-border bg-popover text-popover-foreground shadow-2xl rounded-xl ring-1 ring-border/50 z-100 overflow-hidden"
+            className="w-auto p-0 border border-border bg-popover text-popover-foreground shadow-lg rounded-xl ring-1 ring-border/50 z-100 overflow-hidden"
           >
             <CustomCalendar
               selected={selectedDate}

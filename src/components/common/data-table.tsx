@@ -156,7 +156,7 @@ export function DataTable<TData, TValue, TFilterKey extends string = string>({
     <div className="space-y-4">
       <div className="relative overflow-hidden rounded-lg border">
         {isFetching && !isLoading && data.length > 0 && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] transition-all">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-xs transition-all">
             <div className="flex items-center justify-center rounded-full border bg-background/95 p-2 shadow-sm">
               <div className="size-5 animate-spin rounded-full border-2 border-dashed border-primary" />
             </div>

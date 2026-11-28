@@ -83,7 +83,7 @@ export default async function AboutPage() {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="relative mx-auto aspect-square max-w-xs overflow-hidden rounded-3xl border border-border/70 bg-card p-6 shadow-sm">
+          <div className="relative mx-auto aspect-square max-w-xs overflow-hidden rounded-2xl border border-border/70 bg-card p-6 shadow-xs">
             <Image
               src="/images/brand-seal.jpg"
               alt={tCommon("brandName")}

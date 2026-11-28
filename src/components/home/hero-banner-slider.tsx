@@ -57,7 +57,7 @@ export function HeroBannerSlider({
 
   if (activeSlides.length === 0) {
     return (
-      <div className="group relative h-72 overflow-hidden rounded-4xl border border-border/60 shadow-2xl shadow-primary/10 sm:h-96 lg:h-125">
+      <div className="group relative h-72 overflow-hidden rounded-2xl border border-border shadow-md sm:h-96 lg:h-125">
         <Image
           src={FALLBACK_IMAGE}
           alt={fallbackAlt}
@@ -72,7 +72,7 @@ export function HeroBannerSlider({
 
   return (
     <div
-      className="relative overflow-hidden rounded-4xl border border-border/60 shadow-2xl shadow-primary/10"
+      className="relative overflow-hidden rounded-2xl border border-border shadow-md"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >

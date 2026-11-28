@@ -206,8 +206,7 @@ function MonthGrid({
                               isCurrentMonth ? currentMonthButtonRef : undefined
                             }
                             variant={isCurrentMonth ? "default" : "outline"}
-                            size="sm"
-                            className="h-7"
+                            size="default"
                             disabled={isDisabled}
                             onClick={() => onMonthSelect(month)}
                           >
@@ -239,7 +238,7 @@ function CaptionLabel({
     <Button
       className="data-[state=open]:text-muted-foreground/80 -ms-2 flex items-center gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180"
       variant="ghost"
-      size="sm"
+      size="default"
       onClick={() => setIsYearView((prev) => !prev)}
       data-state={isYearView ? "open" : "closed"}
     >
@@ -268,7 +267,7 @@ function CollapsibleYear({
           <Button
             className="flex w-full justify-start gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180"
             variant="ghost"
-            size="sm"
+            size="default"
           >
             <ChevronDownIcon
               className="text-muted-foreground/80 shrink-0 transition-transform duration-200"
