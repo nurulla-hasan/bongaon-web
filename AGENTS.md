@@ -98,6 +98,8 @@ size: {
 
 # 🧠 Agent Skills Execution Matrix (Addy Osmani)
 
+> **Mandatory Skill-First Rule:** For **every** task (UI design, API work, debugging, security, refactoring, etc.), you **MUST** read the relevant skill's `SKILL.md` file **before** writing code or making changes. Never skip reading the applicable `SKILL.md` or rely on memory alone.
+
 Each phase of development in this project MUST invoke and follow the corresponding skill workflow:
 
 | Development Phase / Scenario         | Skill to Invoke                            | Mandatory Workflow / Action                                                                                                   |
